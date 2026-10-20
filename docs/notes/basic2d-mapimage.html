@@ -1,0 +1,45 @@
+<section class="fx" id="fx-mapimage">
+<h3>mapimage &mdash; the scrolling city-lights band</h3>
+<p>In the Camel city scene <code>mapImage kiko {CITYLIGHTS} {TEMP}</code> paints a horizontally scrolling strip of lights (later added to the screen with the <code>PPRO</code> overlay). The source is a 256x256 picture that
+<code>createBuffer</code> copied <em>linearly</em> into a 640x480 buffer, so the effect reads the buffer as an array of 256-pixel rows: rows 48..207 of that array become the 160 destination rows 160..319.
+Each destination row is the source row repeated 2.5 times, shifted left by <code>(int)Frame</code> pixels (the global song time in centiseconds, not the event's local frame) with a wrap at 256 -
+that is how a 256-wide texture fills 640 pixels while it scrolls at 100 pixels per second.</p>
+<p>The row copy at <code>0x1e8ef</code> moves two pixels per iteration and keeps the source index in two registers masked with <code>and 0xff</code>, so wrapping costs nothing. All the loop constants are in the caller:
+<code>0xc000</code> (= 48 rows * 1 KB) for the source and <code>0x64000</code> (= 160 rows * 2560 bytes) for the destination.</p>
+<pre class="asm">
+10fb38  fld dword [0x1b28f8]       ; global Frame (centiseconds, float)
+10fb3e  mov edx, 0xc000            ; source offset: 48 rows * 256 px * 4 bytes
+10fb43  mov ebp, 0x64000           ; destination offset: row 160 of 640*4 bytes
+10fb48  call 0x103d1a              ; truncate
+10fb4d  fistp [esp]                ; shift
+10fb58  mov ecx, 0x280             ; 640 pixels per row
+10fb6c  add edi, ebp
+10fb6e  add esi, edx
+10fb70  call 0x1e8ef               ; row copy with wrap
+10fb75  add edx, 0x400             ; next source row
+10fb7b  add ebp, 0xa00             ; next destination row
+10fb81  cmp edx, 0x34000           ; 160 rows
+10fb87  jne 0x10fb50
+
+1e8ff  mov eax, [esi+edx*4]        ; pixel (shift+i) &amp; 255
+1e902  add edx, 2
+1e908  mov ebp, [esi+ebx*4]        ; pixel (shift+i+1) &amp; 255
+1e90b  add ebx, 2
+1e911  and edx, 0xff
+1e917  and ebx, 0xff
+1e91d  mov [edi], eax
+1e91f  mov [edi+4], ebp
+1e922  add edi, 8
+1e928  sub ecx, 2
+1e92e  jne 0x1e8ff
+</pre>
+<pre class="js">
+for (let k = 0; k &lt; 160; k++)
+  for (let x = 0; x &lt; 640; x++) d[(160+k)*640 + x] = s[(48+k)*256 + ((x + shift) &amp; 255)];
+</pre>
+<dl class="facts">
+<dt>script</dt><dd><code>addEvent mapImage kiko {CITYLIGHTS} {TEMP} {}</code> (after <code>fillbuffer</code> cleared TEMP), then <code>blend</code> with PPRO, then <code>blit</code> to SCREEN</dd>
+<dt>functions</dt><dd>run <code>0x10fb2c</code>, row copy <code>0x1e8ef</code> (in the self-modifying object); init is empty</dd>
+<dt>verified</dt><dd>100.0000 % identical at 5 frame values (0, 17, 100, 333.5, 1234)</dd>
+</dl>
+</section>

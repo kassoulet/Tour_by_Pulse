@@ -1,0 +1,10 @@
+re/state.bin
+re/__pycache__/
+__pycache__/
+*.pyc
+node_modules/
+re/mem.bin
+re/golden/
+build/
+re/dt_*/ref/
+re/dt_*/gt/

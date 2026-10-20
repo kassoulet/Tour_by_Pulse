@@ -1,0 +1,30 @@
+<section class="fx" id="fx-volumes-plasma">
+<h3>plasma1volume &mdash; a 3D sine plasma with eight-fold symmetry</h3>
+<p><code>plasma1volume VOLUME a b</code> fills the field with <code>a + b&middot;sin(r + 0.02&middot;Frame)</code>, where r is the distance of the voxel from the centre of the cube.
+The distance table (16&times;16&times;16 floats, <code>sqrt((x&minus;7.5)&sup2;+(y&minus;7.5)&sup2;+(z&minus;7.5)&sup2;)</code>) is built once by the init function at <code>0x2001f0</code>.
+The run kernel exploits the symmetry: it evaluates only one octant (8&times;8&times;8 = 512 <code>fsin</code>) and stores every result four times (x, y mirrored), then copies the 8 finished planes onto
+their mirror planes with <code>rep movsd</code>. In the script it is multiplied (<code>mulvolume</code>) into the metaball/morph field to give the surface a changing organic texture.</p>
+<pre class="asm">
+; kernel 0x1522af, st1=a st2=b st3=phase;  edi=distance table, eax=volume plane
+1522d6  fld dword [edi]            ; r
+1522d8  fadd st(3)                 ; + phase
+1522da  fsin
+1522dc  fmul st(2)                 ; * b
+1522de  fadd st(1)                 ; + a
+1522e0  fst dword [eax+edx]        ; (x,y)
+1522e3  fst dword [eax+esi]        ; (15-x,y)
+1522e6  fst dword [eax+ebx]        ; (x,15-y)
+1522e9  fstp dword [eax+ebp]       ; (15-x,15-y)
+...                                ; edx+=4, esi-=4, ebx+=4, ebp-=4, edi+=4
+152334  rep movsd                  ; plane z -> plane 15-z (256 dwords)
+</pre>
+<pre class="js">
+const v = f32(a + b * Math.sin(PLASMA_TAB[x + 16*y + 256*z] + phase));
+vol[o + x + 16*y] = v; vol[o + (15-x) + 16*y] = v; vol[o + x + 16*(15-y)] = v; vol[o + (15-x) + 16*(15-y)] = v;
+/* then for z &lt; 8: vol.copyWithin(256*(15-z), 256*z, 256*z + 256) */
+</pre>
+<dl class="facts">
+<dt>script</dt><dd><code>plasma1volume nazwa7 {} {} {PlasmaVolume 0.7 0.7}</code> (a = b = 0.7, so the field ranges 0..1.4)</dd>
+<dt>verified</dt><dd>4096/4096 floats bit-identical to the original at 7 frames</dd>
+</dl>
+</section>

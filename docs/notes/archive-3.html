@@ -1,0 +1,38 @@
+<section class="fx" id="fx-archive-3">
+<h3>Type 3 (and 1): adaptive-Huffman LZ</h3>
+<p>RYMDLEGO.XM (74 016 bytes, a second tracker module the script never plays) uses type 3, an LZ coder whose fields are not stored in fixed bit widths but coded by <em>five adaptive Huffman models</em> of 256 symbols each: match length, distance high byte, distance low byte, literal-run length and literal bytes (0x12a019). Every model is a FGK-style tree kept in sorted arrays (weights, children, parents): each decoded symbol increments its leaf, swaps it with the highest slot of smaller weight (the sibling property) and repeats up to the root; when the root weight reaches a per-model limit (0xe00, 0x1c00, 0x200, 0x800, 0x480) all weights are halved and the tree is rebuilt (0x12a1ee). Bits are read MSB first with <code>add al,al</code> and the carry flag.</p>
+<p>The stream alternates "literal run, match, literal run ..."; after every match a single raw bit tells whether a literal run follows. Type 1 (M_30_210.BIN, 256 bytes) is just the byte RLE at 0x129ea8, and type 4 (order-N PPM with an arithmetic coder reading straight from the FILE, 0x12ffa6) is in the executable but unused by this archive.</p>
+<pre class="asm">12a2ff  mov bx,[ebp+0x12b224]    ; root&#x27;s children (model base in ebp)
+12a307  mov eax,[0x12a41c]      ; bit buffer: al = bits, ah = count
+12a30d  test ah,ah
+12a30f  jne 0x12a323
+12a311  mov edi,[0x12a422]      ; refill one byte
+12a317  mov ah,8
+12a319  mov al,[edi]
+12a31b  inc edi
+12a31c  mov [0x12a422],edi
+12a323  add al,al              ; next bit -&gt; CF
+12a325  jae 0x12a32b
+12a327  add ebx,2              ; bit 1 -&gt; right child
+12a32b  dec ah
+12a32e  mov bx,[ebx+ebp+0x12ae28]   ; child / symbol
+12a33b  cmp ebx,0x3fe
+12a341  jb 0x12a307           ; &lt; 0x3fe: inner node, keep walking
+12a343  lea eax,[ebx-0x3fe]
+12a349  shr eax,1              ; symbol
+12a36e  inc word [eax+ebp+0x12a42a]    ; adaptive update: bump weight of the leaf ...
+12a38f  add esi,2              ; ... look for the highest slot with a smaller weight
+12a39a  ja 0x12a38f
+12a3a7  mov [eax+..],bx         ; swap weights and sub-trees (sibling property)
+12a409  mov ax,[eax+ebp+0x12a82a]  ; go to the parent, repeat until root</pre><pre class="asm">12a116  rep movsb               ; match copy, ecx = length, esi = edi - (dist+1)
+; five models, one per field (ebp = 0, 0xdfc, 0x1bf8, 0x29f4, 0x37f0, rescale limits 0xe00,0x1c00,0x200,0x800,0x480)</pre><pre class="js"># state: lit = True
+# loop:
+#   if lit: n = M[3].decode(); emit n literals M[4].decode(); stop if output full
+#   len = M[0].decode()                      # 0 -&gt; back to a literal run
+#   hi  = 0 if len == 2 else M[1].decode()   # distance high byte
+#   lo  = M[2].decode(); d = (hi &lt;&lt; 8 | lo) + 1
+#   copy len bytes from out[-d]; stop if output full
+#   lit = next raw bit                       # 1: literal run follows, 0: another match</pre>
+<dl class="facts"><dt>Decoder</dt><dd>TOUR.EXE 0x12a019 (eax = src, edx = dst); models init 0x12a154, decode+update 0x12a2ff, rescale 0x12a1ee</dd>
+<dt>Verified</dt><dd>tools/extract.py and docs/js/archive.js decode3 equal the original (74 016 bytes, run in Unicorn); XM parses exactly</dd></dl>
+</section>

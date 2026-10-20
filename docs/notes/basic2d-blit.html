@@ -1,0 +1,32 @@
+<section class="fx" id="fx-blit">
+<h3>blit &mdash; the surface copy and the 565 to 8888 conversion</h3>
+<p>Every slide of the opening picture show is a 16-bit RGB565 buffer copied to the 32-bit screen with <code>blit</code> (as a script command or as an effect: <code>blit</code> and <code>surfcopy</code> share the code).
+The copy goes through a small DirectDraw-like library (surface objects with <code>Lock</code>/<code>Unlock</code> in a vtable): the blit method at <code>0x1351ec</code> picks a converter for the pair of pixel formats; same format = straight copy,
+16 to 32 uses two 256-entry lookup tables (<code>0x28a380</code>, one for the low byte and one for the high byte of two pixels, results added).</p>
+<p>The conversion is <em>not</em> bit replication. Measured over all 65536 inputs: red and blue (5 bit) give <code>floor(v*255/31)</code>, but green (6 bit) gives <code>4*v + floor(v/24)</code>, so pure green tops out at 254 - a quirk of the table generator. The alpha byte of the result is 0, and a 32-to-32 copy keeps alpha untouched.</p>
+<pre class="asm">
+; 16 -> 32 converter, two pixels per iteration (0x1a5ad2): table lookups per source byte
+1a5acb  mov cl, [esi+ebp*4]        ; pixel 0, low byte
+1a5ace  mov bl, [esi+ebp*4+1]      ; pixel 0, high byte
+1a5ad2  mov edx, [ecx*8+0x28a380]  ; table lo[byte] (dword)
+1a5ad9  mov cl, [esi+ebp*4+2]      ; pixel 1, low byte
+1a5add  mov eax, [ebx*8+0x28a384]  ; table hi[byte]
+1a5ae4  mov bl, [esi+ebp*4+3]
+1a5ae8  add eax, edx               ; lo + hi = 0x00RRGGBB
+1a5aea  mov edx, [ecx*8+0x28a380]
+1a5af1  mov [edi+ebp*8], eax       ; pixel 0
+1a5af4  mov eax, [ebx*8+0x28a384]
+1a5afb  add eax, edx
+1a5afd  mov cl, [esi+ebp*4+4]
+1a5b01  mov [edi+ebp*8+4], eax     ; pixel 1
+</pre>
+<pre class="js">
+const T5 = i =&gt; Math.floor(i * 255 / 31), T6 = i =&gt; 4 * i + Math.floor(i / 24);
+d[i] = (T5(p &gt;&gt; 11) &lt;&lt; 16) | (T6((p &gt;&gt; 5) &amp; 63) &lt;&lt; 8) | T5(p &amp; 31);
+</pre>
+<dl class="facts">
+<dt>script</dt><dd><code>addEvent blit bbb {TITLE} {SCREEN} {}</code>, <code>changeBuffers bbb {NEWHIRES} {SCREEN}</code>, <code>blit TEMPIMAGES TITLE</code> ...</dd>
+<dt>functions</dt><dd>command <code>0x1047a4</code> -> <code>0x10825b</code> -> <code>0x1351ec</code>; effect init/run <code>0x10fd60/0x10fd64</code>. JS: <code>blitBuf</code> in <code>engfx.js</code></dd>
+<dt>verified</dt><dd>100.0000 % identical (all 65536 RGB565 values converted; random 32-bit copy). Formats: see <code>re/formats.md</code></dd>
+</dl>
+</section>

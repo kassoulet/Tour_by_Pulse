@@ -1,0 +1,34 @@
+<section class="fx" id="fx-blend">
+<h3>blend &mdash; saturated additive compositing with MMX</h3>
+<p><code>blend {A B} {OUT} {mode}</code> combines two buffers byte by byte. The script only uses mode 1: <code>SCREEN = SCREEN + EFXLAYER</code> (the glow layer over the low-res plasma) and <code>TEMP + PPRO</code>. The adds are
+<em>saturating</em> (an overflowing channel sticks at 255 instead of wrapping), which is exactly what the MMX instruction <code>paddusb</code> does on 8 bytes at once. The original also contains a pure integer fallback for CPUs without MMX
+(a global flag at <code>0x1d1b88</code> selects it), built from the classic SWAR trick of adding the low 7 bits of every byte and patching up the carry bit.</p>
+<p>The mode number is the whole parameter (<code>atoi</code>), and the buffer is treated as a flat byte array of <code>w*h*bpp/8</code> bytes, so alpha takes part in the add. Other modes found in the dispatcher at <code>0x10f76b</code>: 2 colour-key
+(source pixel 0 is transparent), 3 saturated subtract, 11 double add, 22 colour key = first pixel of the second input, 33 which ends up writing zeros (<code>psubusb mm0,mm0</code>) - all ported and checked, none used by the script.</p>
+<pre class="asm">
+; mode 1, MMX path (0x1e7a8)  esi=A edi=OUT ebx=B  ecx=byte count
+1e7a8  neg ecx
+1e7aa  sub esi, ecx               ; point past the end, count up from -n
+1e7ac  sub ebx, ecx
+1e7ae  sub edi, ecx
+1e7b0  movq mm0, [esi+ecx]
+1e7b4  paddusb mm0, [ebx+ecx]     ; 8 byte-wise saturating adds
+1e7b8  movq [edi+ecx], mm0
+1e7bc  add ecx, 8
+1e7c2  jne 0x1e7b0
+1e7c4  emms
+
+; the non-MMX fallback (0x1e73b, self-modifying: the pointers are patched into the loads) halves each byte, adds and re-doubles with a
+; carry mask:   a &amp; 0xfefefefe + b &amp; 0xfefefefe ... 1e772 and edx,0x1010100 ; carry bits ; sub ebp,edx ; or esi,ebp
+</pre>
+<pre class="js">
+const r = ((x &amp; 0x7f7f7f7f) + (y &amp; 0x7f7f7f7f)) ^ ((x ^ y) &amp; 0x80808080);  // 4 byte sums without inter-byte carry
+const c = ((x &amp; y) | ((x | y) &amp; ~r)) &amp; 0x80808080;                          // bytes that overflowed
+o[i] = r | ((c &gt;&gt;&gt; 7) * 255);                                          // saturate them to 0xff
+</pre>
+<dl class="facts">
+<dt>script</dt><dd><code>addEvent blend blendpa {SCREEN EFXLAYER} {SCREEN} {1}</code> and <code>addEvent blend blend_ppro {TEMP PPRO} {TEMP} {1}</code></dd>
+<dt>functions</dt><dd>init <code>0x10f714</code> (atoi, <code>0x14925d</code>), run <code>0x10f73c</code>, kernels <code>0x1e6fc</code> (integer), <code>0x1e7a8</code> (MMX add), <code>0x1e7e9</code> (sub), <code>0x1e82a/0x1e861</code> (colour key)</dd>
+<dt>verified</dt><dd>100.0000 % identical for modes 1, 2, 3, 11, 22, 33 on random 640x480x32 data</dd>
+</dl>
+</section>

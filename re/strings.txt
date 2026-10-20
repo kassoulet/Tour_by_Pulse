@@ -1,0 +1,2620 @@
+101014 SQRVWU
+10114f ]_^ZY[
+101158 SQRVWU
+101214 \$ Shx
+10122a <]_^ZY[
+101234 SQRVW
+1012d1 _^ZY[
+101364 SQRVW
+1015d5 _^ZY[
+10189c SQRVWU
+101935 ]_^ZY[
+101d7c t0Vhl
+101edb P^ZY[
+101f2f P^ZY[
+101f47 P^ZY[
+102020 SQRVWU
+102105 P]_^ZY[
+102134 SQRVWU
+102202 ]_^ZY[
+10220c SQRVWU
+1022d4 ]_^ZY[
+1022dc SQVWU
+1023a2 ]_^Y[
+1023a8 SQVWU
+10246e ]_^Y[
+102537 P]_^Y
+102bdc SQRVWU
+102c19 ]_^ZY[
+102c34 SQRVWU
+102d68 ]_^ZY[
+102e4c SQRVWU
+102e8f @ ;H u
+102ed1 ]_^ZY[
+102ed8 SQRVW
+102ffd _^ZY[
+103028 SQVWU
+103182 ]_^Y[
+10325d ]_^Y[
+103359 ]_^Y[
+103486 ]_^Y[
+10349b ]_^Y[
+1034a4 SQVWU
+10355d ]_^Y[
+103632 ]_^Y[
+10363d ]_^Y[
+103644 SQVWU
+103700 ]_^Y[
+1037cf ]_^Y[
+1037da ]_^Y[
+1038e8 SQRVWU
+103ac0 ]_^ZY[
+103b1b t:It)
+103e28 SRVW1
+103edc SQRVWU
+104478 ]_^ZY[
+104480 SQRVWU
+1046a9 ]_^ZY[
+1046b0 SQRVWU
+1046bd l$$Uh
+10479b D]_^ZY[
+1047af T$$Rh
+1047e8 @^ZY[
+1047f0 SQRVWU
+10489a ]_^ZY[
+104a6d ~?iT$`l
+104a8e iT$`l
+104aa6 T$`;S4|
+104ab0 d^ZY[
+104ab8 SQRVWU
+104b58 ~MiD$p
+104b75 u"iT$p
+104b89  iD$p
+104b9f l$p;kD|
+104ba9 t]_^ZY[
+104bb4 SQRVWU
+104cce ]_^ZY[
+104cd8 SQRVWU
+104d1c D$tPPh`
+104d60 l$d;k4
+104d6c iD$dl
+104d89 uRiD$dl
+104da1 $;l$`t
+104dc6 iT$dl
+104de3 T$d;S4|
+104dfc h]_^ZY[
+104e04 SQRVWU
+104f16 l]_^ZY[
+104f20 SQRVWU
+104fa5 ]_^ZY[
+104fd8 SQRVWU
+1051cd D$TP1
+1053d6 ]_^ZY[
+1053e0 SQRWU
+10545d @]_ZY[
+105464 SQRWU
+1054e1 @]_ZY[
+1054e8 SQRVWU
+105580 @]_^ZY[
+105588 SQRVWU
+105687 D$LPh
+10572c D$@Ph
+1057ac ]_^ZY[
+1057c6 t$0Vh
+10586a ,_^Z[
+105870 SQRVW
+1058b6 _^ZY[
+1058bc SQRVU
+105981 ]^ZY[
+105d08 SQRVWU
+105e03 ]_^ZY[
+105e0c SQRVWU
+106030 ]_^ZY[
+1060fa b$QSVW
+1061f8 ]_^[Y
+1062d7 ]_^[Y
+106418 SQRVW
+1064f5 _^ZY[
+1064fb SQRVU
+106577 ]^ZY[
+106e54 SQRVWU
+106fa4 ]_^ZY[
+106fac SQRVWU
+106ff4 ]_^ZY[
+107689 SQVWU
+1076be ]_^Y[
+1076ce SQVWU
+1076fe ]_^Y[
+10770e SQRVWU
+10787f ]_^ZY[
+107890 SQRVWU
+107900 ]_^ZY[
+107911 SQVWU
+1079af ]_^Y[
+107d93 SQRVWU
+107dbe ]_^ZY[
+107dcf SQRVWU
+107df2 ]_^ZY[
+107e03 SQVWU
+107e52 ]_^Y[
+107f8a SQRVWU
+107fc1 ]_^ZY[
+1080e4 SQRVWU
+108114 ]_^ZY[
+108125 SQRVWU
+108146 ]_^ZY[
+108157 SQRVWU
+108178 ]_^ZY[
+108189 SQRVWU
+1081a1 ]_^ZY[
+1081b2 SQRVWU
+1081f2 ]_^ZY[
+108203 SQRVWU
+108223 ]_^ZY[
+108234 SQRVWU
+108254 ]_^ZY[
+1082b2 SQRVWU
+1082f6 ]_^ZY[
+10830a SQRVWU
+108336 ]_^ZY[
+10834a SQRVWU
+108376 ]_^ZY[
+108380 SQRVWU
+10839a ]_^ZY[
+1083a4 SQRVWU
+1083be ]_^ZY[
+1083c8 SQRVWU
+1083e2 ]_^ZY[
+1083ec SQRVWU
+108406 ]_^ZY[
+108410 SQRVWU
+10842a ]_^ZY[
+108435 vWATCOM C/C++32 Run-Time system. (c) Copyright by WATCOM International Corp. 1988-1995. All rights reserved.
+1084c9 RAHP)
+1084ea f=XDu>
+10852d 8f=CBu4
+10861a ^OWR&f
+10862b     =no87u
+108b54 SQRVWU
+108b9e ]_^ZY[
+108f0b 2&FIu
+10a02b VWQU+
+10a0a8 VWQU+
+10a4ef SQVWU
+10a639 ]_^Y[
+10ac60 SQRVWU
+10b03c ]_^ZY[
+10b0d0 SQVWU
+10b174 ]_^Y[
+10b196 ]_^Y[
+10b1eb ]_^Y[
+10b357 ]_^Y[
+10b458 ]_^Y[
+10b4df ]_^Y[
+10b672 ]_^Y[
+10b737 ]_^Y[
+10b83f ]_^Y[
+10ba99 ]_^Y[
+10bfb6 ]_^Y[
+10c142 ]_^Y[
+10c27a ]_^Y[
+10c2f8 SQRVWU
+10c487 ]_^ZY[
+10c4de :]_^Y
+10c4e4 SQRVWU
+10c763 ]_^ZY[
+10c8f0 SQRVWU
+10cfff ;B&s"
+10db7a Ng:New
+10db9c Fe:Ff
+10e0bf ]_^ZY[
+10e3a8 SQRVWU
+10e54b ]_^ZY[
+10e7e0 SQRVWU
+10e9ae F;q)}
+10e9fc ]_^ZY[
+10ee5b __^Y[
+10ee80 SQVWU
+10ef8a ]_^Y[
+10eff8 SQVWU
+10f339 ]_^Y[
+10f340 SQVWU
+10f470 ]_^Y[
+10f4bc ]_^Y[
+10f508 ]_^Y[
+10f556 ]_^Y[
+10f698 SQVWU
+10f6d8 ]_^Y[
+10f73c SQVWU
+10f7e3 ]_^Y[
+10f817 ]_^Y[
+10f8eb ]_^Y[
+10f91f ]_^Y[
+10f95c ]_^Y[
+10f990 ]_^Y[
+10fa64 ]_^Y[
+10fa98 ]_^Y[
+10facc ]_^Y[
+10fb05 ]_^Y[
+10fb2c SQVWU
+10fb8c ]_^Y[
+10fc6c _&_^Y[
+10fc74 SQVWU
+10fd2f ]_^Y[
+10fdf8 SQVWU
+10ffa8 ]_^Y[
+10ffb0 SQVWU
+110162 ]_^Y[
+110304 SQVWU
+110a33 ]_^Y[
+110a3c SQVWU
+110de3 L$dkT$d$
+110e8f |^;D$\
+110e96 X;T$H
+110f00 ]_^Y[
+111008 SQVWU
+111123 ]_^Y[
+1111b2 ]_^Y[
+111234 ]_^Y[
+111251 ]_^Y[
+111304 SQVWU
+1113c9 ]_^Y[
+111413 ]_^Y[
+111430 ]_^Y[
+111484 SQVWU
+11152b ]_^Y[
+1115d0 SQVWU
+1118c3 ]_^Y[
+111b30 SQVWU
+111c09 ]_^Y[
+111c2c SQVWU
+111d0f ]_^Y[
+111d18 SQVWU
+111e12 ]_^Y[
+111e1c SQVWU
+111f38 ]_^Y[
+111f40 SQVWU
+112067 ]_^Y[
+112070 SQVWU
+11225d ,]_^Y[
+112560 SQVWU
+1126ef ]_^Y[
+112730 SQRVWU
+11285f ]_^ZY[
+112868 SQVWU
+112ca0 ]_^Y[
+112db0 SQVWU
+112ede ]_^Y[
+112ee4 SQVWU
+113039 ]_^Y[
+113044 SQVWU
+113222 ,]_^Y[
+113288 SQVWU
+113552 ]_^Y[
+113558 SQVWU
+11365f ]_^Y[
+1136b0 SQVWU
+1139d5 ]_^Y[
+1139dc SQVWU
+113b06 ]_^Y[
+113b9c SQVWU
+113c46 NYh333?1
+113c6a h333?
+113c9d NYh333?1
+113cc1 h333?
+113cf4 NYh333?1
+113d18 h333?
+113dbc ]_^Y[
+113eed RQUShx
+113f27 NYh333?1
+113f4b h333?
+113f97 ]_^Y[
+11400b PQUSh
+114069 h333?1
+114083 h333?
+1140a0 ]_^Y[
+1140ad RQUSh
+114128 ]_^Y[
+11412e RQUSh
+114168 NYh333?1
+11418c h333?
+1141bf NYh333?1
+1141e3 h333?
+114216 NYh333?1
+11423a h333?
+114268 ]_^Y[
+11426e RQUSh
+114297 ]_^Y[
+114300 SRVWU
+114448 ]_^Z[
+114450 SQVWU
+114523 ]_^Y[
+11454c L>h)\
+11459c L>h33
+1145cf @h333?h
+114650 L>h33
+114683 @h333?h_)K<h
+1146a4 SQVWU
+114757 QWUVh
+1147c4 ]_^Y[
+1147ea ]_^Y[
+114908 SQVWU
+114ad0 ]_^Y[
+114b50 SQVWU
+114bfd ]_^Y[
+114c54 SQRVW
+114ca6 _^ZY[
+114ee8 SQVWU
+11526a ]_^Y[
+115314 SQVWU
+1155c6 ]_^Y[
+115691 T$TRh
+1158ad @_^Y[
+1158e4 SQVWU
+115afe ]_^Y[
+115bf4 SQVWU
+115c2d D$\Ph@
+115c8d D$PPhp
+115d6e ]_^Y[
+115e30 SQVWU
+115f99 ]_^Y[
+116028 SQVWU
+116158 ]_^Y[
+1161ac SQVWU
+1162dc ]_^Y[
+116330 SQVWU
+116460 ]_^Y[
+1164b4 SQVWU
+1165cd ]_^Y[
+116634 SQVWU
+1167ab ]_^Y[
+1168ac SQVWU
+116a10 ]_^Y[
+116a18 SQVWU
+116c23 ]_^Y[
+116c60 SQVWU
+116e6a ]_^Y[
+116e70 SQVWU
+117081 ]_^Y[
+1170c8 SQVWU
+1171f4 RC]_^Y[
+1171fc SQVWU
+1172c4 ]_^Y[
+1172cc SQVWU
+117556 ]_^Y[
+1175bc SQVWU
+117877 ]_^Y[
+117880 SQVWU
+117cae ]_^Y[
+118210 SQRVWU
+11832c ]_^ZY[
+118334 SQRVWU
+11848f ]_^ZY[
+118b0c SQRVWU
+118c8b ]_^ZY[
+118c98 SQRVWU
+118f24 ]_^ZY[
+1190ac SQRVWU
+1191ae ]_^ZY[
+11920e ]_^ZY[
+11926e ]_^ZY[
+1192ce ]_^ZY[
+1192e1 ]_^ZY[
+1192e8 SQVWU
+11935f ]_^Y[
+1193a0 SQRVW
+1193ea _^ZY[
+119484 SQRVWU
+119579 P]_^ZY[
+119581 SQVWU
+119639 ]_^Y[
+119640 SQRVWU
+119ad6 D$tHi
+11a577 T$tJi
+11b8b7 D$PPB
+11ba98 D$`PA
+11bda5 ]_^ZY[
+11bdac SQRVWU
+11c05e ]_^ZY[
+11c09c SQRVWU
+11c919 T$ i5
+11cae4 t$$;rp
+11cbdf 0]_^ZY[
+11cbe8 SQVWU
+11ccb8 iL$Xl
+11d02b T$P;P(
+11d174 \$XCi
+11d544 h]_^Y[
+11d640 SQRVWU
+11d6ed C$]_^ZY[
+11d6f8 SQRVWU
+11d787 ]_^ZY[
+11d79f >333?33
+11d97b  ]_^Y
+11d984 SQRVWU
+11f53a ]_^ZY[
+11f550 SQRVWU
+11f68a ]_^ZY[
+11f694 SQRVWU
+11f794 ]_^ZY[
+11fbe0 PSQRV
+11fc92 ^ZY[X
+11fc9c PSQRVWU
+11fd50 ]_^ZY[X
+11fd5c SQRVWU
+11fe6e ]_^ZY[
+11fe83 ]_^ZY[
+11fe8c SQRVWU
+120044 ]_^ZY[
+120060 SQRVWU
+120164 ]_^ZY[
+12016c SQRVWU
+120245 ]_^ZY[
+12024c SQRVWU
+120393 ]_^ZY[
+12039c SQRVWU
+1204fd ]_^ZY[
+120588 SQRVWU
+120ab6 ]_^ZY[
+120ac0 SQRVWU
+120e6c ]_^ZY[
+1213a2  ^ZY[
+1215c0 SQRVWU
+121dbb ]_^ZY[
+121e34 SQVWU
+122027 ;xLt'
+1220f8 |$H;w
+1221b0 ]_^Y[
+122408 SQRVWU
+122701 ]_^ZY[
+1227f4 SQVWU
+12294f ]_^Y[
+122958 SQRVW
+122b9a _^ZY[
+122ba4 SQVWU
+122d20 |&;T$(
+122d27  ;\$ 
+122e43 |<;T$(
+122e4a 6;\$ 
+122e94 SQRVU
+12330e ]^ZY[
+123ea8 D$4f)
+123ed4 \$4f)
+123f73 D$4f)4B
+123f9f \$4f)4B
+123fd8 \$4;\$4
+123ff4 SQRVWU
+12406c <]_^ZY[
+124074 SQRVWU
+124123 @]_^ZY[
+12412c SQRVWU
+124220 @]_^ZY[
+124228 SQRVWU
+1242d1 @]_^ZY[
+1242dc SQRVWU
+1243d0 @]_^ZY[
+1243d8 SQRVWU
+124493 <]_^ZY[
+12449c SQRVWU
+124511 <]_^ZY[
+12452a <]_^ZY[
+124578 <]_^ZY[
+124580 SQRVWU
+12461a <]_^ZY[
+124624 SQRVWU
+1246b5 <]_^ZY[
+1246c0 SQRVWU
+124745 <]_^ZY[
+124750 SQRVWU
+1247e1 <]_^ZY[
+1247ec SQRVWU
+12487d <]_^ZY[
+1248d8 SQVWU
+124ae6 ]_^Y[
+124b14 SQRVWU
+124b83 ]_^ZY[
+124b8c SQRVWU
+124c21 <]_^ZY[
+124c2c SQRVWU
+124c71 <]_^ZY[
+124caf <]_^ZY[
+124cb8 SQRVWU
+124d49 <]_^ZY[
+124d54 SQRVWU
+124e0f <]_^ZY[
+124e18 SQRVWU
+124ead <]_^ZY[
+124eb8 SQRVWU
+124f2d <]_^ZY[
+124f4f <]_^ZY[
+124f68 <]_^ZY[
+124fc6 <]_^ZY[
+124fd0 SQRVWU
+125061 <]_^ZY[
+12506c SQRVWU
+125106 <]_^ZY[
+125110 SQRVWU
+1251d5 <]_^ZY[
+1251e0 SQRVWU
+12524b <]_^ZY[
+125254 SQRVWU
+1252e5 <]_^ZY[
+1252f0 SQRVWU
+12535b <]_^ZY[
+125364 SQRVWU
+1253f5 <]_^ZY[
+125400 SQRVWU
+12546b <]_^ZY[
+125474 SQRVWU
+125505 <]_^ZY[
+125510 SQRVWU
+12557b <]_^ZY[
+125584 SQRVWU
+125602 <]_^ZY[
+12560c SQRVWU
+125689 <]_^ZY[
+125694 SQRVWU
+125712 <]_^ZY[
+12571c SQRVWU
+12579a <]_^ZY[
+1257a4 SQRVWU
+125821 <]_^ZY[
+12582c SQRVWU
+125898 <]_^ZY[
+1258a0 SQRVWU
+125931 <]_^ZY[
+125990 SQVWU
+1262a7 ;x u!
+1263e9 ]_^Y[
+1264f9 { ;s$wV)
+1265f4 SQRVW
+126650 SQVWU
+126749 ]_^Y[
+126813 SQRVWP
+1268de _^ZY[
+1268e4 SQRVWP
+126994 SQRVUP1
+126ada ]^ZY[
+126bc7 SQVWU
+126c3c ]_^Y[
+126c42 SQVWU
+126ce0 ]_^Y[
+127068 SQRVWU
+1271f4 ]_^ZY[
+127354 QRVWU
+12744d ]_^ZY
+127454 QRVWU
+12754b ]_^ZY
+127554 SQRVW
+1275ab (_^ZY[
+1275b4 SQRVW
+12760d D_^ZY[
+1279c3 h]_^Y
+128360 SQVWU
+1283c9 ]_^Y[
+128b94 PSQRVWU
+128c08 ]_^ZY[X
+128ec8 SQRVWU
+128fca ,]_^ZY[
+129575 uY_^Y
+1295a6 u(_^Y
+129b40 SQVWU
+129bca ]_^Y[
+129ea2 (]_^Y
+12a177 f@f@Iu
+12a18e f@f@Iu
+12ffb0 SQVWU
+130043 ]_^Y[
+130053 SQRVWU
+1300b8 ]_^ZY[
+1300c9 SQRVWU
+13012f ]_^ZY[
+130140 SQVWU
+130201 ]_^Y[
+130207 SQRVW
+1302a7 _^ZY[
+130bf0 u.;\$ u(
+130c2b u#;\$ u
+130c5b u$;\$ u
+130c8c u';\$ u!9
+131065 D$(;F
+131380 X ;Z u
+131388 X$;Z$u
+131390 X(;Z(u
+131398 X,;Z,u
+1313a0 X0;Z0u
+1313a8 X4;Z4u
+1313b0 X8;Z8u
+1313b8 X<;Z<u
+1313c0 X@;Z@u
+1313c8 XD;ZDu
+1313d0 XH;ZHu
+1313d8 XL;ZL
+1313e4 @P;BP
+131505 PL_ZY[
+1318d0 |$ WQ1
+131f00 t$ VQ1
+132075  ]_^Y
+13246a SQVWU
+1325ce <]_^Y[
+133215 SQVWU
+1332ff ]_^Y[
+13336e SQRVWU
+1333b2 ]_^ZY[
+133409 SQRVWU
+13346b SQVWU
+13353f \]_^Y
+13354f SQVWU
+13360a X]_^Y
+1337de T$tRQ
+133818 \$tSQ
+1338db T$tRQ
+133915 \$tSQ
+133a64 SQVWU
+133b10 SQVWU
+133d9b SQRVW
+133e0f SQVWU
+133f3b Q(ZY[
+1345b2 ;T$TuW
+1345c1 ;l$huH
+1345d3 ;L$\u6
+1345fc ;L$du
+134649 ;|$Xu
+134657 F|;D$tt
+134766 C|,i 
+1347c0 @|,i 
+1348eb D$$;D$,~
+13499e D$0+D$ 
+1349a6 T$4+T$$
+1349d8 \$8+\$0
+1349e0 T$<+T$49
+135071 t$@+t$8
+13526b t$P+t$H
+1354b8 SQRVW
+135560 H_^ZY[
+135a59 SQRVWU
+135b13 ]_^ZY[
+135d64 SQRVWU
+135e36 ]_^ZY[
+136377 ht"_^Y
+136380 Fr>v,
+136eec SQVWU
+136f8b (]_^Y[
+137497 Zd;Z|v
+13753c SQRVW
+1375b1 _^ZY[
+1375b8 SQVWU
+1375e5 ;]_^Y[
+1375f0 SQVWU
+137657 ]_^Y[
+137660 SQRVW
+137717 _^ZY[
+137743 _^ZY[
+13774c SQRVWU
+137786 nd;n|vD
+13780b ]_^ZY[
+137941 Q|]_^Y
+137c7c SQRVWU
+137d61 ]_^ZY[
+137e38 SQRVW
+137e7e _^ZY[
+137e84 SQRVWU
+137ee0 ]_^ZY[
+1381a7 %&'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz
+13825d &'()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz
+138b64 SQRVWU
+138d6e ]_^ZY[
+138e59 ]_^ZY[
+139260 SQVWU
+1392f8 ]_^Y[
+139300 SQRVW
+139369 a-_^ZY[
+139436 B ZY[
+139443 B ZY[
+1394a8 SQRVWU
+1394f6 ]_^ZY[
+139594 SQRVW
+1396b0 _^ZY[
+139d44 SQRVW
+139dcc _^ZY[
+13a304 SQRVWU
+13a487 ]_^ZY[
+13a490 SQRVf
+13a587 uY^ZY[
+13a8e0 SQRW1
+13abd8 SQRVW
+13ac5f _^ZY[
+13ac98 SQRVWU
+13b120 ]_^ZY[
+13b298 SQRVW
+13b3d8 SQRWU
+13b47c ]_ZY[
+13b488 SQRV1
+13b534 SQRVWU
+13b644 ]_^ZY[
+13b64c SQVWU
+13b700 ]_^Y[
+13b7a7 ]_^Y[
+13b7bf ]_^Y[
+13b8cc ]_^Y[
+13c258 SQRVWU
+13c3ad ]_^ZY[
+13c948 SQRVWU
+13cb48 ]_^ZY[
+13cca8 SQRVW
+13cd2f _^ZY[
+13cd68 SQRVWU
+13d173 ]_^ZY[
+13d17c SQRVWU
+13d6dc ]_^ZY[
+13d6e4 SQRVWU
+13d93e ]_^ZY[
+13d948 SQRVWU
+13da57 ]_^ZY[
+13da60 SQRVW
+13dbc8 SQRWU
+13dc7c ]_ZY[
+13dd27 Y(^ZY[
+13dd68 SQVWU
+13dfac ]_^Y[
+13e7b4 SQVWU
+13e9a2 ]_^Y[
+13e9e0 SQRVWU
+13ea81 ]_^ZY[
+13eb98 ]_^ZY[
+13f4ec SQRVWU
+13f6db ]_^ZY[
+13f7c8 SQRV1
+13f898 SQVWU
+13fbf6 ]_^Y[
+1401bc SQVWU
+140410 ]_^Y[
+1404c4 SQRVW
+140634 _^ZY[
+14066e _^ZY[
+140684 _^ZY[
+1406fb _^ZY[
+140d7c SQRVWU
+140f7c ]_^ZY[
+1410d0 SQRVW
+141157 _^ZY[
+141160 SQRVW
+1411e7 _^ZY[
+14123c SQRVWU
+1415f1 ]_^ZY[
+1415f8 SQRVWU
+141b68 SQRVWU
+141d3c SQRWU
+141df0 ]_ZY[
+141df8 SQRVW
+141fcb _^ZY[
+141fd4 SQVWU
+142163 ]_^Y[
+142a58 SQVWU
+142bba ]_^Y[
+142be8 SQRVWU
+142c1c ]_^ZY[
+142c3c ]_^ZY[
+142d64 ]_^ZY[
+143450 SQRVWU
+14393a ]_^ZY[
+143944 SQRVWU
+143b5f ]_^ZY[
+143b68 SQRVWU
+14409f ]_^ZY[
+1440a8 SQRWU
+14414c ]_ZY[
+1441c3 P(ZY[
+1442a7 C#^ZY[
+144340 SQVWU
+1444d3 ]_^Y[
+1446c8 SQRVW
+144752 _^ZY[
+144e44 SQRVWU
+144f1d ]_^ZY[
+1456b8 SQVWU
+14593c ]_^Y[
+1462b0 SQVWU
+1463f2 ]_^Y[
+146494 SQRVW
+146545 _^ZY[
+14655d _^ZY[
+146575 _^ZY[
+1465c0 _^ZY[
+1465c6 SQRVWU
+146620 ]_^ZY[
+147660 SQRVW
+1476b1 _^ZY[
+1476b8 SQRVWU
+1477e2 ]_^ZY[
+147844 SQRVW1
+1478a8 SQRVW
+14793c _^ZY[
+147944 SQRVWU
+1479fd ]_^ZY[
+147a70 SQRVW
+147b4c C0_^ZY[
+147b73 S0_^ZY[
+147bd4 SQRVWU
+147cc7 ]_^ZY[
+147d1d B ]^Y[
+147d24 SQRVWU
+147d59 ]_^ZY[
+148053 ]_^ZY[
+148260 SQRVWU
+148a08 SQVWU
+148b85 ]_^Y[
+148bf6 ]_^Y[
+148cb4 ]_^Y[
+148d7f ]_^Y[
+148d94 ]_^Y[
+148db6 ]_^Y[
+148e3c SQRVWU
+148ef7 ]_^ZY[
+149078 SQRV1
+149144 SQRV1
+1494b7 _^Y[]
+1495ba SQVWU
+149626 ]_^Y[
+149636 PSQRVWU
+149653 ]_^ZY[X
+149667 PSQRVWU
+1496a4 ]_^ZY[X
+1496b8 PSQRVWU
+1496f8 ]_^ZY[X
+14970c PSQRVWU
+14974b ]_^ZY[X
+14975f PSQRVWU
+1497a2 ]_^ZY[X
+1497b6 SQVWU
+149888 ]_^Y[
+149898 SQVWU
+149929 ]_^Y[
+149939 SQVWU
+14a402 ]_^Y[
+14a412 SQRVWU
+14a569 ]_^ZY[
+14a57a SQRVWU
+14acc2 ]_^ZY[
+14acd5 PSQRVWU
+14ad09 ]_^ZY[X
+14ad1b PSQRVWU
+14ad61 ]_^ZY[X
+14ad73 PSQRVWU
+14adbc ]_^ZY[X
+14adce PSQRVWU
+14ae10 ]_^ZY[X
+14ae22 PSQRVWU
+14ae68 ]_^ZY[X
+14ae7a SQRVWU
+14b33f ]_^ZY[
+14ba7d +f@uQf
+14bf0c PSQRWU3
+14bf58 ]_ZY[X
+14bf5f PSQRWU3
+14bfb1 ]_ZY[X
+14bfb8 PSQRWU3
+14c007 ]_ZY[X
+14c00e PSQRWU3
+14c061 ]_ZY[X
+14c068 PSQRWU3
+14c0d4 ]]_ZY[X
+14c0dc PSQRWU3
+14c14f ]]_ZY[X
+14c157 PSQRWU3
+14c1c0 ]]_ZY[X
+14c1c8 PSQRWU3
+14c238 ]]_ZY[X
+14c240 UPSQR
+14c35f ZY[X]
+14c468 RUPQW
+14c512 RUPQ+
+14c608 PSQUW
+14c7df ^]Y[X
+14cdf5 ^]Y[X
+14ce04 PSQRU
+14ced8 ]ZY[X
+14d310 SQRVU
+14d4a8 SQRVU
+14d5b2 ]^ZY[
+14d640 SQRVWU
+14d74a ]_^ZY[
+14d754 SQRVWU
+14d840 SQRVWU
+14d9a1 ]_^ZY[
+14da1c SQVWU
+14da56 ]_^Y[
+14de72 trZY[
+14df2c SQRVWU
+14df71 u<;Y(u7
+14e043 l$4;i0
+14e1a2 l$8+i
+14e218 l$0;i0
+14e395 l$D+i
+14e413 `]_^ZY[
+14e41c SQVWU
+14e639 ]_^Y[
+14ec04 SQRVWU
+14ece4 ]_^ZY[
+14ed40 SQRVW
+14ed95 _^ZY[
+14ed9c SQRVWU
+14f006 ]_^ZY[
+14f010 SQRVWU
+14f2c4 SQRVWU
+14f4bd ]_^ZY[
+14f4c8 SQRVWU
+14f56c ]_^ZY[
+14f8e4 SQRVWU
+14fb2e 8]_^ZY[
+14fd0e ]_^ZY[
+14fd28 SQRVWU
+14fd48 SQRVW
+14fdd4 _^ZY[
+14fddc SQRVW
+14fe76 _^ZY[
+14fe7c SQRVW
+14fef4 SQRVW
+14ff9c SQRVWU
+1500be ]_^ZY[
+1500c8 SQRVWU
+1501e4 SQVWU
+150343 ]_^Y[
+150388 SQRVWU
+1504cd ]_^ZY[
+150550 SQRVWU
+150676 ]_^ZY[
+150810 SQRVU
+150abc ]^ZY[
+150f38 SQVWU
+1510c2 ]_^Y[
+1511a0 SQRVWU
+1511f2 }6k\$
+151233 ]_^ZY[
+1518f4 |$,H1
+1520fc SQVWU
+152158 ]_^Y[
+1522af RQVWSUP
+15233f ][_^YZ
+152960 SQVWU
+152983 C<#{<
+152989 A<#y<
+152a88  ]_^Y[
+152a90 SQVWU
+152b36 s,Vhx
+152b6b ]_^Y[
+152b74 SQVWU
+152c4c ]_^Y[
+152f94 PSQUW
+1531b8 ^]Y[X
+1534e8 SQVWU
+1535a1 ]_^Y[
+153614 SQRVWU
+1538d5 `]_^ZY[
+1538e0 SQRVW
+153a84 x_^ZY[
+153a8c SQRVW
+153c0a `_^ZY[
+153c20 SQRVWU
+153d06 D$ PS
+153d43 ]_^ZY[
+153d4c SQRVWU
+153da5 ]_^ZY[
+153db0 SQRVWU
+153f8b ]_^ZY[
+153fbc SQRVWU
+15410e ]_^ZY[
+154258 SQRVWU
+154438 ]_^ZY[
+1547b8 SQRVWU
+154da7 |]_^ZY[
+154e2b @hff&@
+154ee8 SQRVWU
+1554d1 |]_^ZY[
+1554dc SQRVWU
+155620 ]_^ZY[
+1556a3 @hff&@
+155f77 T$XM1
+156378 SQRWU
+15640c ]_ZY[
+156414 SQRVWU
+156547 ]_^ZY[
+15655e ]_^ZY[
+156568 SQRWU
+15662b ]_ZY[
+15672f ]_ZY[
+156848 ]_ZY[
+156870 SQRVWU
+156895 iD$\l
+156b1d \$d;Z
+156c14 ]_^ZY[
+156c1c SQRVWU
+156d36 ]_^ZY[
+1570c0 SQVWU
+1573c4 ]_^Y[
+1573cc SQRVW
+157645 _^ZY[
+157650 SQRVW
+1578c9 _^ZY[
+1578d4 SQVWU
+157c58 ]_^Y[
+157c60 SQVWU
+157e1b ]_^Y[
+158380 SQRVW
+1584b1 _^ZY[
+1584b8 SQRVW
+1585d4 $_^ZY[
+158c30 SQRVWU
+158c98  ]_^ZY[
+159125  ]_^ZY[
+159227 ;M w(
+15926d ;O w/
+1598af ;M w(
+1598f5 ;O w/
+159b14 ;M w(
+159b5a ;O w/
+15a60f ;M w(
+15a655 ;O w/
+15abe3 ;M w(
+15ac29 ;O w/
+15ade5 ;M w(
+15ae2b ;O w/
+15b687 ;M w(
+15b6cd ;O w/
+15b889 ;M w(
+15b8cf ;O w/
+15c09f ;M w(
+15c0e5 ;O w/
+15c617 ;M w(
+15c65d ;O w/
+15c819 ;M w(
+15c85f ;O w/
+15d15f ;M w(
+15d1a5 ;O w/
+15d3c4 ;M w(
+15d40a ;O w/
+15e123 ;M w(
+15e169 ;O w/
+15e325 ;M w(
+15e36b ;O w/
+15ec3a ;M w(
+15ec80 ;O w/
+15ee9f ;M w(
+15eee5 ;O w/
+15fbc3 ;M w(
+15fc09 ;O w/
+15fdc5 ;M w(
+15fe0b ;O w/
+16079e ;M w(
+1607e4 ;O w/
+160a03 ;M w(
+160a49 ;O w/
+1616f6 ;M w(
+16173c ;O w/
+1618f8 ;M w(
+16193e ;O w/
+162175 ;M w(
+1621bb ;O w/
+162c1a ;M w(
+162c60 ;O w/
+1637f8 ;M w(
+16383e ;O w/
+164402 ;M w(
+164448 ;O w/
+16501a ;M w(
+165060 ;O w/
+16521c ;M w(
+165262 ;O w/
+16860b ;M w(
+168651 ;O w/
+16880d ;M w(
+168853 ;O w/
+16910d ;M w(
+169153 ;O w/
+169bd7 ;M w(
+169c1d ;O w/
+169dd9 ;M w(
+169e1f ;O w/
+16a697 ;M w(
+16a6dd ;O w/
+16a899 ;M w(
+16a8df ;O w/
+16b1a7 ;M w(
+16b1ed ;O w/
+16b3a9 ;M w(
+16b3ef ;O w/
+16b8a7 QVSRW
+16ba43 QVSRW
+16baa4 tJZ[^Y3
+16bcb3 ;M w(
+16bcf9 ;O w/
+16bf18 ;M w(
+16bf5e ;O w/
+16c97c ;M w(
+16c9c2 ;O w/
+16cbd1 ;M w(
+16cc17 ;O w/
+16d3ac ;M w(
+16d3f2 ;O w/
+16de2e ;M w(
+16de74 ;O w/
+16e8e4 ;M w(
+16e92a ;O w/
+16eb39 ;M w(
+16eb7f ;O w/
+16f343 ;M w(
+16f389 ;O w/
+16f598 ;M w(
+16f5de ;O w/
+16fdb0 ;M w(
+16fdf6 ;O w/
+170015 ;M w(
+17005b ;O w/
+1709b2 SQRVW
+170a77 _^ZY[
+170b79 SQRVW
+170c0f D$(@t1
+170c50 D$( t
+170d5c _^ZY[
+171108 SQRVWU
+1711df 4]_^ZY[
+1711e8 SQVWU
+1715bd ]_^Y[
+171b1c SQVWU
+171b78 ]_^Y[
+171b80 SQVWU
+171c3a ]_^Y[
+171c79 ]_^Y[
+171cb8 ]_^Y[
+171cf7 ]_^Y[
+171d36 ]_^Y[
+171d75 ]_^Y[
+171db4 ]_^Y[
+171df3 ]_^Y[
+171e32 ]_^Y[
+171e7f ]_^Y[
+171ebe ]_^Y[
+171efd ]_^Y[
+171f3c ]_^Y[
+171f7b ]_^Y[
+171f9d ]_^Y[
+172226 4]_^Y
+172368 SQVWU
+1723cb ]_^Y[
+1723e8 SQVWU
+17242d ]_^Y[
+172446 SQRVWU
+172647 ]_^ZY[
+1727f1 SQRVWU
+172886 ]_^ZY[
+172897 SQVWU
+172af4 ]_^Y[
+172b04 SQVWU
+172bf2 ]_^Y[
+172c02 SQRVWU
+172c40 ]_^ZY[
+172c51 SQVWU
+172d19 ]_^Y[
+172d29 SQRVWU
+172dc3 ]_^ZY[
+172ea4 SQRVWU
+172f96 ]_^ZY[
+172fa7 SQRVWU
+173169 ]_^ZY[
+17317a SQRVWU
+1731e3 ]_^ZY[
+1731f4 SQRVWU
+17320e ]_^ZY[
+17321f SQRVWU
+1732b9 ]_^ZY[
+1732ca SQRVWU
+1732f4 ]_^ZY[
+173305 SQVWU
+173382 ]_^Y[
+173392 SQRVWU
+1733d3 ]_^ZY[
+1733e4 SQRVWU
+173410 ]_^ZY[
+173421 SQRVWU
+1734ef ]_^ZY[
+173500 SQRVWU
+173552 ]_^ZY[
+173563 SQRVWU
+17358b ]_^ZY[
+17359c SQRVWU
+1735c6 ]_^ZY[
+1735d7 SQVWU
+17371b ]_^Y[
+17372b SQRVWU
+173786 ]_^ZY[
+173797 SQRVWU
+1737fb ]_^ZY[
+17380c SQRVWU
+173869 ]_^ZY[
+17387a SQVWU
+17398e ]_^Y[
+173994 SQRVWU
+1739f5 ]_^ZY[
+173a44 ]_^ZY[
+173a4b SQRVWU
+173aa0 ]_^ZY[
+173aa7 QVWUSR
+173c95 SQRVWU
+173ccb ]_^ZY[
+173cdc SQRVWU
+173d1d ]_^ZY[
+173d2e SQRVWU
+173d70 ]_^ZY[
+173d81 SQRVWU
+174081 ]_^ZY[
+174092 SQRVWU
+17422a ]_^ZY[
+1744d6 |_^Y[
+1745a9 SQVWU
+1745ee ]_^Y[
+174dc7 t_^Y[
+174dd7 SQVWU
+175006 SQVWU
+17544c SQVWU
+175b39 D$%;AH
+175fc0 p]_^Y
+1760db \]^Y[
+17637c ;D$\u
+176389 `]^Y[
+176399 SQRVU
+176454 \]^ZY[
+176465 SQRVW
+176601 h_^ZY[
+17662e SQRVW
+176ab2 |]_^Y
+177333 SQVWU
+177378 ]_^Y[
+1776d0 t_^Y[
+178952 `_^Y[
+179108 SQRVW1
+17916b _^ZY[
+1793aa 0123456789abcdefghijklmnopqrstuvwxyz
+179413 (]_^Y
+179434 0123456789abcdefghijklmnopqrstuvwxyz
+17949d (]_^Y
+179973 G@]_^
+1799d3 GD]_^
+1799dc SQRVWU
+179b8e ]_^ZY[
+179f90 SQVWU
+17a088 ]_^Y[
+17a5d0 SQRVWU
+17a898 ]_^ZY[
+17a8a0 SQRVWU
+17ab14 ]_^ZY[
+17ab1c SQRVWU
+17acd5 ]_^ZY[
+17acdc SQRVWU
+17ae54 ]_^ZY[
+17ae5c SQRVWU
+17b254 ]_^ZY[
+17b25c SQRVWU
+17b4a0 ]_^ZY[
+17b4a8 SQRVWU
+17b578 ]_^ZY[
+17b580 SQRVWU
+17b612 ]_^ZY[
+17b61c SQRVWU
+17b71d ]_^ZY[
+17b724 SQRVWU
+17b79c ]_^ZY[
+17b7a4 SQRVW
+17b7d2 _^ZY[
+17b8d1 _^ZY[
+17b8ea _^ZY[
+17b903 _^ZY[
+17b91c _^ZY[
+17b935 _^ZY[
+17b967 _^ZY[
+17b991 _^ZY[
+17b9a6 _^ZY[
+17b9bb _^ZY[
+17b9d0 _^ZY[
+17b9e5 _^ZY[
+17ba00 ue_^ZY[
+17ba15 uP_^ZY[
+17ba45 u _^ZY[
+17bafc SQVWU
+17bc0f ]_^Y[
+17bd30 SQRVWU
+17bf11 ]_^ZY[
+17bf18 SQRVWU
+17c0a2 ]_^ZY[
+17c0ac SQRVWU
+17c16a ]_^ZY[
+17c1bc SQRVW
+17c287 _^ZY[
+17c2a3 _^ZY[
+17c34a QRVWU
+17c380 ]_^ZY
+17c3ba ]_^ZY
+17c3da ]_^ZY
+17c3e2 ]_^ZY
+17c3f2 SQRVWU
+17c5f8 ]_^ZY[
+17c60a SQRVW
+17c690 __^ZY[
+17c8ce SQRVW
+17ca23 2_^ZY[
+17cba0 SQVWU
+17cc97 ]_^Y[
+17cdec SQVWU
+17cefd ]_^Y[
+17cf04 SQRVWU
+17cff4 ]_^ZY[
+17d268 SQRVWU
+17d31b ]_^ZY[
+17d332 ]_^ZY[
+17d345 ]_^ZY[
+17d34c SQRVWU
+17d3f3 ]_^ZY[
+17d41c SQRVWU
+17d4a9 ]_^ZY[
+17d620 SQRVWU
+17d681 ]_^ZY[
+17d6a5 SQRVWU
+17d910 SQRVWU
+17dad1 SQRVW
+17db21 _^ZY[
+17de67 (_^Y[
+17e740 SQRVWU
+17e7f4 (]_^ZY[
+17e7fc SQVWU
+17eedb ]_^Y[
+17eee4 SQRVW
+17efc1 _^ZY[
+17f06d _^ZY[
+17f0e8 _^ZY[
+17f0f0 SQRVWU
+17f1d5 ]_^ZY[
+17f6e4 SQRVW
+17f855 _^ZY[
+180078 SQRVf
+180345 WVIDEO
+1803b6 UVWQS
+1803e9 [Y_^]
+180440 [Y_^]
+180446 UVWQSR
+18048b [Y_^]
+18051b ^ZY[]
+180523 PSQRV
+180638 ^ZY[X
+1808ab ZY[X]
+181239 \$$G9
+181398 SQVWU
+181481 $]_^Y[
+1814bb $]_^Y[
+1814ed $]_^Y[
+18151f $]_^Y[
+18155a $]_^Y[
+181618 SQVWU
+181735 ]_^Y[
+181950 SQRVWU
+181b0b ]_^ZY[
+181b48 SQRVU
+181b80 ]^ZY[
+182041 @(#x<
+182903 SVh0A
+182919 WVhlA
+1829bb SVhlA
+1829d1 WVh0A
+183983 SVh0A
+183999 WVhlA
+183a3b SVhlA
+183a51 WVh0A
+184380 SQRVWU
+184416 ]_^ZY[
+184584 |$,CAB9
+1845bc SQVWU
+184603 ]_^Y[
+18518c SQVWU
+185268 ]_^Y[
+1852d9 ]_^Y[
+185316 ]_^Y[
+18535b ]_^Y[
+18539e ]_^Y[
+1853dc ]_^Y[
+1853fe ]_^Y[
+185460 ]_^Y[
+18549e ]_^Y[
+1854e1 ]_^Y[
+185524 ]_^Y[
+18557d ]_^Y[
+18558b ]_^Y[
+18561c SQRVWU
+18565f ]_^ZY[
+1856cf ]_^ZY[
+1856f4 ]_^ZY[
+1858c4 SQVWU
+1859e6 T]_^Y[
+185c82 l$ US
+185c9b $]_^Y
+185d29 `]_^Y
+185e1d `]_^Y
+185e60 `]_^Y
+187221 $]_^Y
+18763d 8]_^Y
+1879fc D]_^Y
+187b76 D$$;l$
+187c38 SQRVWU
+187ef3 ]_^ZY[
+187efc SQRVWU
+188051 AU@tGf
+1880ea IP@]_^ZY[
+18850e \$0BC@
+188ab0 SQRVWU
+189375 ]_^ZY[
+189403 @T@t 
+189490 SQRVWU
+189562 FU t4
+189690 ]_^ZY[
+189698 SQVWU
+189818 ]_^Y[
+1899b1 F;7sN1
+189b44 SQVWU
+189cde ]_^Y[
+18a172 t$X;M
+18a2d0 t$|f;r
+18a2e4 ugf;J
+18a50f t$xf;r
+18a516 uef;J
+18aa0b D$tf=
+18b839 :L$,r
+18bee0 SQRVWU
+18c27d L$DBf
+18c2cf L$ ;T$ 
+18c5f8 ]_^ZY[
+18c788 SQVWU
+18c88e ]_^Y[
+18cb1c SQRVW
+18cb57 _^ZY[
+18cec3 H^ZY[
+18d11e SQVWU
+18d1f1 ]_^Y[
+18e81c SQVWU
+18e8f9 ]_^Y[
+18e93c SQRVWU
+18eaf8 0]_^ZY[
+18eb00 SQRVWU
+18ecaa ,]_^ZY[
+18ecb4 SQVWU
+18ed51 ]_^Y[
+18ed58 SQRVWU
+18ed87 $;H u
+18edba ]_^ZY[
+18f420 SQRVWU
+18f468 ]_^ZY[
+18f470 SQVWU
+18f54e ]_^Y[
+18f6ec SQVWU
+18fd70 ]_^Y[
+1900ad H]_^Y
+1900b4 SQVWU
+190146 ]_^Y[
+190c28 SQRVW
+190cc0 _^ZY[
+190cec SQVWU
+190e03 ]_^Y[
+190e1c SQRVWU
+190f5a ]_^ZY[
+190f70 SQRVWU
+191045 ]_^ZY[
+1914b0 D$ GH
+19157c SQRVW
+1915fb _^ZY[
+191610 SQRVWU
+1916e5 ]_^ZY[
+191bc7 A%:A$u
+191bf1 Al^ZY[
+19219c SQRVWU
+1923ea ]_^ZY[
+19268c SQVWU
+192714 ]_^Y[
+192743 sAmTb
+192750 BKbhTb~XBK!;
+192775 A!;I2
+192800 SQRVWU
+192a89 $]_^ZY[
+192a94 SQRVWU
+192b0b ]_^ZY[
+192ba0 SQRVWU
+192eb8 ]_^ZY[
+192ec0 SQRVW
+192f3b _^ZY[
+192f44 SQVWU
+1930ae L]_^Y[
+1930dc L]_^Y[
+1931aa L]_^Y[
+1931b4 SQVWU
+193309 <]_^Y[
+193353 <]_^Y[
+1933e9 <]_^Y[
+193427 L$0F9
+193483 <]_^Y[
+19348c SQVWU
+193556 (]_^Y[
+1935cd (]_^Y[
+1935d4 SQVWU
+193bf9 ]_^Y[
+193c3d ]_^Y[
+193ca8 C;^ |
+193d40 SQRVWU
+193e8d ]_^ZY[
+1941f5 ;<$}E
+194368 SQRVW
+1943dc _^ZY[
+1943e4 SQVWU
+194556 L]_^Y[
+194584 L]_^Y[
+194614 L]_^Y[
+194679 L]_^Y[
+1946b9 L]_^Y[
+194757 L]_^Y[
+1947bc L]_^Y[
+1947f8 L]_^Y[
+19489c L]_^Y[
+194990 SQVWU
+194aa9 D$8;T$
+194b0d D$,;FH}N
+194c36 L]_^Y[
+194c4d L]_^Y[
+194c58 SQRVWU
+194eb1 H]_^ZY[
+194ec9 H]_^ZY[
+194ed4 SQVWU
+1950b3 ,]_^Y[
+1950c1 ,]_^Y[
+1950c8 SQRVWU
+195175 ]_^ZY[
+195191 ]_^ZY[
+1951ec ]_^ZY[
+1951f4 SQVWU
+195c0f ]_^Y[
+195c22 ]_^Y[
+195c28 SQVWU
+195cf6 ]_^Y[
+195d3d ]_^Y[
+195d50 SQRVWU
+195e2b ]_^ZY[
+195e34 SQRVWU
+195fc7 0]_^ZY[
+195fd0 SQRVWU
+196146 0]_^ZY[
+196150 SQRVWU
+19621d ]_^ZY[
+196399 F4;FH
+19640c F4;FHr:
+19646c SQVWU
+196550 ]_^Y[
+196560 SQRVWU
+196739 ]_^ZY[
+196740 SQRVWU
+1967af A;J1}'
+196b73 ]_^ZY[
+196b7c SQRVWU
+196c03 ]_^ZY[
+196c84 ]_^ZY[
+196c8c SQRVWU
+196e37 ]_^ZY[
+196e40 SQRVWU
+196ff9 ]_^ZY[
+197150 SQRVWU
+19721e ]_^ZY[
+19789c A5:A$u
+1978a4 Y ;Y1t
+198228 SQRVWU
+1983ac ]_^ZY[
+198561 ;t$8|
+1985a5 ;X4u/
+1985e9 l$T;(w
+19867d D$ F9
+198771 ;P0u`1
+19880d @4;B<
+19886d ;t$4|
+1988a5 z<;x4
+198940 SQRVWU
+198ab7 (]_^ZY[
+198ac0 SQVWU
+198b7f ]_^Y[
+198bb3 sAmTb
+198bc0 BKbhTb~XBK!;
+198be5 A!;I2
+198c4f ?SQRVWU
+198e89 ]_^ZY[
+1992f0 SQVWU
+1994e1 ]_^Y[
+199664 SQRVWU
+1996d5 ]_^ZY[
+19978c SQVWU
+1998d0 ]_^Y[
+1998d8 SQVWU
+199a77 ]_^Y[
+199a80 SQVWU
+199b49 ]_^Y[
+199b50 SQVWU
+199e4f ]_^Y[
+199eb4 SQRVWU
+199f8d  ]_^ZY[
+199fe0 SQVWU
+19a1ca  ]_^Y[
+19a634 SQVWU
+19a79c 0]_^Y[
+19a7a4 SQRVWU
+19a840 (]_^ZY[
+19a8e0 SQVWU
+19a9ac ]_^Y[
+19abdc SQRVWU
+19accb 0]_^ZY[
+19ae14 SQVWU
+19af15 T$(;P
+19af1e D$D;FH
+19b0e4 P]_^Y[
+19b0ec SQVWU
+19b3ad \]_^Y[
+19b3b4 SQVWU
+19b5f6 H]_^Y[
+19b600 SQVWU
+19b6c2 ]_^Y[
+19b7d0 SQVWU
+19b862 ]_^Y[
+19b918 QVWUPRS
+19ba9d SQRVW
+19bb6b _^ZY[
+19bc3c SQRUVR
+19bca1 ^]ZY[
+19bd0b X[Y_]
+19c392 P]_^Y
+19c58a u(;t$@u
+19c9a0 D$L;D$0
+19ccf4 P]_^Y
+19ceca u0;u,t@
+19cfe3 P]_^Y
+19d036 U,]_^Y
+19d3e4 B0;B,
+19d5a8 +@G;D$
+19d630 X[[[f
+19db68 SQRWU
+19dba1 ]_ZY[
+19dc3c _^][[Z
+19dd37 SQRVW
+19df08 _^ZY[]
+19e488 L$@ix
+19f810 SQRVWU
+19f90a ,$il$
+19faab ,$il$
+19fb41 ,]_^ZY[
+19fb50 SQRVWU
+19fd47 ]_^ZY[
+1a04d8 L$D;L$
+1a0555 l$8#,
+1a058e l$8)L$D
+1a0666 H]_^Y
+1a0678 L$D;L$(
+1a06c2 H]_^Y
+1a070a l$8#,
+1a072c l$8)L$D
+1a0755 L$D;L$ 
+1a079f H]_^Y
+1a07e7 l$8#,
+1a0820 l$8)L$D
+1a08cf H]_^Y
+1a08e1 L$D;L$$
+1a092b H]_^Y
+1a0973 l$8#,
+1a0995 l$8)L$D
+1a0a9e H]_^Y
+1a0b99 H]_^Y
+1a0bd3 N0;N,t=
+1a0c11 H]_^Y
+1a0c5a H]_^Y
+1a0c9c H]_^Y
+1a18bd SQRVW
+1a18f4 _^ZY[
+1a1b52 |$<C9
+1a1bdf L$0;L$,v 
+1a1be9 L$,)L$0
+1a1bf6 L$,FI
+1a1c0e L$0FI
+1a1ee9 XPSQRVWU
+1a1fe8 ]_^ZY[X
+1a2650 $]_^Y
+1a27c7 D$lh-
+1a27d0 \$4S1
+1a2af5 x]_^Y
+1a2c19 SQVWU
+1a2c75 ]_^Y[
+1a2cb3 SQVWU
+1a42c1 SQVWU
+1a43e8 ]_^Y[
+1a459b ;NXul
+1a473a D$,dI
+1a4981 T$ ;t$
+1a49a8 $]_^Y
+1a49d0 D$ ;t$
+1ac004 example.h
+1ac010 Largest available block (in bytes): %lu
+1ac03c Maximum unlocked page allocation: %lu
+1ac064 Pages that can be allocated and locked: %lu
+1ac094 Total linear address space including allocated pages: %lu
+1ac0d0 Number of free pages available: %lu
+1ac0f8 Number of physical pages not in use: %lu
+1ac124 Total physical pages managed by host: %lu
+1ac150 Free linear address space (pages): %lu
+1ac178 Size of paging/file partition (pages): %lu
+1ac1a4  Select video mode for demo 
+1ac1c4  Select 640x480 video mode 
+1ac1e3 G-setup
+1ac1ec -nointel
+1ac1f8 -bigmem
+1ac200 -persp
+1ac208 -invert
+1ac210 -prog
+1ac218 PROGGIE!!! you are the best :)
+1ac238 -virago
+1ac240 * viragoLVD cant think really straigth atm.. been awake too long :)..
+1ac288 tour.98
+1ac290 tour3.xm
+1ac29c example.c
+1ac2a8 script.unr
+1ac2b8 noname
+1ac2c0 mem.c
+1ac2c8 0 <= flag && flag <= MEM_RETRY
+1ac2f0 alloc'd from file '%s' line %d nbytes %d ptr x%x
+1ac324 File '%s' line %d
+1ac338 More frees than allocs at 
+1ac354 Pointer x%x underrun
+1ac36c Pointer x%x overrun
+1ac384 error: mem_numalloc = %ld, dl->nbytes = %d
+1ac3b0 free'd from 
+1ac3c0 Unfreed pointer: 
+1ac3d4 mem_count == 0 && mem_scount == 0
+1ac3f8 Protected mode vesa interface not found, try page switching mode
+1ac43c Physical memory mapping error, try page switching mode
+1ac474 svga.c
+1ac47c  %d,%d  %s
+1ac4dd                                                                               
+1ac584 images.c
+1ac594 MAPS\
+1ac59c Could not find file 
+1ac5b4 Image 
+1ac5bc  not found
+1ac5c8 Image has unknown type
+1ac5e0 IMS error: could not init
+1ac5fc IMS error: could not open module.
+1ac620 IMS error: could not load module.
+1ac644 IMS error: could not upload samples.
+1ac66b IMS error: could not play module.
+1ac6a0 %d %d
+1ac6ac theend
+1ac6b4 loadscene
+1ac6c0 loadanim
+1ac6cc addevent
+1ac6d8 suppressevent
+1ac6e8 resumeevent
+1ac6f4 deleteevent
+1ac700 changebuffers
+1ac710 setscenesorder
+1ac720 process_twirl3d
+1ac730 setwireframe
+1ac740 setparticles
+1ac750 renderoff
+1ac75c beamsoff
+1ac768 renderon
+1ac774 beamson
+1ac77c assignbuffertotexture
+1ac794 loadimage
+1ac7a8 deletebuffer
+1ac7b8 createbuffer
+1ac7c8 %s %s %d %d %d %s
+1ac7e4 %*s %s
+1ac7f4 %s %s
+1ac7fc loadbackground
+1ac80c removebackground
+1ac820 assignbackground
+1ac834 %s %s %s
+1ac840 request to assign background %s to buffer %s in (%d:%d)
+1ac87c received a request to create a %d bit %d x %d in buffer named %s
+1ac8c0 script.c
+1ac8cc %*s %s %s
+1ac8d8 %d %d %s %s %s %f %f %f %f %f %f %f
+1ac8fc %d %d %s %s %s %s
+1ac910 %*s %[^,]%*s %[^,]%*s %[^,]%*s %[^,]%*s %[^,]%*s %[^,]%*s %[^,]%*s %[^,]%*s
+1ac960 %d %d %s %s %s %d
+1ac974 %s %s %s %d
+1ac980 tried to add non existant event: %s
+1ac9a4 %s %s %s %s
+1ac9b0 %*s %d %s %s
+1ac9c0 could not find render target buffer
+1ac9fb Bscene1.c
+1aca30 ralloc.c
+1aca3c FILE ERROR : %s%s
+1aca52 No archive file!!! 
+1aca66 File not found : 
+1aca78 hsort.c
+1aca81 problem with graphics adapter - could not initialize any video mode
+1acac6 try running UNIVBE.
+1acadc Assertion failed: %hs, file %hs, line %d
+1acb08 misc.c
+1acb14 font0.png
+1acb23 can't open %s
+1acb34 IMSSETUP
+1acb3d quiet
+1acb43 AMD InterWave
+1acb51 Gravis UltraSound
+1acb63 GUS Software Mixing
+1acb77 GUS MAX
+1acb7f GUS DaughterBoard
+1acb91 Double GUS 2D
+1acb9f SoundBlaster 32
+1acbaf SoundBlaster 16
+1acbbf SoundBlaster Pro stereo
+1acbd7 SoundBlaster 2.x/Pro mono
+1acbf1 SoundBlaster 1.x
+1acc02 Windows Sound System
+1acc17 ESS Audio Drive 688
+1acc2b Pro Audio Spectrum
+1acc40 Extended Module: 
+1acc54 undefined constructor or destructor called!
+1acc80 event.c
+1acc8c %s %f %f %c
+1accb6 Y@sorry, no ZOOM for this depth
+1accd8 %f %f
+1acd58 %s %d %d %d %f
+1acd8b @%s %s %s %s %s %s
+1acda0 Zla liczba parametrow dla EchoCml32!!!
+1acdc8 eventc.c
+1acdd4 Blad w parametrze 1 EchoCml32!!! {%s}
+1acdfc Blad w parametrze 2 EchoCml32!!! {%s}
+1ace24 Blad w parametrze 3 EchoCml32!!! {%s}
+1ace4c Blad w parametrze 4 EchoCml32!!! {%s}
+1ace74 Blad w parametrze 5 EchoCml32!!! {%s}
+1ace9c Blad w parametrze 6 EchoCml32!!! {%s}
+1acec4 EchoCml needs 32 bit output buffer
+1acee8 EchoCml needs 32 bit input buffer
+1acf14 %f %f %f %f %f %f %d %d %d %d %d %d %d %f %f %f %f %s %s %s %s
+1acf54 Zla liczba parametrow dla EchoCml32!!!
+1acf7c Blad w parametrze 18 EchoCml32!!! {%s}
+1acfa4 Blad w parametrze 19 EchoCml32!!! {%s}
+1acfcc Blad w parametrze 20 EchoCml32!!! {%s}
+1acff4 Blad w parametrze 21 EchoCml32!!! {%s}
+1ad01c Zla wielkosc particles (PartMag2D)
+1ad04a ?333333$@
+1ad062 ?333333
+1ad084 PartMag2D needs 16 or 32 bit output buffer
+1ad0e8 %f %f %f %s
+1ad0f4 Zla liczba parametrow dla Fade16!!!
+1ad118 Blad w parametrze 4 Fade16!!! {%s}
+1ad13c Fade: Input and output buffer sizes and depths must be equal
+1ad17c Fade: Buffer color depth not supported
+1ad1b8 Zla liczba parametrow dla XFade!!!
+1ad1dc Blad w parametrze 1 XFade!!! {%s}
+1ad200 XFade: Input and output buffer sizes and depths must be equal
+1ad240 XFade: Buffer color depth not supported
+1ad26e o@AFade: Input and output buffer sizes and depths must be equal
+1ad2b0 AFade: Buffer color depth not supported
+1ad2d8 Zla liczba parametrow dla LowPass!!!
+1ad300 Blad w parametrze 1 LowPass!!! {%s}
+1ad328 Fade: Input and output buffer sizes and depths must be equal
+1ad368 LowPass: Buffer color depth not supported
+1ad3a0 Dither: Input and output buffer sizes or depths are not valid
+1ad3e0 Dither: Buffer color depth not supported
+1ad40c DitherFS: Input and output buffer sizes and depths must be equal
+1ad450 DitherFS: Buffer color depth not supported
+1ad47c Edges: Input and output buffer sizes and depths must be equal
+1ad4bc Edges: Buffer color depth not supported
+1ad4e4 %f %f %f %f %f %f %f %f %f %f
+1ad504 Zla liczba parametrow dla Matrix!!!
+1ad528 MatrixEffects: Input and output buffer sizes and depths must be equal
+1ad570 MatrixEffects: Buffer color depth not supported
+1ad5a6 o@Blad w parametrze GridFX!!! {%s}
+1ad5d9 ?ffffff
+1ad630 GridEffects: Input and output buffer sizes and depths must be equal
+1ad674 GridEffects: Buffer color depth not supported
+1ad6a4 ShowZbuffer: output buffer depth must be 8
+1ad6d0 %s %s %d
+1ad6dc FakeZBuffer: wrong params
+1ad6f8 FakeZBuffer: Error at param 1
+1ad718 FakeZBuffer: Error at param 2
+1ad738 Zla liczba parametrow dla BoxFilter!!!
+1ad760 Blad w parametrze 1 BoxFilter!!! {%s}
+1ad788 BoxFilter: Input and output buffer sizes and depths must be equal
+1ad7cc BoxFilter: Buffer color depth not supported
+1ad7f8 evento.c
+1ad804 %s %s %s
+1ad810 Zla liczba parametrow dla Bomb!!!
+1ad834 Blad w parametrze 3 Bomb!!! {%s}
+1ad858 Bomb: Scene (%s) not found
+1ad874 Bomb: Object (%s) not found
+1ad891 UUUUUU
+1ad89c 8333333
+1ad8a4 ?333333
+1ad8f0 SilvereGridEffects: Input and output buffer sizes and depths must be equal
+1ad93c SilvereGridEffects: Buffer color depth not supported
+1ad974 %s %s %s %s %s
+1ad984 Zla liczba parametrow dla Disp247!!!
+1ad9ac Blad w parametrze 3 Disp247!!! {%s}
+1ad9d4 Blad w parametrze 4 Disp247!!! {%s}
+1ad9fc Blad w parametrze 5 Disp247!!! {%s}
+1ada24 Disp247: Scene (%s) not found
+1ada44 Disp247: Object (%s) not found
+1ada64 Zla liczba parametrow dla DispNorm!!!
+1ada8c Blad w parametrze 3 DispNorm!!! {%s}
+1adab4 Blad w parametrze 4 DispNorm!!! {%s}
+1adadc Blad w parametrze 5 DispNorm!!! {%s}
+1adb04 DispNorm: Scene (%s) not found
+1adb24 DispNorm: Object (%s) not found
+1adb48 %d %d %s rgbforwardrecord %s %d
+1adb68 rgbbackwardplay
+1adb78 %d %d %s forwardrecord %s %d
+1adb95 backwardplay
+1adba2 %d %d %s forward %s
+1adbbb %d %d %s backward %s
+1adbd0 %s.tp0
+1adbd7 %s.tm1
+1adbde %d %d %s rgbforward %s
+1adbf5 %d %d %s rgbbackward %s
+1adc0d illegal parameters for Wave.
+1adc3f @e@ffffff
+1adc84 grayscott %f %f %f %s
+1adc9f preinit grayscott %f %f %f %s
+1adcc6 cellrd: illegal args
+1adcdc %f %f
+1adce2 %f %f %f %f
+1adcee gfeed: output buffer size is not 512x200...
+1add1b gfeed: input 0 size is not 320x200...
+1add42 gfeed: input 1 size is not 512x200...
+1add78 ?333333
+1add8c blob.c
+1addd0 %s %s
+1addd8 Volume3D: Params parse error.
+1addf8 Too many volumes!!!
+1ade10 ClearVolume: Params parse error.
+1ade34 ClearVolume: Volume not found
+1ade54 CopyVolume: Params parse error.
+1ade74 CopyVolume: Dest volume not found
+1ade98 CopyVolume: Src volume not found
+1adebc MetaBalls: Params parse error.
+1adedc MetaBalls: Volume not found
+1adef8 %s %s %s %s %s
+1adf08 MetaBalls: Wrong param %d at config file line %d
+1adf3c MetaBalls: Wrong param X at config file line %d
+1adf70 MetaBalls: Wrong param Y at config file line %d
+1adfa4 MetaBalls: Wrong param Z at config file line %d
+1adfd8 MetaBalls: Wrong param R at config file line %d
+1ae00c MetaBalls: Wrong param C at config file line %d
+1ae040 %s %s %s %d
+1ae04c MarchingCubes: Params parse error.
+1ae070 MarchingCubes: Scene (%s) not found
+1ae098 MarchingCubes: Object (%s) not found
+1ae0c0 MarchingCubes: Volume not found
+1ae0e0 %s %s %s %s
+1ae0ec MorphVolume: Params parse error.
+1ae110 MorphVolume: Volume not found
+1ae130 MorphVolume: Volume not found
+1ae150 MorphVolume: Volume not found
+1ae170 MorphVolume: Wrong param 4
+1ae18c %s %s %s
+1ae198 AddVolume: Params parse error.
+1ae1b8 AddVolume: Volume not found
+1ae1d4 SubVolume: Params parse error.
+1ae1f4 SubVolume: Volume not found
+1ae210 MulVolume: Params parse error.
+1ae230 MulVolume: Volume not found
+1ae24c FadeVolume: Params parse error.
+1ae26c FadeVolume: Volume not found
+1ae28c FadeVolume: Wrong param 3
+1ae2a8 Plasma1Volume: Params parse error.
+1ae2cc Plasma1Volume: Volume not found
+1ae2ec Plasma1Volume: Wrong param 2
+1ae30c Plasma1Volume: Wrong param 3
+1ae340 VolumeSprites: Params parse error.
+1ae364 VolumeSprites: Scene (%s) not found
+1ae38c VolumeSprites: Object (%s) not found
+1ae3b4 VolumeSprites: Volume not found
+1ae3da A@eventn.c
+1ae42c ParaSite: Output buffer muse be 320x200x32
+1ae48d Y@333333
+1ae4c6 @ffffff
+1ae4e0 %s %s %s %s
+1ae4ec Tunnel: Params error
+1ae504 Tunne: Param error {%s}
+1ae5a8 evente.c
+1ae5b4 Blad w parametrze w Echo2 {%s}
+1ae5d4 Efekt Echa potrzebuje 320x200x8
+1ae5f4 Blad w parametrze w Echo2 {%s}
+1ae614 Efekt Echa potrzebuje 320x200x8
+1ae634 Blad w parametrze w Echo2 {%s}
+1ae654 Efekt Echa potrzebuje 320x200x8
+1ae674 Blad w parametrze w Echo2 {%s}
+1ae694 process.c
+1ae6a8 dispmap.tab
+1ae6b4 tried to add non existing do_process
+1ae701 zt?frame=%d
+1ae710 rendered=%d
+1ae71c objects calculated=%d/%d
+1ae738 particles(%d)=%d
+1ae74c loaduexp.c
+1ae7b0 loadlws.c
+1ae7d4 flares.c
+1ae7f0 flare1.unr
+1ae7fc matmgr.c
+1ae80c chn.pic
+1ae814 gen_env.png
+1ae884 tried to use KF_SLERP, it is disabled!
+1ae9a0 particle.c
+1ae9b4 Bad particle size
+1aea0c renderc.c
+1aea18 RSorting range exceeded (underflow)
+1aea3c RSorting range exceeded (overflow)
+1aea5f ffffff
+1aea9c %1.4f %1.4f %1.4f
+1aeab0 %1.4f %1.4f %1.4f
+1aeac4 %1.4f %1.4f %1.4f %1.4f
+1aeae0 %1.4f %1.4f %1.4f %1.4f
+1aeb04 X: %4.4f  Y: %4.4f  Z: %4.4f
+1aeb5c pngload.c
+1aeb68 destination target conversion not available
+1aeb94 BlockSort: alloc error
+1aebac undefined member function called through debug information!
+1aebe8 ARGB8888
+1aebf1 ABGR8888
+1aebfa BGRA8888
+1aec03 RGBA8888
+1aec0c RGB888
+1aec13 BGR888
+1aec1a RGB565
+1aec21 BGR565
+1aec28 RGB555
+1aec2f BGR555
+1aec36 ARGB1555
+1aec3f ABGR1555
+1aec48 RGB332
+1aec4f INDEX8
+1aec56 GREY8
+1aec5c GRAY8
+1aec62 FAKEMODE1A
+1aec6d FAKEMODE1B
+1aec78 FAKEMODE1C
+1aec83 FAKEMODE2A
+1aec8e FAKEMODE2B
+1aec99 FAKEMODE2C
+1aeca4 FAKEMODE3A
+1aecaf FAKEMODE3B
+1aecba FAKEMODE3C
+1aecc5 FAKEMODE1
+1aeccf FAKEMODE2
+1aecd9 FAKEMODE3
+1aecec DIRECT
+1aecf3 INDEXED
+1aecfb FAKEMODE
+1aed04 ptc error: %s
+1aed1b Apure virtual function called!
+1aed3c ABNORMAL TERMINATION
+1aed54 Bogus message code %d
+1aed6c Sorry, there are legal restrictions on arithmetic coding
+1aeda8 ALIGN_TYPE is wrong, please fix
+1aedc8 MAX_ALLOC_CHUNK is wrong, please fix
+1aedf0 Bogus buffer control mode
+1aee0c Invalid component ID %d in SOS
+1aee2c IDCT output block size %d not supported
+1aee54 Bogus input colorspace
+1aee6c Bogus JPEG colorspace
+1aee84 Bogus marker length
+1aee98 Wrong JPEG library version: library is %d, caller expects %d
+1aeed8 Sampling factors too large for interleaved scan
+1aef08 Invalid memory pool code %d
+1aef24 Unsupported JPEG data precision %d
+1aef48 Invalid progressive parameters Ss=%d Se=%d Ah=%d Al=%d
+1aef80 Invalid progressive parameters at scan script entry %d
+1aefb8 Bogus sampling factors
+1aefd0 Invalid scan script at entry %d
+1aeff0 Improper call to JPEG library in state %d
+1af01c JPEG parameter struct mismatch: library thinks size is %u, caller expects %u
+1af06c Bogus virtual array access
+1af088 Buffer passed to JPEG library is too small
+1af0b4 Suspension not allowed here
+1af0d0 CCIR601 sampling not implemented yet
+1af0f8 Too many color components: %d, max %d
+1af120 Unsupported color conversion request
+1af148 Bogus DAC index %d
+1af15c Bogus DAC value 0x%x
+1af174 Bogus DHT counts
+1af188 Bogus DHT index %d
+1af19c Bogus DQT index %d
+1af1b0 Empty JPEG image (DNL not supported)
+1af1d8 Read from EMS failed
+1af1f0 Write to EMS failed
+1af204 Didn't expect more than one scan
+1af228 Input file read error
+1af240 Output file write error --- out of disk space?
+1af270 Fractional sampling not implemented yet
+1af298 Huffman code size table overflow
+1af2bc Missing Huffman code table entry
+1af2e0 Maximum supported image dimension is %u pixels
+1af310 Empty input file
+1af324 Premature end of input file
+1af340 Cannot transcode due to multiple use of quantization table %d
+1af380 Scan script does not transmit all data
+1af3a8 Invalid color quantization mode change
+1af3d0 Not implemented yet
+1af3e4 Requested feature was omitted at compile time
+1af414 Backing store not supported
+1af430 Huffman table 0x%02x was not defined
+1af458 JPEG datastream contains no image
+1af47c Quantization table 0x%02x was not defined
+1af4a8 Not a JPEG file: starts with 0x%02x 0x%02x
+1af4d4 Insufficient memory (case %d)
+1af4f4 Cannot quantize more than %d color components
+1af524 Cannot quantize to fewer than %d colors
+1af54c Cannot quantize to more than %d colors
+1af574 Invalid JPEG file structure: two SOF markers
+1af5a4 Invalid JPEG file structure: missing SOS marker
+1af5d4 Unsupported JPEG process: SOF type 0x%02x
+1af600 Invalid JPEG file structure: two SOI markers
+1af630 Invalid JPEG file structure: SOS before SOF
+1af65c Failed to create temporary file %s
+1af680 Read failed on temporary file
+1af6a0 Seek failed on temporary file
+1af6c0 Write failed on temporary file --- out of disk space?
+1af6f8 Application transferred too few scanlines
+1af724 Unsupported marker type 0x%02x
+1af744 Virtual array controller messed up
+1af768 Image too wide for this implementation
+1af790 Read from XMS failed
+1af7a8 Write to XMS failed
+1af7bc Copyright (C) 1996, Thomas G. Lane
+1af7e0 6a  7-Feb-96
+1af7f0 Caution: quantization tables are too coarse for baseline JPEG
+1af830 Adobe APP14 marker: version %d, flags 0x%04x 0x%04x, transform %d
+1af874 Unknown APP0 marker (not JFIF), length %u
+1af8a0 Unknown APP14 marker (not Adobe), length %u
+1af8cc Define Arithmetic Table 0x%02x: 0x%02x
+1af8f4 Define Huffman Table 0x%02x
+1af910 Define Quantization Table %d  precision %d
+1af93c Define Restart Interval %u
+1af958 Freed EMS handle %u
+1af96c Obtained EMS handle %u
+1af984 End Of Image
+1af994         %3d %3d %3d %3d %3d %3d %3d %3d
+1af9bc JFIF APP0 marker, density %dx%d  %d
+1af9e0 Warning: thumbnail image size does not match data length %u
+1afa1c Unknown JFIF minor revision number %d.%02d
+1afa48     with %d x %d thumbnail image
+1afa6c Skipping marker 0x%02x, length %u
+1afa90 Unexpected marker 0x%02x
+1afaac         %4u %4u %4u %4u %4u %4u %4u %4u
+1afad4 Quantizing to %d = %d*%d*%d colors
+1afaf8 Quantizing to %d colors
+1afb10 Selected %d colors for quantization
+1afb34 At marker 0x%02x, recovery action %d
+1afb5c RST%d
+1afb64 Smoothing not supported with nonstandard sampling ratios
+1afba0 Start Of Frame 0x%02x: width=%u, height=%u, components=%d
+1afbdc     Component %d: %dhx%dv q=%d
+1afbfc Start of Image
+1afc0c Start Of Scan: %d components
+1afc2c     Component %d: dc=%d ac=%d
+1afc4c   Ss=%d, Se=%d, Ah=%d, Al=%d
+1afc6c Closed temporary file %s
+1afc88 Opened temporary file %s
+1afca4 Unrecognized component IDs %d %d %d, assuming YCbCr
+1afcd8 Freed XMS handle %u
+1afcec Obtained XMS handle %u
+1afd04 Unknown Adobe color transform code %d
+1afd2c Inconsistent progression sequence for component %d coefficient %d
+1afd70 Corrupt JPEG data: %u extraneous bytes before marker 0x%02x
+1afdac Corrupt JPEG data: premature end of data segment
+1afde0 Corrupt JPEG data: bad Huffman code
+1afe04 Warning: unknown JFIF revision number %d.%02d
+1afe34 Premature end of JPEG file
+1afe50 Corrupt JPEG data: found marker 0x%02x instead of RST%d
+1afe88 Invalid SOS parameters for sequential JPEG
+1afeb4 Application transferred too many scanlines
+1afee4 compiler error: eliminated virtual function call!
+1aff18 INTERWAVE
+1aff22 ULTRASND
+1aff2c ULTRASND
+1aff38 ULTRASND
+1aff78 ULTRA16
+1aff80 ULTRA16
+1aff88 ULTRASND
+1aff94 ULTRASND
+1affa0 BLASTER
+1affa8 BLASTER
+1affb0 BLASTER
+1affb8   Indoor Music System v0.6       SETUP     (c) '94-97  Niklas Beisert / pascal  
+1b0009   2*return:start, 2*esc:quit, 
+1b002a :select (
+1b003a :select (
+1b0048 return
+1b005d , digit:enter
+1b006b digit
+1b00de normal
+1b00fd inverted
+1b010a inverted headphones
+1b012a headphones
+1b0138 normal
+1b013f suppress
+1b014c -suppress half
+1b015f normal
+1b0169 medium
+1b0178  device:
+1b0181    port:
+1b018a   port2:
+1b0193     dma:
+1b019c    dma2:
+1b01a5     irq:
+1b01ae    irq2:
+1b01b7    rate:
+1b01c0  16 bit:
+1b01c9  stereo:
+1b01d2 intrplt:
+1b01db amplify:
+1b01e4 panning:
+1b01ed  reverb:
+1b01f6  chorus:
+1b01ff    srnd:
+1b0212 0@%lf
+1b021a ERROR
+1b024d FLOOR
+1b0260 CLIP10
+1b0267 CLIP11
+1b0277 DELTA
+1b027d ERROR - wrong param string
+1b029a FRAME
+1b02a7 3 <%s>
+1b02af Eval Stack Underflow
+1b02c4 Eval Stack Overflow
+1b02dc wspeed.tga
+1b02ea read_table failed, name '%s'
+1b037a @wave: time_offset invalid
+1b0396 wave: image size is %dx%d, not %dx%d.  ignoring.
+1b03ce p?UUUUUU
+1b03d7 ?time_offset invalid
+1b03f3 p?Wave: no luck, only asm drawer available...
+1b0424 silvere\cppwraps.c
+1b043b =ffffff
+1b046b =ffffff
+1b04ab =333333
+1b04bb @333333
+1b04c3 ?333333
+1b050e Q@cellrd: image size is %dx%d, not %dx%d.  ignoring.
+1b054a p?UUUUUU
+1b06b3 ?cfg_file.c
+1b06c0 Cannot read file %s
+1b06d8 Warning: Config File EOF
+1b06fa _@Point  (origin)  = %f,%f,%f
+1b071c Point  (rotated) = %f,%f,%f
+1b073c Normal (origin)  = %f,%f,%f
+1b075c Point  (persp)   = %f,%f
+1b0778 U,V cords.       = %d,%d
+1b0794 Colour           = %d
+1b07ac Pyramid          = %d
+1b07c4 present
+1b07cc not present
+1b07d8 Material %s 
+1b07e8 Clipped %s 
+1b07f8  Points = %d
+1b0808 Point[%d] %6.2f,%6.2f,%6.2f Rot %6.2f,%6.2f,%6.2f Per %6.2f,%6.2f UV %d,%d Pyr %d
+1b08df ?333333
+1b08e7 ?UUUUUU
+1b097f ?333333
+1b0987 ?UUUUUU
+1b0a23 ?calcbump.c
+1b0a4b ?O=%6.2f,%6.2f,%6.2f R=%6.2f
+1b0a6c Bbox:
+1b0a74  min. X=%f Y=%f Z=%f
+1b0a8c  max. X=%f Y=%f Z=%f
+1b0aa4  P[%d]. X=%f Y=%f Z=%f
+1b0ac4 Not enough memory to allocate file structures
+1b0af4 Incompatible libpng version in application and library
+1b0b2c 1.0.4
+1b0b34 zlib memory error
+1b0b48 zlib version error
+1b0b5c Unknown zlib error
+1b0b70 zlib memory
+1b0b7c zlib version
+1b0b8c Not a PNG file
+1b0b9c PNG file corrupted by ASCII conversion
+1b0bc4 Missing IHDR before IDAT
+1b0be0 Missing PLTE before IDAT
+1b0bfc Invalid attempt to read row data
+1b0c20 Not enough image data
+1b0c38 Extra compressed data
+1b0c50 Decompression error
+1b0c64 Too many IDAT's found
+1b0c7c Too many bytes for PNG signature.
+1b0ca0 Failure #1: allocating context table!
+1b0cc6 Failure #2: allocating null table!
+1b0ce9 Failure #3: allocating null table!
+1b0d0c Failure #4: allocating null table!
+1b0d2f Failure #5: allocating null table!
+1b0d52 Failure #6: allocating new table
+1b0d73 Failure #7: allocating new table
+1b0d94 Failure #8: allocating new table
+1b0db5 Error #9: reallocating table space!
+1b0dd9 Error #10: reallocating table space!
+1b0dfe Error #11: reallocating stats space!
+1b0e24 Bad input file
+1b0e43 @@VESA
+1b0e7a @@Floating-point support not loaded
+1b0ea0 JPEGMEM
+1b0ea8 %ld%c
+1b0eb0 stack data has been corrupted!
+1b0ecf violation of function exception specification!
+1b0efe throw while "terminate" function active!
+1b0f27 throw during destructor while unwinding stack to catch exception!
+1b0f69 throw while "terminate" function active!
+1b0f92 throw during construction of exception!
+1b0fba throw during destructor for handled exception!
+1b0fe9 re-throw when no exception handler active!
+1b1014 no handler active to catch thrown object!
+1b103e re-throw when no exception handler active!
+1b1069 no handler active to catch thrown object!
+1b1093 system exception! code = 0x00000000
+1b10be UUUUUU
+1b10df ?Out of Memory
+1b10f0 libpng error: %s
+1b1104 libpng warning: %s
+1b1118 1.0.4
+1b1120 unknown compression method
+1b113c invalid window size
+1b1150 incorrect header check
+1b1168 need dictionary
+1b1178 incorrect data check
+1b1190 Call to NULL read function
+1b11ac Read Error
+1b11b8 Can't discard critical data on CRC error.
+1b11e4 CRC error in %s
+1b11f4 Out of place IHDR
+1b1208 Invalid IHDR chunk
+1b121c Invalid image size in IHDR
+1b1238 Invalid bit depth in IHDR
+1b1254 Invalid color type in IHDR
+1b1270 Invalid color type/bit depth combination in IHDR
+1b12a4 Unknown interlace method in IHDR
+1b12c8 Unknown compression method in IHDR
+1b12ec Unknown filter method in IHDR
+1b130c Missing IHDR before PLTE
+1b1328 Invalid PLTE after IDAT
+1b1340 Duplicate PLTE chunk
+1b1358 Invalid palette chunk
+1b1370 No image in file
+1b1384 Incorrect IEND chunk length
+1b13a0 Missing IHDR before gAMA
+1b13bc Invalid gAMA after IDAT
+1b13d4 Out of place gAMA chunk
+1b13ec Duplicate gAMA chunk
+1b1404 Incorrect gAMA chunk length
+1b1422 '7Missing IHDR before sBIT
+1b1440 Invalid sBIT after IDAT
+1b1458 Out of place sBIT chunk
+1b1470 Duplicate sBIT chunk
+1b1488 Incorrect sBIT chunk length
+1b14a4 Invalid cHRM after IDAT
+1b14bc Missing PLTE before cHRM
+1b14d8 Duplicate cHRM chunk
+1b14f0 Incorrect cHRM chunk length
+1b150c Invalid cHRM white point
+1b1528 Invalid cHRM red point
+1b1540 Invalid cHRM green point
+1b155c Invalid cHRM blue point
+1b157f ?Missing IHDR before tRNS
+1b159c Invalid tRNS after IDAT
+1b15b4 Duplcate tRNS chunk
+1b15c8 Missing PLTE before tRNS
+1b15e4 Incorrect tRNS chunk length
+1b1600 tRNS chunk not allowed with alpha channel
+1b162c Missing IHDR before bKGD
+1b1648 Invalid bKGD after IDAT
+1b1660 Missing PLTE before bKGD
+1b167c Duplicate bKGD chunk
+1b1694 Incorrect bKGD chunk length
+1b16b0 Missing IHDR before hIST
+1b16cc Invalid hIST after IDAT
+1b16e4 Missing PLTE before hIST
+1b1700 Duplicate hIST chunk
+1b1718 Incorrect hIST chunk length
+1b1734 Missing IHDR before pHYS
+1b1750 Invalid pHYS after IDAT
+1b1768 Duplicate pHYS chunk
+1b1780 Incorrect pHYs chunk length
+1b179c Missing IHDR before oFFs
+1b17b8 Invalid oFFs after IDAT
+1b17d0 Duplicate oFFs chunk
+1b17e8 Incorrect oFFs chunk length
+1b1804 Out of place tIME chunk
+1b181c Duplicate tIME chunk
+1b1834 Incorrect tIME chunk length
+1b1850 Missing IHDR before tEXt
+1b186c Missing IHDR before zTXt
+1b1888 Zero length zTXt chunk
+1b18a0 Unknown zTXt compression type
+1b18c0 zTXt decompression error
+1b18dc Unknown critical chunk %s
+1b18f8 Invalid chunk type 0x%02X 0x%02X 0x%02X 0x%02X
+1b1928 Bad adaptive filter type
+1b1944 Not enough image data
+1b195c Extra compressed data
+1b1974 Decompression Error
+1b1988 Extra compression data
+1b19a0 Application must supply a known background gamma
+1b1a27 Fno memory left to handle thrown exception!
+1b1a59 yE>acos
+1b1a7d acosh
+1b1a8c log10
+1b1a92 atanh
+1b1a98 atan2
+1b1aa3 dpowi
+1b1ac2 cotan
+1b1ac8 invalid block type
+1b1adc invalid stored block lengths
+1b1afc too many length or distance symbols
+1b1b20 invalid bit length repeat
+1b1b3c need dictionary
+1b1b4c stream end
+1b1b5c file error
+1b1b68 stream error
+1b1b78 data error
+1b1b84 insufficient memory
+1b1b98 buffer error
+1b1ba8 incompatible version
+1b1bc0 1.0.4
+1b1bef ?return from "terminate" function!
+1b1c14 return from "unexpected" function!
+1b1c38 Domain error
+1b1c45 Argument singularity
+1b1c5a Overflow range error
+1b1c6f Underflow range error
+1b1c85 Total loss of significance
+1b1ca0 Partial loss of significance
+1b1cc4 invalid literal/length code
+1b1ce0 invalid distance code
+1b1cf8 oversubscribed dynamic bit lengths tree
+1b1d20 incomplete dynamic bit lengths tree
+1b1d44 oversubscribed literal/length tree
+1b1d68 incomplete literal/length tree
+1b1d88 oversubscribed literal/length tree
+1b1dac incomplete literal/length tree
+1b1dcc invalid distance code
+1b1de4 invalid literal/length code
+1b26ed 8888888888
+1b26fe XXXXXXHHHHHHHHHHHHHHHHHHHH
+1b2850 =@[V6
+1b2918 Fatal error: out of memory
+1b2957 ?16 bit per pixel                linear buffer 
+1b298a 15 bit per pixel                linear buffer 
+1b29bc not available                                 
+1b29ee not available                                 
+1b2a20 not available                                 
+1b2a52 not available                                 
+1b2a84 not available                                 
+1b2ab6 not available                                 
+1b2ae8 16 bit per pixel                page switching
+1b2b1a 15 bit per pixel                page switching
+1b2b4c 16 bit per pixel, double pixel  page switching
+1b2b7e 15 bit per pixel, double pixel  page switching
+1b2bb0 fake hi-color                   x-mode        
+1b2be2 not available                                 
+1b2c14 not available                                 
+1b2c46 not available                                 
+1b2c78  Select video mode 
+1b2cf8 fillbuffer
+1b2d0c buffer_and
+1b2d20 scene
+1b2d70 palette
+1b2d84 surfcopy
+1b2d98 swapsurf
+1b2dac echocml32
+1b2dc0 partmag2d
+1b2de8 xfade
+1b2dfc afade
+1b2e10 lowpass
+1b2e24 colordistort
+1b2e38 colormap
+1b2e60 dither
+1b2e74 ditherfs
+1b2e88 edges
+1b2e9c matrix
+1b2ec4 colorgrid
+1b2ed8 blend
+1b2f00 cellrd
+1b2f14 gfeed
+1b2f28 interpolator
+1b2f3c zbuffer
+1b2f50 showz
+1b2f64 volume3d
+1b2f78 clearvolume
+1b2f8c copyvolume
+1b2fa0 metaballs
+1b2fb4 marchingcubes
+1b2fc8 morphvolume
+1b2fdc addvolume
+1b2ff0 subvolume
+1b3004 mulvolume
+1b3018 fadevolume
+1b302c plasma1volume
+1b3040 volumesprites
+1b3054 fakezbuffer
+1b3068 boxfilter
+1b307c parasite
+1b3090 reebok
+1b30a4 mapimage
+1b30b8 doubleimage
+1b30cc displace247
+1b30e0 displacenorm
+1b30f4 echo2
+1b3108 echo3
+1b311c echo4
+1b3130 echo5
+1b3144 tunnel
+1b3158 playani
+1b87c7 ?333?
+1b87d7 >333?
+1b87df ?333?
+1b87ef ?333?
+1b8beb >0Lf?
+1b8c3d lV>xz
+1b8d13 ?TRG?{
+1b8d51 A@?:#j
+1b8dba j>'1h?
+1b8eb6 Y?;pN
+1b8f25 oA?)\O?io
+1b8f5d 1w?-!_
+1b901e 7?|aR?
+1b913a Q?vO>?8g
+1b9161 OO?p_
+1b91a2 P?<NQ
+1b9202 W? cn
+1b920b <,e9?
+1b9242 y? cn=
+1b926d v>>(~
+1b939d =y?8g
+1b93a5 "[>(~
+1b93ba g?k+v
+1b947d aC?O@
+1b949e >?,ey?
+1b94c2  ?vO~?
+1b955d LU?RI
+1b95e1 U??B`e
+1b9657 >}?u?"l
+1b9681 rH?t$
+1b96e6 d?9EG
+1b96ff >iop>~
+1b973a d?L7i?
+1b97f1 !}=d]\>
+1b986e d?_)K
+1b9874 R'`?>
+1b98ce c? cN?
+1b9931 FE?<N
+1b9985 Vl>io
+1b99f3 >}?5?
+1b9afa U?J{c
+1b9b0e p?lxz>
+1b9b3d a!>?5>?
+1b9b49 \m>9EG
+1b9c1e Stack Overflow!
+1b9d2d AMD InterWave
+1b9d5d Gravis UltraSound
+1b9d8d Gravis UltraSound
+1b9ddd Windows Sound System
+1b9e0d Double GUS
+1b9e3d -6<@BEGIJLMNOPQRSTTUVVWWXXYYZZ[[\\\]]^^^___````aaaabbbbccccddddeeeeeffffffgggggghhhhhhiiiiiiijjjjjjjkkkkkkkkllllllllmmmmmmmmmnnnnnnnnnnooooooooooppppppppppppqqqqqqqqqqqqrrrrrrrrrrrrrssssssssssssssttttttttttttttttuuuuuuuuuuuuuuuuvvvvvvvvvvvvvvvvvvwwwwwwwwwwwwwwwwwwwxxxxxxxxxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzzz{{{{{{{{{{{{{{{{{{{{{{{{{{||||||||||||||||||||||||||||}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1ba18a (,Tr;8(
+1ba241 SoundBlaster 32
+1ba291 SoundBlaster
+1ba2cd ESS AudioDrive 688
+1ba611 Mixer
+1c2add IHDRIDATIENDPLTEgAMAsBITcHRMtRNSbKGDhISTtEXtzTXtpHYsoFFstIME
+1c310b ?3333
+1c36a2 W0+W t(|
+1c36d2 W4+W$t(|
+1ca0a0 Error decoding zTXt chunk
+1ca21d Qkkbal
+1ca479 wn>Jj
+1cb61c  inflate 1.0.4 Copyright 1995-1996 Mark Adler 

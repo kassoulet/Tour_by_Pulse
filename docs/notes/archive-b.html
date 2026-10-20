@@ -1,0 +1,54 @@
+<section class="fx" id="fx-archive-b">
+<h3>Type b: the music decompressor (bzip-like block sorter)</h3>
+<p>TOUR3.XM, the 2.89 MB module that is the whole soundtrack (26 orders, 20 channels, 21 samples, 152 s), is stored as 2.15 MB with a bzip-style pipeline: Burrows-Wheeler transform, move-to-front, run-length symbols and a canonical Huffman code (function 0x130136). The stream is a plain MSB-first bit stream; the bit reader refills three bytes at a time with <code>bswap</code> and a mask.</p>
+<p>Each block starts with its length, the BWT primary index and the Huffman table: 5-bit codes give lengths 2..18, with extra codes for "repeat previous length 2-7 times" and "2-7 / 8-23 / 24-55 zero lengths". Decoding uses an 8-bit lookup table of tree nodes (a longer code falls back to a bit-by-bit tree walk with <code>add edx,edx / sbb ebp,ebp</code>). While decoding, the program fills the BWT's <em>T</em> vector (rank of each byte among equal bytes) so the inverse transform is one pass, walking backwards through the block. The code patches its own immediates (the <code>0x3e7</code> in the listing) with buffer addresses at run time. The sample data inside the XM is ordinary delta-coded 8/16-bit PCM: no hidden structure beyond the standard XM format.</p>
+<pre class="asm">173b25  ...                     ; --- one Huffman symbol per iteration (self-modifying: 0x3e7 immediates are patched with table pointers)
+173b27  cmp ebx,8               ; &lt; 8 bits left in edx?
+173b2a  jae 0x173b42
+173b2c  mov edi,[esi]           ; refill: 3 bytes, MSB first
+173b2e  mov cl,bl
+173b30  bswap edi
+173b32  and edi,0xffffff00
+173b38  add bl,0x18
+173b3b  shr edi,cl
+173b3d  or edx,edi
+173b3f  add esi,3
+173b42  mov eax,edx
+173b44  shr eax,0x18            ; top 8 bits -&gt; 256-entry lookup of tree nodes
+173b47  mov edi,[eax*4+0x1c2ce9]
+173b4e  mov ecx,[edi+0xc]       ; code length
+173b51  mov eax,[edi+8]         ; symbol, or -1 = code longer than 8 bits
+173b54  cmp eax,-1
+173b57  je 0x173b5f             ; long code: walk the tree bit by bit
+173b59  shl edx,cl
+173b5b  sub ebx,ecx
+173b5d  jmp 0x173b95
+173b72  add edx,edx             ; slow path: top bit -&gt; CF
+173b74  sbb ebp,ebp             ; ebp = -1 (bit 1) / 0 (bit 0)
+173b86  mov edi,[edi+ebp*4+4]   ; child[bit]
+173b95  ...
+173b98  cmp eax,0x100
+173b9d  jae 0x173be6            ; &gt;= 0x100: run symbol
+173b9f  mov cl,[eax+0x1c2bcd]   ; MTF list: byte at rank eax
+173ba6  mov [edi],cl            ; L[i] = c
+173ba9  mov ebp,[ecx*4+...]     ; T[i] = cnt[c]++
+173bc9  mov ch,[eax+0x1c2bcc]   ; move-to-front: shift ranks 0..eax-1 up
+173bcf  mov [eax+0x1c2bcd],ch
+173bd5  sub eax,1
+173bd8  jns 0x173bc9</pre><pre class="asm">173c71  mov cl,[edi+edx]         ; --- inverse BWT, output written backwards
+173c74  mov edx,[esi+edx*4]     ; edx = T[edx]
+173c77  mov [ebx+eax],cl        ; out[n-1-k] = L[idx]
+173c7b  add edx,[ecx*4+0x3e7]   ; + C[c] (start of byte c in the sorted column)
+173c83  dec eax
+173c84  jns 0x173c71</pre><pre class="js"># file:  u32 total, u32 blocksize, then blocks until u32 n == 0; MSB-first bit stream
+# block: u32 n, u32 idx, code-length table (5-bit codes, repeats/zero runs), n Huffman symbols
+#        0..255 = MTF rank, 0x104..0x107 = run of 256/128/64/32 of the front byte, 0x108.. = run of sym-0x106
+for each symbol: c = mtf.pop(s); mtf.insert(0, c); L[i] = c; T[i] = cnt[c]; cnt[c] += 1
+C[c] = sum(cnt[:c])
+x = idx
+for k in range(n-1, -1, -1):   # inverse Burrows-Wheeler transform
+    c = L[x]; out[k] = c; x = T[x] + C[c]</pre>
+<dl class="facts"><dt>Decoder</dt><dd>TOUR.EXE 0x130136 (eax = src, edx = dst); Huffman table reader 0x174088, canonical tree builder 0x173d77, block decoder 0x173aa7</dd>
+<dt>Verified</dt><dd>output of tools/extract.py and docs/js/archive.js (<code>decodeB</code>, ~0.6 s in node) is byte-identical to the original run in Unicorn (2 894 937 bytes), and the XM parses with no leftover bytes</dd>
+<dt>Usage</dt><dd>script.unr plays it with <code>play</code>; every timed script line uses its (order,row)</dd></dl>
+</section>

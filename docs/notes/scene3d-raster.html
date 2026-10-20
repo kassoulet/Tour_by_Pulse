@@ -1,0 +1,55 @@
+<section class="fx" id="fx-scene3d-raster">
+<h3>The triangle fillers: self-modifying templates</h3>
+<p>There is no generic rasteriser in TOUR. For every combination of material mode and target depth the build contains a <em>template</em>: a setup routine that computes the screen-space plane gradients of the texture
+coordinates from the three vertices, walks the edges in 16.16 fixed point and <strong>writes the gradients into the immediate operands of the scanline loop</strong> (self-modifying code, which is why the PMODE/W
+image has to be loaded writable). The inner loops are tiny. Texture coordinates are kept as an 8 bit integer part in <code>cl/ch</code> (u, v: 256x256 textures that wrap by themselves) and a fraction in the high half of
+<code>esi/ebx</code>; the carry of the 32 bit <code>add</code> feeds the byte-wide <code>adc</code>, so one pair of instructions per axis steps the texture address. No perspective correction.</p>
+<pre class="asm">
+; mode 3 (unrdisp: textured, opaque) template at 0x161fc3; the immediates below are the placeholders of the file image
+161fc3  mov  eax, dword ptr [ecx*4 + 0xbc614e]   ; texture base patched in  (ecx = v:u)
+161fca  add  esi, 0xbc614e                       ; du fraction (patched)
+161fd0  adc  cl, 0xc                             ; du integer part (patched)
+161fd3  add  ebx, 0xbc614e                       ; dv fraction
+161fd9  adc  ch, 0xc                             ; dv integer part
+161fdc  mov  dword ptr [edi + edx*4], eax        ; edi = end of the span, edx counts up to 0
+161fdf  inc  edx
+161fe0  jne  0x161fc3
+; the same loop as it runs after the setup patched it (tentacle, two textures, 0x163644, read back from the emulated memory):
+163644  mov  al, byte ptr [ebx + 0x42088d8]       ; crater.png texel   (bl = u1, bh = v1)
+16364a  add  ebp, 0x35380000 ; adc bl, 0          ; u1
+163654  mov  ah, byte ptr [ecx + 0x4229358]       ; pink.png texel     (cl = u2, ch = v2)
+16365a  add  edx, 0xc6900000 ; nop ; adc bh, 0xff ; v1
+163666  mov  eax, dword ptr [eax*4 + 0x423dde8]   ; 64K colour table [pink:crater]
+16366d  mov  dword ptr [edi + esi*4], eax
+163670  add  dl, 0x31 ; adc cl, 2                  ; u2 (8 bit fractions live in dl / dh)
+163676  add  dh, 0x7e ; adc ch, 1                  ; v2
+16367b  xor  eax, eax ; inc esi ; jne 0x163644
+; hires (alpha blended, 2 passes over the span): colour table * alpha, then  dst = c32 + mul[alpha][dst]  per channel
+16afd2  mov  esi, dword ptr [edx*8 + 0x1c0d7c]     ; alpha row (alpha*256)
+16afd9  mov  al, byte ptr [edi + edx*4 + 2]        ; destination r
+16afe4  mov  al, byte ptr [esi + eax + 0x2a033a8]  ; r * (63-a)/63
+...
+16b005  add  ebp, eax                              ; + pre-multiplied texture colour (packed add, no saturation)
+16b00b  mov  dword ptr [edi + edx*4 - 4], ebp
+; edge setup: start x / row = ceil(x - 1/4096)
+161b6d  mov  eax, dword ptr [0x1be734]             ; y (16.16, float magic number trick)
+161b72  add  eax, 0xfff0
+161b77  shr  eax, 0x10
+161b80  mov  eax, dword ptr [eax*4 + 0x2055a0]     ; row start pointer table
+</pre>
+<pre class="js">
+// scene3d-raster.js: same sampling positions, plane-equation attributes in floating point
+function fillENV32(dst, ro, xs, xe, y) {            // dst = tex32[(v&lt;&lt;8)|u]
+  const u0 = P[0] + P[2]*y, du = P[1], v0 = P[3] + P[5]*y, dv = P[4];
+  for (let x = xs; x &lt; xe; x++)
+    dst[ro + x] = tex[((((v0 + dv*x + 65536) | 0) &amp; 255) &lt;&lt; 8) | (((u0 + du*x + 65536) | 0) &amp; 255)];
+}
+xs = Math.ceil(xl - (1 - 0xfff0/65536)); xe = Math.ceil(xr - (1 - 0xffe0/65536));   // (x+0xfff0)&gt;&gt;16, (x+0xffe0)&gt;&gt;16
+</pre>
+<dl class="facts">
+<dt>Modes</dt><dd>3 textured (tex32), 4 env 8 bit (palette &amp; 0xfcfcfc), 2 lit (64K ramp [light:texel]), 0x84 two textures (64K table), 0x24 alpha glass</dd>
+<dt>Fidelity</dt><dd>silhouettes: 99.7 % of the covered pixels identical; interior mean error 0.3-1 per channel (the original's fixed-point rounding, fitted colour tables)</dd>
+<dt>Speed</dt><dd>1.6 - 4.5 ms per frame in node 22 for the five scenes (tentacle: 2741 triangles)</dd>
+<dt>Code</dt><dd><code>docs/js/fx/scene3d-raster.js</code>, tables in <code>scene3d-tex.js</code></dd>
+</dl>
+</section>

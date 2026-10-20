@@ -1,0 +1,55 @@
+<section class="fx" id="fx-palette">
+<h3>palette and doubleimage &mdash; the 320x240 "low-res" path</h3>
+<p>The Medusa/Reebok pictures are drawn as 8-bit indices in a 320x240 buffer (<code>TEMP8</code>, filled by <code>fillbuffer</code>, <code>echo5</code> or <code>reebok</code>). <code>palette</code> expands the indices to 32-bit
+colour through a 256-entry table made from a 768-byte VGA palette file (6-bit components, so every value is multiplied by four), and <code>doubleimage</code> blows the 320x240 result up to 640x480 by writing every pixel twice on two rows.</p>
+<p>The table is rebuilt every frame in the original (the loop at <code>0x108e3d</code> is cheap); the whole conversion <code>(r&lt;&lt;16 | g&lt;&lt;8 | b) &lt;&lt; 2</code> is done on the packed dword, which only works because the components are at most 63.
+For a 16-bit destination the same table is built as RGB565 from the 6-bit values (<code>r&gt;&gt;1, g, b&gt;&gt;1</code>). The doubling routine (<code>0x1e896</code>) has the pitch (<code>0xa00</code> = 640*4 bytes) and the width (<code>0x140</code> pixels) burnt in: it is a one-trick routine, and each iteration moves 8 bytes in and writes 4x8.</p>
+<pre class="asm">
+; palette run, 32-bit destination  (0x108e2d)  edi=dst esi=src ecx=w*h ebx=palette file
+108e3d  mov dl, [ebx+2]            ; b
+108e40  mov al, [ebx]              ; r
+108e42  shl eax, 0x10
+108e45  mov dh, [ebx+1]            ; g
+108e48  or edx, eax                ; 0x00RRGGBB (6-bit components)
+108e4a  add ebx, 3
+108e4d  shl edx, 2                 ; all three components x4 at once
+108e52  mov [ebp*4+0x1b7b94], edx  ; table[-256..-1]  (0x1b7794)
+108e59  inc ebp
+108e5f  jne 0x108e3d
+108e61  mov al, [esi]              ; --- pixel loop: one table read per pixel
+108e63  inc esi
+108e64  add edi, 4
+108e68  mov edx, [eax*4+0x1b7794]
+108e6f  dec ecx
+108e70  mov [edi-4], edx
+108e73  jne 0x108e61
+
+; doubleimage inner loop (0x1e89e)   esi=src, edi=dst, one pass = 2 source pixels -> 2x2 block each
+1e89e  mov eax, [esi]
+1e8a0  mov ebx, [esi+4]
+1e8a3  mov [edi], eax              ; row 0: p0 p0
+1e8a5  mov [edi+8], ebx            ;        p1 p1
+1e8a8  mov [edi+4], eax
+1e8ab  mov [edi+0xc], ebx
+1e8ae  mov [edi+0xa00], eax        ; row 1 (+640*4)
+1e8b4  mov [edi+0xa08], ebx
+1e8ba  mov [edi+0xa04], eax
+1e8c0  mov [edi+0xa0c], ebx
+1e8c6  add esi, 8
+1e8cc  add edi, 0x10
+1e8d2  sub ecx, 2
+1e8d8  jne 0x1e89e
+</pre>
+<pre class="js">
+t32[i] = (((r &lt;&lt; 16) | (g &lt;&lt; 8) | b) &lt;&lt; 2) &gt;&gt;&gt; 0;          // palette file bytes are 6-bit
+for (let i = 0; i &lt; n; i++) dst[i] = t32[src[i]];
+
+d[q] = v; d[q+1] = v; d[q+pitch] = v; d[q+pitch+1] = v;   // doubleimage, pitch = 640
+</pre>
+<dl class="facts">
+<dt>script</dt><dd><code>addEvent palette pa {TEMP8} {LORES} {medusa.pal}</code> then <code>addEvent doubleimage di {LORES} {SCREEN} {}</code> (also <code>picture.pal</code> in the Reebok part)</dd>
+<dt>parameters</dt><dd>palette: file name of a 768-byte palette (loaded from the archive by the init at <code>0x10f5b4</code>); doubleimage: none</dd>
+<dt>functions</dt><dd>palette init/run <code>0x10f5b4/0x10f5e4</code>, doubleimage run <code>0x10fba0</code> (centres vertically if the heights differ)</dd>
+<dt>verified</dt><dd>100.0000 % identical pixels against the original (random indices, 3 palettes; random 32-bit image)</dd>
+</dl>
+</section>

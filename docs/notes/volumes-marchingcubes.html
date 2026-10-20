@@ -1,0 +1,71 @@
+<section class="fx" id="fx-volumes-marchingcubes">
+<h3>marchingcubes &mdash; polygonising a 16&times;16&times;16 field every frame</h3>
+<p><code>marchingcubes test box01 OurVolume 1</code> turns the field into triangles at the fixed iso-level <code>0.65</code> and pours them straight into the mesh of the object
+<code>box01</code> of the scene <code>test</code> (<code>box3.exp</code>): the object's vertex array is replaced by 3&times;4096 preallocated vertex slots (0x60 bytes each, 0x120000 bytes), its face array by up to 4000
+face records (0x3c bytes, copy of the first face so the material is kept) and the object's face count is set every frame. The volume cube is stretched over the bounding box of the object (1/15 of its size per cell).
+The last parameter selects Gouraud (2) or flat (1) shading in the object header.</p>
+<p>The routine at <code>0x151ab8</code> is hand-written x87 assembly. It scans the 4096 samples once; for each sample it looks at the three edges that arrive from the lower neighbours. An edge carries a vertex when exactly
+one end is above the threshold (the float bit patterns are compared as signed integers). The vertex is placed by linear interpolation, and its <strong>normal</strong> is the interpolated central-difference gradient of the field,
+normalised with a table-driven <code>1/sqrt</code>: the exponent is halved with integer arithmetic, the 8-bit mantissa comes from a 128-byte table, and one Newton step <code>r&middot;0.5&middot;(3&minus;r&sup2;&middot;|g|&sup2;)</code> finishes.
+Vertex slots are indexed by edge, so triangles share vertices and only the coordinate along the edge and the normal are rewritten per frame. Triangles come from the classic 256-case table (64 bytes per case at <code>0x1b340c</code>),
+the case index being the 4 inside-bits of the current z-plane square joined to the 4 bits of the plane below (kept in a scratch array whose address is patched into the code, self-modifying style).
+The face normal is the cross product of two edges.</p>
+<h4>Edge test and interpolation (x edge, 0x151af4)</h4>
+<pre class="asm">
+151af4  mov eax, dword [esi+0x440]   ; v0 = volume[x-1]
+151afa  mov ebx, dword [esi+0x444]   ; v1 = volume[x]
+151b00  cmp eax, ecx                 ; ecx = bits of the threshold 0.65f
+151b02  jl  0x151b0e
+151b04  cmp ebx, ecx
+151b06  jge 0x151c2f                 ; both above: no vertex
+151b0c  jmp 0x151b16
+151b0e  cmp ebx, ecx
+151b10  jl  0x151c2f                 ; both below
+151b16  fld dword [esi+0x444]        ; t = (v1 - thr) / (v1 - v0)
+151b1c  fsub dword [0x1f6330]
+151b22  fld dword [esi+0x444]
+151b28  fsub dword [esi+0x440]
+151b2e  fdivp st(1)
+</pre>
+<h4>Fast normalisation (0x151b83)</h4>
+<pre class="asm">
+151b83  fstp dword [0x1bdc48]        ; |g|^2 as float
+151b89  mov eax, dword [0x1bdc48]
+151b8e  mov ebp, 0xbe000000
+151b93  shr eax, 0x11
+151b96  mov edx, dword [0x1bdc48]
+151b9c  and eax, 0x7f                ; top 7 mantissa bits
+151b9f  and edx, 0x7f800000          ; exponent
+151ba7  sub ebp, edx
+151ba9  shr ebp, 1                   ; exponent of 1/sqrt
+151bab  mov bl, byte [eax+0x1b7414]  ; mantissa from the 128 byte table
+151bb1  shl ebx, 0xf
+151bb7  and ebp, 0x7f800000
+151bbe  or  ebp, ebx
+151bc0  mov dword [0x1bdc50], ebp    ; r ~ 1/sqrt(|g|^2), then k = r*0.5*(3 - r*r*|g|^2)
+</pre>
+<h4>Triangle emission (0x151f36)</h4>
+<pre class="asm">
+151f36  mov eax, 3
+151f3b  mov ebx, dword [ebp+0x1b3410]   ; table: byte offsets of the 3 vertex slots
+151f41  mov dword [edx+0x10], eax       ; face: 3 vertices
+151f4a  mov eax, dword [ebp+0x1b340c]
+151f56  fld dword [ebx] / fsub dword [eax] ...   ; (b-a) x (c-a)
+151f96  fstp dword [edx+0x1c]            ; face normal z
+151f9d  fstp dword [edx+0x18]            ; y
+151fa0  fstp dword [edx+0x14]            ; x
+151fa6  mov dword [edx+0x30], eax        ; vertex pointers
+151fa9  mov dword [edx+0x34], ebx
+151fac  mov dword [edx+0x38], ecx
+151fc1  add edx, 0x3c                    ; next face record
+</pre>
+<pre class="js">
+const tri = TRI[(m &lt;&lt; 4) | mask[s]], base = s - 273;       // slot of the cell's lowest corner
+for (let i = 0; i &lt; tri.length; i++) out[n++] = tri[i] + base;
+</pre>
+<dl class="facts">
+<dt>script</dt><dd><code>marchingcubes nazwa9 {} {} {test box01 OurVolume 1}</code> after metaballs, morph and plasma have built OurVolume</dd>
+<dt>threshold</dt><dd>0.65 (constant 0x3f266666 stored by the run function; the 73MS version has it as a script parameter)</dd>
+<dt>verified</dt><dd>5 volumes (1604, 1904, 368, 3360, 224 triangles): triangle count, every vertex-slot index, every vertex position and normal, every face normal bit-identical to the original</dd>
+</dl>
+</section>

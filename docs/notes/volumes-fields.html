@@ -1,0 +1,43 @@
+<section class="fx" id="fx-volumes-fields">
+<h3>volume3D, copyvolume, morphvolume, mulvolume... &mdash; scalar fields as named blocks of floats</h3>
+<p>The cube sequence of <em>Tour</em> (script order 13-16) is driven by a tiny "volume" language that lives in the source file <code>blob.c</code>.
+<code>volume3D NAME [file]</code> allocates a 16&times;16&times;16 field of 32-bit floats (16 KB) and registers it under a name: the engine keeps a table of
+32 pointers at <code>0x2041f0</code>, every later effect looks its volumes up by name with a linear string search (and <code>puts()</code>+<code>exit()</code>s with
+"Volume not found" if it fails). The optional file is the raw 16 KB dump (<code>v8.dat</code>, <code>vbox.dat</code>). The run function of <code>volume3D</code> is a bare <code>ret</code>;
+the other effects just apply a kernel on the 4096 floats every frame: <code>copyvolume</code>, <code>addvolume</code>, <code>subvolume</code>, <code>mulvolume</code>,
+<code>fadevolume</code> (v&middot;f) and <code>morphvolume</code> (a&middot;t + b&middot;(1&minus;t)). The factor of fade/morph is a script expression of <code>Frame</code>, evaluated every frame
+by the engine's expression compiler (<code>0x14a408</code> compiles, <code>0x14a570</code> evaluates).</p>
+<p>The kernels are unrolled by four with the x87 FPU: load, multiply, store, 16 bytes per iteration. All values are computed with the 64-bit mantissa of the FPU stack and rounded
+to float only when stored, which is why the JS port (double arithmetic, <code>Float32Array</code> store) reproduces every one of the 4096 floats bit for bit.
+One detail found by testing: the evaluated factor is a float (rounded) before the kernel uses it.</p>
+<pre class="asm">
+; morphvolume kernel 0x15225c   eax=dst edx=A ebx=B ecx=4096 (count/4), st0=t, st1=1-t
+15225f  fld dword [edx]          ; A[i]
+152261  fmul st(1)               ; * t
+152263  fld dword [ebx]          ; B[i]
+152265  fmul st(3)               ; * (1-t)
+152267  fld dword [edx+4]
+15226a  fmul st(3)
+15226c  fld dword [ebx+4]
+15226f  fmul st(5)
+152271  fxch st(2)
+152273  faddp st(3)              ; A0*t + B0*(1-t)
+...                              ; (same for elements 2 and 3)
+152295  fstp dword [eax]         ; stored as float
+1522a0  add eax, 0x10 / add edx, 0x10 / add ebx, 0x10 ; next 4 floats
+1522a9  dec ecx
+1522aa  jne 0x15225f
+</pre>
+<pre class="js">
+FX.register('morphvolume', {
+  init(params, ev, ctx) { const p = words(params); return { d: find(p[0]), a: find(p[1]), b: find(p[2]), f: expr(p[3]) }; },
+  run(st, ev) { const t = f32(st.f(f32(ev.local))), u = 1 - t;
+    for (let i = 0; i &lt; 4096; i++) st.d[i] = st.a[i] * t + st.b[i] * u; },   // Float32Array store = fstp dword
+});
+</pre>
+<dl class="facts">
+<dt>script</dt><dd><code>volume3D nazwa1 {} {} {V8Volume v8.dat}</code>, <code>copyvolume {OurVolume SrcVolume}</code>, <code>morphvolume {OurVolume OurVolume V8Volume clip10(0.5+0.3*sin(Frame*0.01)+0.7*cos(Frame*0.007))}</code>, <code>mulvolume {OurVolume OurVolume PlasmaVolume}</code></dd>
+<dt>storage</dt><dd>volume record: data pointer at +0x20 (16 KB, malloc), slot index at +0x24; index = x + 16&middot;y + 256&middot;z</dd>
+<dt>verified</dt><dd>bit-identical to the original (Unicorn) for copy, mul, add, sub, fade, morph at 7 frames (tools/test-volumes.mjs)</dd>
+</dl>
+</section>

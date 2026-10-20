@@ -1,0 +1,50 @@
+<section class="fx" id="fx-scene3d-effects">
+<h3>Mesh effects: displace247, displacenorm, bomb and the LightWave displacement modifier</h3>
+<p>Three effects reach into a running <code>scene</code> by event name and rewrite the vertices of one named object each frame. <code>displace247</code> (script: <code>{wscene1 Box02 0.3 -0.04 0.17+0.04*sin(Frame*0.002)}</code>) wobbles
+every vertex radially around the object's centroid, <code>v' = c + (v-c) * (1 + A*sin(|v-c|*F + Frame*S))</code>, with three script expressions A, S, F evaluated per frame; <code>displacenorm</code> uses the same wave along the vertex normal.
+<code>bomb</code> (<code>{ipl tentacle sqr(Frame*0.03)}</code>) first <em>unshares</em> the mesh (three private vertices per triangle), then flies every triangle away from the object centre:
+<code>centre' = g + dir * |c-g| * (1 + speed * d)</code>, with a per-face random speed <code>(1.2 - |c-g|/max) * (rand()/32768 * 1.0 + 0.3)</code>. The C <code>rand()</code> is the Watcom linear congruential generator and its
+seed already holds 0x565bb039 when the script starts, so the explosion is the same every run (and is reproduced here).</p>
+<p>The soap bubble of the first scene is different: its deformation is an object <em>modifier</em> stored in the .lwe (chunk 0x0b). Each frame every vertex is projected spherically around the position of a
+Null object, looked up in the 256x256 height map <code>Disp2.tga</code> (tiled 3 x 4) and pushed outwards by up to 2 units, so the bubble wobbles as the Null flies away; the normals are rebuilt afterwards.</p>
+<pre class="asm">
+; displace247 run 0x113558: per vertex  s = 1 + A * sin(dist * F + Frame*S)
+1135e4  fld  dword ptr [edi]               ; dist (computed at init)
+1135e6  fmul st(1)                         ; * F
+1135e8  fadd st(2)                         ; + Frame*S
+1135ea  fsin
+1135ec  fmul st(3)                         ; * A
+1135ee  fld1
+1135f0  faddp st(1)                        ; s
+1135f4  fmul dword ptr [edx]               ; * rel.x
+1135f6  fadd dword ptr [ecx + 8]           ; + centroid.x
+1135fd  fstp dword ptr [ebx]               ; vertex record (stride 0x60)
+; bomb run 0x112ca8: per face
+112d01  fld  dword ptr [eax + 0x40]        ; speed
+112d04  fmul st(1)                         ; * d
+112d06  fld1 ; faddp st(1)                 ; 1 + speed*d
+112d0a  fmul dword ptr [eax + 0x3c]        ; * |c - g|
+112d0f  fmul dword ptr [eax + 0x30]        ; * dir.x   (+ g.x, + vertex offset)
+; the displacement modifier of unrdisp.lwe (0x118924) after the spherical projection 0x156414
+118a6c  add  eax, edi                      ; (v*256 + u) &amp; 0xffff
+118a7f  mov  al, byte ptr [esi]            ; height 0..255 from the map
+118a8f  fmul dword ptr [esp + 0x84]        ; * 2/255
+; Watcom rand(), seed at 0x1ba928
+14b356  imul edx, dword ptr [eax], 0x41c64e6d
+14b35c  add  edx, 0x3039
+14b364  mov  eax, edx
+14b366  shr  eax, 0x10
+14b369  and  eax, 0x7fff
+</pre>
+<pre class="js">
+// scene3d-fx.js
+const s = 1 + A * Math.sin(d[i] * F + Math.fround(Frame * S));     // displace247
+P[i*3] = rel[i*3] * s + c[0]; ...
+const m = (1 + spd[t] * d) * dist[t];                               // bomb: new face centre = dir*m + g
+</pre>
+<dl class="facts">
+<dt>Script</dt><dd><code>addEvent displace247 sdfdfg {} {} {wscene1 Box02 0.3 -0.04 0.17+0.04*sin(Frame*0.002)} {0 0}</code>; <code>addEvent bomb ast {} {} {ipl tentacle sqr(Frame*0.03)}</code></dd>
+<dt>Verified</dt><dd>displace247 vertices vs original: 5e-5 after 90 frames; bomb: 1e-4 after 60 frames, frame 99.4 % identical; unrdisp displacement: 2e-7 at t=30</dd>
+<dt>Code</dt><dd><code>docs/js/fx/scene3d-fx.js</code>, <code>scene3d-disp.js</code></dd>
+</dl>
+</section>

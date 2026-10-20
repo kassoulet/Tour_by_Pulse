@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tour — Pulse, Assembly '98, in JavaScript</title>
+<meta name="description" content="A JavaScript port of 'Tour', the 1998 DOS demo by Pulse (3rd at Assembly 98), reverse-engineered from its executable, with notes on the engine and the cleverest x86 tricks of the original code.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <p class="kicker">PULSE · PYGMY PROJECTS · VIRTUAL DREAMS · ASSEMBLY 1998 · 3RD PLACE · DOS · 640×480</p>
+    <h1>Tour</h1>
+    <p class="lead">A 1998 PC demo, reverse-engineered from its executable and re-implemented in JavaScript.
+      Watch it, then read how the engine worked and which assembly tricks made it fast.</p>
+    <p><a class="btn" href="demo.html">▶ Play the demo</a> <a class="btn" href="writeup.html">The best asm tricks →</a></p>
+  </div>
+</header>
+
+<main>
+<section class="wrap" id="what">
+  <h2>What you are watching</h2>
+  <p><em>Tour</em> by <strong>Pulse</strong> (together with <em>Pygmy Projects</em> and <em>Virtual Dreams / FLT</em>) was shown as entry #16 of the PC demo competition at
+  <strong>Assembly 1998</strong> in Helsinki, where it finished <strong>3rd with 752 points</strong>. It is a ~4½-minute real-time demo: a software 3D engine,
+  volumetric effects (metaballs, marching cubes), feedback effects, a reaction–diffusion simulation and a procession of photographs, all running at 640×480
+  in true colour on a Pentium-class PC under MS-DOS, synchronised with a tracker module.</p>
+  <table>
+    <tr><th>Programming</th><td>camel (Marek Borzyszkowski), silver eagle (Sami Vaarala), unreal (Wojtek Podgorski, also concept)</td></tr>
+    <tr><th>3D</th><td>fndr (Jonas Hedeback)</td></tr>
+    <tr><th>Graphics, 3D, design, concept</th><td>visualize (Timo Harju)</td></tr>
+    <tr><th>Music</th><td>falcon (Jacek Dojwa)</td></tr>
+    <tr><th>Thanks (NFO)</th><td>Glenn Fiddler [Gaffer] for PTC; Pascal Massimino [SKAL/BOMB] for the MP3 depacker</td></tr>
+    <tr><th>Files</th><td><code>TOUR.EXE</code> (494&nbsp;KB, PMODE/W 1.33, packed), <code>TOUR.98</code> (4.7&nbsp;MB archive of 116 files)</td></tr>
+  </table>
+  <p>The NFO explains a design choice: <q>the music player has SB32 disabled: the music is over a megabyte in size, it's got to be mixed ‘by hand’; there is no kind of ‘download time’ whatsoever</q>.</p>
+  <p>This site runs <strong>a JavaScript re-implementation</strong> of that engine. The original script and assets are read as they are; every effect was re-written from the
+  disassembly of the original code and checked against the original executable running inside a CPU emulator. Nothing is pre-rendered.</p>
+</section>
+
+<section class="wrap" id="retro">
+  <h2>The retro context</h2>
+  <h3>1998: DOS is not dead yet</h3>
+  <p>Windows 98 had just shipped, but the demoscene still wrote for MS-DOS: the program owns the machine, switches the graphics card to a mode of its choice and talks
+  to the hardware directly. <code>TOUR.EXE</code> is a <em>32-bit protected-mode DOS program</em>: a <strong>DOS extender</strong> (here Daredevil &amp; Tran's <strong>PMODE/W</strong> 1.33, the
+  free alternative to Rational's DOS/4GW) switches the CPU to protected mode and gives the Watcom C++ code a flat address space, while DOS is still there for files and keyboard.</p>
+  <h3>640×480 in true colour — through VESA</h3>
+  <p>The classic VGA mode 13h (320×200, 256 colours) is gone: Tour asks the video card, through the VESA BIOS extension, for a 640×480 linear frame buffer in 16 or 32 bits per pixel
+  (the demo even prints <code>Select 640x480 video mode</code> and <code>try running UNIVBE</code> when the card has no VESA BIOS; <strong>PTC</strong>, thanked in the NFO, is a pixel-surface library from that era).
+  Effects render into off-screen <em>buffers</em> of 8, 16 or 32 bits per pixel; 8-bit buffers carry intensity for feedback effects and are turned into colour by a palette stage.</p>
+  <h3>Small downloads</h3>
+  <p>The archive is packed with a handful of home-made coders (an LZ with a flag-bit stream, a block coder for the module) because 1998 demo parties had a size limit
+  and no-one wanted a long loading time.</p>
+</section>
+
+<section class="wrap" id="engine">
+  <h2>How the engine works</h2>
+  <p>The architecture is data-driven. A 4&nbsp;KB text script, <code>script.unr</code>, creates named <strong>buffers</strong> and then adds <strong>events</strong>: an event is an instance of an
+  effect type with input buffers, output buffers and a parameter string. Every frame the engine runs all events in creation order. Effects chain like a patch-bay: a 3D scene renders over a picture
+  blitted into <code>SCREEN</code>, a <em>doubleimage</em> doubles a 320×240 buffer to 640×480, a <em>blend</em> adds a layer… Script lines carry a time stamp that is not seconds but a
+  <em>pattern order / row</em> of the tracker module, so the visuals stay glued to the music whatever the speed of the machine.</p>
+  <pre class="plain">createBuffer SCREEN 640 480 32
+createBuffer TEMP8 320 240 8
+createBuffer LORES 320 240 32
+...
+addEvent echo5 eko5 {TEMP8} {TEMP8} {0.5*Frame}
+addEvent palette pa {TEMP8} {LORES} {medusa.pal}
+addEvent doubleimage di {LORES} {SCREEN} {}
+addEvent blend blendpa {SCREEN EFXLAYER} {SCREEN} {1}
+9 0 deleteEvent filow            ; at order 9, row 0 of the module</pre>
+  <p>Parameters may be <em>expressions</em> compiled by a small evaluator and evaluated each frame with the variable <code>Frame</code> = time since the event started, in hundredths of a second.</p>
+</section>
+
+<section class="wrap" id="re">
+  <h2>Reverse-engineering the executable</h2>
+  <ol class="steps">
+    <li><strong>Unpacking, twice.</strong> <code>TOUR.EXE</code> is a tiny MZ stub whose 16-bit code decompresses (an LZEXE-style bit reader) the <strong>PMODE/W</strong> extender; PMODE/W then reads the
+    <code>PMW1</code> overlay — the demo itself, with compressed pages — switches to protected mode and starts it. No unpacker exists for that format, so the loader was <em>run</em>: Unicorn emulates the real-mode stub,
+    the switch to protected mode (and PMODE/W's own DPMI host), a few DOS calls, until the whole 1.6&nbsp;MB image sits in memory; it is then cut out of the dump (<code>re/unpack_pmodew.py</code>).</li>
+    <li><strong>Booting the original.</strong> The Watcom start-up code needs a few lies to run (DOS/4G-style signature calls, a heap, VESA answers). With them the original boots in 40 seconds up to the main loop —
+    archive opened, script loaded, 640×480 mode set — and its state is snapshotted. From then on any function of the original can be <em>called</em> with buffers of our choice: that is the ground truth for every port.</li>
+    <li><strong>The archive.</strong> <code>TOUR.98</code> is a plain sequence of records (sizes, name, compression type, payload). The decoders were found from the loader and re-implemented.</li>
+    <li><strong>The engine.</strong> 56 effects are registered in a table of 20-byte records; each points to a descriptor of three functions (<em>init</em>: parse parameters, <em>run</em>: one frame, <em>free</em>). Each used effect was disassembled,
+    ported, and compared pixel by pixel with the original.</li>
+  </ol>
+</section>
+
+<section class="wrap" id="loops">
+  <h2>Interesting inner loops</h2>
+  <p>The effects below were ported from the disassembly. Each note shows the real x86 code of the hot loop (addresses are linear addresses of the unpacked image, which loads at 0x100000) next to the JavaScript equivalent.
+  For the most clever tricks, see <a href="writeup.html">the write-up</a>.</p>
+  <div id="notes"><p class="dim">loading notes…</p></div>
+</section>
+
+<section class="wrap" id="port">
+  <h2>About this port</h2>
+  <ul>
+    <li><strong>Engine</strong>: <code>js/engine.js</code> parses the script, schedules commands on the module's (order,row) timeline and runs the events; <code>js/core.js</code> holds the buffer type and the expression compiler; effects live in <code>js/fx/</code>.</li>
+    <li><strong>Music</strong>: the original XM module (<code>TOUR3.XM</code>, 2.9&nbsp;MB) played through libopenmpt (chiptune3).</li>
+    <li><strong>Source and tools</strong>: the repository contains the reverse-engineering notes, the emulator harness and the extraction tools (<code>re/</code>, <code>tools/</code>). Sister projects with the same method: <em>73 million seconds</em> (Pulse, 1998 — the successor of this engine), <em>Zilog</em>, <em>Stars</em>, <em>Saint</em>.</li>
+    <li><strong>Credits</strong>: demo, music and assets © Pulse / Pygmy Projects / Virtual Dreams (1998); this page is an educational, non-commercial study.</li>
+  </ul>
+</section>
+</main>
+<footer class="wrap foot"><p>Tour · Pulse · Assembly 1998 · 3rd place, 752 points</p></footer>
+<script type="module" src="js/notes.js"></script>
+</body>
+</html>

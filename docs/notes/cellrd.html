@@ -1,0 +1,43 @@
+<section class="fx" id="fx-cellrd">
+<h3>cellrd - a Gray-Scott reaction-diffusion automaton driven by lookup tables</h3>
+<p>The pink worms that crawl through the lower left and upper right of the glass-scene section are a chemical simulation: two species A and B (5 bit each, 0..31) live on a 260 x 140 torus, A is spread by a 5x5 box blur, B by a 3x3 blur, and the Gray-Scott reaction <em>dA = F(1-A) - A B&sup2;, dB = A B&sup2; - (F+k) B</em> turns them into spots, stripes and worms. The script gives <code>0.012 0.045 3.2</code> = feed F, kill k and a time step.</p>
+<p>The clever part is that <strong>no floating point happens per cell</strong>. At <code>preinit</code> time the demo precomputes two tables of 16 bit results, indexed by <code>(neighbourhood sum &lt;&lt; 10) | (B &lt;&lt; 5) | A</code>: 776 x 1024 entries for A (the 5x5 sum is at most 25 x 31) and 280 x 1024 for B (3x3 sum), 1.6 MB + 0.57 MB, filled by a float loop (0x14ed9c). Every frame the cell step is two box sums, one packed index and one table read; the low byte of the 16 bit table value is the fraction, and a pseudo random dither byte is added before the result is truncated to 5 bit (stochastic rounding, so slow reactions still progress). The original runs two steps per frame, draws eight moving 3x3 "blob" seeds (sines) into the field first, and then paints the 260 x 140 field <em>twice</em> into the 32 bit screen (at 0,195 and at 378,156) through a 1024 entry colour table.</p>
+<h4>Table builder (0x14ed9c, table 2 shown)</h4>
+<pre class="asm">14ef82  fild dword ptr [esp+0x28]      ; S = 3x3 sum of B (0..279)
+14ef86  fld  dword ptr [0x2142cc]      ; F = 0.012
+14ef8c  fadd dword ptr [0x2142c8]      ; F + k
+14ef94  fmul dword ptr [0x1b0438]      ; S * (1/31)  -> mean in 0..1 units
+14ef9c  fmul dword ptr [esp+0x3c]      ; (F+k) * w        (w = 0.7 * B/31, float32)
+14efa4  fsubr dword ptr [esp+0x20]     ; A w^2 - (F+k) w   (A w^2 precomputed per A,B)
+14efaa  fmul qword ptr [0x1b043c]      ; 0.7 * s
+14efb2  fmul dword ptr [0x2142c4]      ; * D (3.2)
+14efbe  fmul qword ptr [0x1b0458]      ; 0.7 s / 9 = mean of the 3x3 w
+14efc4  faddp st(1)                    ; D*(reaction) + mean
+14efc6  fmul qword ptr [0x1b0460]      ; / 0.7  back to B units
+14efcc  fmul dword ptr [0x1b0454]      ; * 31
+14efd2  fstp dword ptr [esp+0x34]      ; float32, clamped to [0,31], then floor(v*256) is stored as a word</pre>
+<h4>The cell kernel (object 2, 0x2073e - self-modifying: the three table addresses are patched in by 0x20400)</h4>
+<pre class="asm">2075e  mov eax, dword ptr [edx]              ; packed index of A: (sumA5 &lt;&lt; 10) | (B &lt;&lt; 5) | A
+20760  add bl, byte ptr [ebp+NOISE]             ; running dither byte (patched: noise table 0x214288)
+20766  mov ax, word ptr [eax+eax+TABLE_A]       ; 16 bit new value of A (patched: 0x214280)
+2076e  mov ecx, dword ptr [edx+0x410]           ; packed index of B: (sumB3 &lt;&lt; 10) | (B &lt;&lt; 5) | A
+20774  mov cx, word ptr [ecx+ecx+TABLE_B]      ; (patched: 0x214284)
+2077c  add ebp, dword ptr [esp]                 ; noise index += loop counter (a bug: the random step pushed by the caller is never used)
+2077f  add eax, ebx                             ; + dither
+20781  and ebp, 0x7fff
+20787  mov byte ptr [esi], ah                   ; new A = high byte
+20789  add ecx, ebx
+2078b  mov byte ptr [edi], ch                   ; new B</pre>
+<h4>Port</h4>
+<pre class="js">const ab = (B[i] &lt;&lt; 5) | A[i];
+bl = (bl + noise[ep]) &amp; 255;  ep = (ep + (65 - ((x - 2) &gt;&gt; 2))) &amp; 0x7fff;   // the original adds its loop counter (65..1 per group of 4 pixels)
+A2[i] = (t1[(s5[i] &lt;&lt; 10) | ab] + bl) &gt;&gt; 8;
+B2[i] = (t2[(s3[i] &lt;&lt; 10) | ab] + bl) &gt;&gt; 8;</pre>
+<dl class="facts">
+<dt>script</dt><dd><code>addEvent cellrd sellu {} {} {preinit grayscott 0.012 0.045 3.2 none}</code> (tables, at script start, then deleted); <code>addEvent cellrd sellu2 {} {SCREEN} {run}</code> (orders 18-22). The 5th word names an initial-pattern file; <code>none</code> skips it.</dd>
+<dt>state</dt><dd>all global (0x2142a4-0x2142dc): arrays 264 x 144 bytes (2 cell border, periodic), box-sum arrays, 8 blob records, rand() state (srand(12345) at preinit; the noise table is 32768 rand() bytes; the step draws 4 more per step)</dd>
+<dt>colours</dt><dd>R = 255(1.5-2a), G = 255(b + 4.3 a b&sup2; - 0.2), B = 255(1 - 0.6 sin 5b - 1.2 a), a = A/31, b = B/31, 0x00RRGGBB</dd>
+<dt>verified</dt><dd>both 16 bit tables, the palette, the noise table, A, B and the 640x480x32 screen bit-identical to the original for 400 frames (800 steps); the 80 bit x87 arithmetic of the table builder is emulated with BigInt where float32 results sit on a rounding tie</dd>
+<dt>speed</dt><dd>about 2.5 ms per frame (two steps + draw) in node</dd>
+</dl>
+</section>

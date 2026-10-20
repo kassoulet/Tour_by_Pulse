@@ -1,0 +1,42 @@
+<section class="fx" id="fx-scene3d-pipeline">
+<h3>3D pipeline: transform, shading, painter's sort, clipping</h3>
+<p>Every frame the original transforms each vertex once (a 0x60 byte record caches camera-space and screen-space coordinates by frame number), flags it against the five frustum planes and drops
+triangles that are outside one plane. There is <strong>no z buffer and no back-face culling</strong>: the dot product at the top of the polygon routine is dead code, which is why the glass cube shows its inner faces.
+Shading is done per vertex: environment mapping takes the camera-space unit normal, <code>u = 127*nx + 128, v = 127*ny + 128</code>; the smooth lit mode adds ambient and the clamped cosines of all lights,
+<code>I = min((amb + sum max(0, n.d)/|d|) * 230.77, 254)</code>, using a Newton-refined reciprocal square root seeded from a 128 entry table (the classic float-bits trick).</p>
+<p>Polygons are sorted with two radix passes of 10 bits over a key made from the float bits of <code>(z0+z1+z2)*2000</code>, so the order is far-to-near with a relative depth resolution of about 2^-11; ties keep creation order.
+Clipping happens in camera space against near, left, right, top, bottom (in that order) before projection, and new vertices interpolate <em>all</em> attributes linearly in camera space - which is
+why a huge, mostly off-screen quad (the marching cubes box) is not drawn with the attributes of a plain screen-space plane.</p>
+<pre class="asm">
+; 0x181e5f  vertex transform (object -> camera, matrix at 0x214b70) and projection
+181e5f  fld  dword ptr [eax]
+181e61  fmul dword ptr [0x214b70]
+...
+181ee4  fld  dword ptr [eax + 0x18]       ; camera x
+181ee7  fmul dword ptr [0x1f9d2c]         ; * zoom x
+181eed  fld  dword ptr [eax + 0x1c]
+181ef0  fmul dword ptr [0x1f9d30]         ; * zoom y
+181f35  fld  dword ptr [eax + 0x28]       ; z
+181f38  fdivr dword ptr [0x1c4010]        ; 1/z
+181f87  fst  dword ptr [eax + 0x5c]       ; keep 1/z
+181fa1  fstp dword ptr [eax + 0x20]       ; screen x = cx + x*zoom/z
+; 0x1822a6  depth key and insertion (two radix passes)
+1822a6  fadd dword ptr [0x1c402c]
+1822ac  fmul dword ptr [0x1f9df0]         ; * 2000.0
+1822c2  jns  0x1822c7
+1822c5  xor  eax, 0xffffffff              ; negative floats: ~bits
+1822c7  or   eax, 0x80000000              ; positive: bits | 0x80000000
+1822cc  shr  eax, 0xc
+1822d1  call 0x107ebc                     ; list[key &amp; 0x3ff], node.key = key >> 10
+</pre>
+<pre class="js">
+function sortKey(zsum) { f32[0] = Math.fround(zsum) * 2000; const b = u32[0];
+  return (((b &amp; 0x80000000) ? ~b : (b | 0x80000000)) &gt;&gt;&gt; 12); }
+polys.sort((p, q) =&gt; q.k - p.k || p.s - q.s);        // far first, creation order for ties
+</pre>
+<dl class="facts">
+<dt>Verified</dt><dd>camera / vertex / normal / env uv against dumps of the original: 1e-6 (tentacle, box3, camel8, hires, unrdisp t=30)</dd>
+<dt>Quirk</dt><dd>tentacle.exp has one rotation key but the original interpolates past it: a rotation about x of 1.58e-4 rad per scene frame appears (also in the real demo run)</dd>
+<dt>Code</dt><dd><code>docs/js/fx/scene3d.js</code> (renderScene, clipPoly), <code>scene3d-scene.js</code> (transformObject)</dd>
+</dl>
+</section>

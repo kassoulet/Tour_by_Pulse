@@ -1,0 +1,38 @@
+<section class="fx" id="fx-volumes-metaballs">
+<h3>metaballs &mdash; eight soft spheres summed into a 16&times;16&times;16 field</h3>
+<p><code>metaballs VOLUME file.mbs</code> reads a text file of eight lines, one ball each: <code>X Y Z R C</code>, five expressions of <code>Frame</code>
+(<code>sin(Frame*0.006*3.4+5.4)</code> ... radius <code>1.2</code>, strength <code>0.90</code> or <code>-0.9</code> to carve holes). Every frame each ball is <em>added</em> to
+the field (nothing clears it: the script runs <code>copyvolume</code> first). A ball contributes only inside its radius R, with the smooth quartic
+<code>f(d&sup2;) = (A d&sup2; + B) d&sup2; + C</code>, <code>A = C/R&#8308;</code>, <code>B = &minus;2C/R&sup2;</code>: value C at the centre, value and slope zero at the edge,
+so balls blend into each other like metal drops. The 16 grid points per axis sit at <code>(i&minus;8)&middot;0.25</code>.</p>
+<p>The renderer (<code>0x114ee8</code>) is written for speed: the squared distances along each axis are computed once (3&times;16 floats on the stack), the loops are clipped to the bounding box of the sphere
+by scanning those tables from both ends, and the inner loop is a pure polynomial evaluation with one test. The ball table holds 16 records of 0x3c bytes
+(type, R&sup2;, R, A, B, C, X, Y, Z, bounding box); only type 1 is ever created (a type 2 renderer exists at <code>0x115314</code> but nothing calls <code>0x114e4c</code> with it).</p>
+<pre class="asm">
+; inner loop of the ball renderer, 0x1151d7 (st0 = d2 as float; esi = &amp;volume cell)
+1151d7  fld dword [esp+ebx]        ; dx2[x]
+1151da  fadd dword [esp+0xec]      ; + (dy2+dz2)
+1151e1  fst dword [esp+0xf0]       ; d2 stored as float
+1151e8  fcomp dword [edx+4]        ; d2 &lt; R2 ?
+1151ee  jae 0x115208               ; no: skip
+1151f0  fld dword [esp+0xf0]
+1151f7  fld st(0)
+1151f9  fmul dword [edx+0xc]       ; d2*A
+1151fc  fadd dword [edx+0x10]      ; + B
+1151ff  fmulp st(1)                ; * d2
+115201  fadd dword [edx+0x14]      ; + C
+115204  fadd dword [ecx]           ; + volume[cell]
+115206  fstp dword [ecx]
+</pre>
+<pre class="js">
+for (let x = x0; x &lt;= x1; x++, p++) {
+  const d2 = f32(dx2[x] + t);
+  if (d2 &lt; R2) vol[p] += (d2 * A + B) * d2 + C;
+}
+</pre>
+<dl class="facts">
+<dt>script</dt><dd><code>metaballs nazwa5 {} {} {OurVolume test1.mbs}</code> (also a.mbs, b.mbs, c.mbs, test2.mbs exist)</dd>
+<dt>quirk</dt><dd>A = C/(R&middot;R&middot;R&sup2;) is computed in the FPU with a 64-bit mantissa and then rounded to float; the port emulates that single step with BigInt to stay bit-exact</dd>
+<dt>verified</dt><dd>test1.mbs: 4096/4096 floats identical at 7 frames. a.mbs differs by &le;1 ulp at some frames because the original evaluator rounds <code>0.90*clip(Frame*0.0002,0,1)</code> to float</dd>
+</dl>
+</section>

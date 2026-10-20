@@ -1,0 +1,45 @@
+<section class="fx" id="fx-fade">
+<h3>fade &mdash; cross-fade to a colour with two 64 KB lookup tables</h3>
+<p><code>fade {IN} {OUT} {r g b expression}</code> blends the image towards the colour (r,g,b) (floats 0..1) by an amount that is the expression evaluated at the event-local <code>Frame</code>:
+<code>f = (int)(expr*255)</code>, truncating (the helper <code>0x103d1a</code> forces the FPU control word to round-toward-zero). With <code>f &lt;= 0</code> the effect is a plain copy of the input; the script uses black
+and <code>1 - sin&sup4;(0.0071&middot;Frame)</code>, so the Fears picture flashes in and out. The parameter text is read by <code>sscanf("%f %f %f %s")</code>: the expression must contain no spaces.</p>
+<p>No multiplication is done per pixel. At start-up the engine builds two 256x256 byte tables, <code>A[f][v] = ((256-f)*v) &gt;&gt; 8</code> (the image) and <code>B[f][v] = (f*v) &gt;&gt; 8</code> (the colour). For every frame the code
+<em>patches the table address into three instructions of the pixel loop</em> (self-modifying code, <code>0x14bc8f</code>) and puts the already scaled colour into an <code>add eax,imm32</code> at <code>0x14bd11</code>.
+The loop then costs three byte loads, three table lookups and one add per pixel; the result has alpha 0.</p>
+<pre class="asm">
+; fade run, 32 bit (0x1111b8): f -> [esp+0xc], colour channels scaled to 0..255 and truncated
+1111b8  fld qword [0x1ad1a3]       ; 255.0
+1111be  fld dword [esi+4]          ; g
+1111c1  fmul st(1)
+...
+1111d2  call 0x103d1a              ; truncate (frndint with RC=3)
+1111fb  shl eax, 8                 ; g
+1111fe  shl edx, 0x10              ; r
+111205  or eax, edx
+11120d  or ecx, eax                ; ecx = 0x00RRGGBB colour*255
+111214  call 0x14bc88              ; patch the loop + precompute B[f][r,g,b]
+11122c  call 0x14bcd0              ; run the loop over w*h pixels
+
+; the loop 0x14bcd0 (self-modified): the [edx+0x270f] displacements are rewritten to A + f*256 by 0x14bc8f/95/9b
+14bcf0  mov al, [edx+0x270f]       ; A[f][r]
+14bcf6  mov bl, [ebp+esi+1]        ; g
+14bcfa  shl eax, 0x10
+14bcfd  mov cl, [ebp+esi]          ; b
+14bd01  mov ah, [ebx+0x270f]       ; A[f][g]
+14bd07  add esi, 4
+14bd0a  mov al, [ecx+0x270f]       ; A[f][b]
+14bd11  add eax, 0x121212          ; imm patched = B[f][colour]  (placeholder 0x121212)
+14bd16  mov dl, [ebp+esi+2]        ; next r
+14bd1a  mov [edi+esi-4], eax
+</pre>
+<pre class="js">
+const k = 256 - f;  for (v = 0; v &lt; 256; v++) t[v] = (k * v) &gt;&gt; 8;           // A[f][.]
+const col = (((f*R) &gt;&gt; 8) &lt;&lt; 16 | ((f*G) &gt;&gt; 8) &lt;&lt; 8 | (f*B) &gt;&gt; 8) &gt;&gt;&gt; 0;  // B[f][colour], R=(int)(r*255) ...
+d[i] = ((t[p &gt;&gt; 16 &amp; 255] &lt;&lt; 16) | (t[p &gt;&gt; 8 &amp; 255] &lt;&lt; 8) | t[p &amp; 255]) + col;
+</pre>
+<dl class="facts">
+<dt>script</dt><dd><code>addEvent fade xf {FEARS} {TEMP} {0 0 0 (1.0-sqr(sqr(fabs(sin(Frame*0.0071)))))}</code> followed by an additive <code>blend</code> onto the screen</dd>
+<dt>functions</dt><dd>init <code>0x110f80</code>, run <code>0x111008</code> (8, 16 and 32-bit branches; only 32 bit ported), table setup <code>0x14bc88</code>, pixel loop <code>0x14bcd0</code></dd>
+<dt>verified</dt><dd>100.0000 % identical on 13 cases (several colours, factors f = 255, 127, 1, negative, 0, expression-driven)</dd>
+</dl>
+</section>

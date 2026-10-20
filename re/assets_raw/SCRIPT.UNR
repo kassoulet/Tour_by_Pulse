@@ -1,0 +1,117 @@
+0 0 createBuffer SCREEN 640 480 32
+createBuffer TITLE 640 480 16 TITLE.jpg
+createBuffer TEMPIMAGES 640 480 16
+createBuffer ISABELLA 640 480 16 isabella.jpg
+createBuffer NEWHIRES 640 480 16 newhires.jpg
+createBuffer DREAMS 640 480 16 q.jpg
+createBuffer HIRES 640 480 16 hires.jpg
+createBuffer FEARS 640 480 32 fears.tga
+createBuffer CITYLIGHTS 640 480 32 scroll.jpg
+createBuffer PPRO 640 480 32 ppro.jpg
+createBuffer TEMP 640 480 32
+createBuffer TEMP8 320 240 8
+createBuffer LORES 320 240 32
+createBuffer LORES8 320 240 8
+createBuffer EFXLAYER 640 480 32 efxlayer.jpg
+createBuffer THEEND 640 480 16 sleep.jpg
+;
+;  cell preinit
+;
+addEvent cellrd sellu {} {} {preinit grayscott 0.012 0.045 3.2 none}
+deleteEvent sellu
+loadImage TEMPIMAGES countryf.jpg
+addEvent blit bbb {TITLE} {SCREEN} {}
+1 0 blit TEMPIMAGES TITLE
+1 1 loadImage TEMPIMAGES fendercl.jpg
+2 0 blit TEMPIMAGES TITLE
+2 1 loadImage TEMPIMAGES falcon.jpg
+3 0 blit TEMPIMAGES TITLE
+3 1 loadImage TEMPIMAGES silver.jpg
+4 0 blit TEMPIMAGES TITLE
+4 1 loadImage TEMPIMAGES echo.jpg
+5 0 blit TEMPIMAGES TITLE
+5 1 loadImage TEMPIMAGES camelc.jpg
+6 0 blit TEMPIMAGES TITLE
+6 1 loadImage TEMPIMAGES unreal.jpg
+7 0 blit TEMPIMAGES TITLE
+8 0 deleteEvent bbb
+addEvent fillbuffer filow {TEMP8} {TEMP8} {0}
+addEvent echo5 eko5 {TEMP8} {TEMP8} {0.5*Frame}
+addEvent palette pa {TEMP8} {LORES} {medusa.pal}
+addEvent doubleimage di {LORES} {SCREEN} {}
+addEvent blend blendpa {SCREEN EFXLAYER} {SCREEN} {1}
+9 0 deleteEvent filow
+deleteEvent eko5
+deleteEvent pa
+deleteEvent di
+deleteEvent blendpa
+addEvent blit bbb {ISABELLA} {SCREEN} {}
+addEvent scene scena2 {SCREEN} {SCREEN} {unrdisp.lwe 30.0 0.0} {0 0}
+play scena2
+11 0 changeBuffers bbb {NEWHIRES} {SCREEN} {}
+deleteEvent scena2
+addEvent scene ipl {SCREEN} {SCREEN} {tentacle.exp 50.0 80.0} {0 0}
+play ipl
+12 35 addEvent bomb ast {} {} {ipl tentacle sqr(Frame*0.03)}
+13 0 changeBuffers bbb {DREAMS} {SCREEN} {}
+deleteEvent ipl
+deleteEvent ast
+addEvent scene test {SCREEN} {SCREEN} {box3.exp 20.0 0.0} {0 0}
+addEvent volume3D nazwa1 {} {} {V8Volume v8.dat}
+addEvent volume3D nazwa2 {} {} {SrcVolume vbox.dat}
+addEvent volume3D nazwa3 {} {} {OurVolume}
+addEvent volume3D nazwa3a {} {} {PlasmaVolume}
+addEvent copyvolume nazwa4 {} {} {OurVolume SrcVolume}
+addEvent metaballs nazwa5 {} {} {OurVolume test1.mbs}
+addEvent morphvolume nazwa6 {} {} {OurVolume OurVolume V8Volume clip10(0.5+0.3*sin(Frame*0.01)+0.7*cos(Frame*0.007))}
+addEvent plasma1volume nazwa7 {} {} {PlasmaVolume 0.7 0.7}
+addEvent mulvolume nazwa8 {} {} {OurVolume OurVolume PlasmaVolume}
+addEvent marchingcubes nazwa9 {} {} {test box01 OurVolume 1}
+play test
+16 30 deleteEvent nazwa9
+deleteEvent nazwa8
+deleteEvent nazwa7
+suppressEvent nazwa6
+deleteEvent nazwa5
+deleteEvent nazwa4
+deleteEvent nazwa3
+deleteEvent nazwa3a
+deleteEvent nazwa2
+deleteEvent nazwa1
+deleteEvent test
+deleteEvent bbb
+addEvent fillbuffer btemp8 {TEMP8} {TEMP8} {0}
+addEvent reebok reeb {} {TEMP8} {picture.png}
+addEvent palette palreeb {TEMP8} {LORES} {picture.pal}
+addEvent doubleimage dimg {LORES} {SCREEN} {}
+addEvent fade xf {FEARS} {TEMP} {0 0 0 (1.0-sqr(sqr(fabs(sin(Frame*0.0071)))))}
+addEvent blend addop {SCREEN TEMP} {SCREEN} {1}
+18 0 deleteEvent btemp8
+deleteEvent reeb
+deleteEvent palreeb
+deleteEvent dimg
+deleteEvent xf
+deleteEvent addop
+addEvent blit bbb {HIRES} {SCREEN} {}
+addEvent cellrd sellu2 {} {SCREEN} {run}
+addEvent scene wscene1 {SCREEN} {SCREEN} {hires.exp 20.0 0.0} {0 0}
+addEvent displace247 sdfdfg {} {} {wscene1 Box02 0.3 -0.04 0.17+0.04*sin(Frame*0.002)} {0 0}
+play wscene1
+22 0 deleteEvent sellu2
+deleteEvent wscene1
+deleteEvent sdfdfg
+addEvent fillbuffer fbkiko {TEMP} {TEMP} {0}
+addEvent mapImage kiko {CITYLIGHTS} {TEMP} {}
+addEvent blend blend_ppro {TEMP PPRO} {TEMP} {1}
+addEvent blit bbb {TEMP} {SCREEN} {}
+addEvent scene wscene1 {SCREEN} {SCREEN} {camel8.exp 20.0 0.0} {0 4}
+addEvent displace247 sdfdfg {} {} {wscene1 Box02 0.2 -0.02 0.10+0.05*sin(Frame*0.002)} {0 10}
+play wscene1
+25 0 deleteEvent kiko
+deleteEvent fbkiko
+deleteEvent sdfdfg
+deleteEvent wscene1
+deleteEvent blend_ppro
+addEvent blit bbb {THEEND} {SCREEN} {}
+25 63 TheEnd
+@

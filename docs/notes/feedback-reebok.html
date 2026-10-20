@@ -1,0 +1,41 @@
+<section class="fx" id="fx-reebok">
+<h3>reebok - six additive rotozoom layers of a picture</h3>
+<p>A 256x256 8 bit picture (<code>picture.png</code>, palette applied later by <code>palette picture.pal</code>) is drawn six times on top of each other into the 320x240 8 bit buffer, each layer rotated and zoomed differently and <em>added</em> with saturation. The angle is <code>0.006 x 0.6 x elapsed</code>, the zoom of a layer is <code>(sin(a)*0.5+2) * phase/32</code>, and the six phases (0,42,84,126,168,210) all decrease with time and wrap at 256. A per-layer brightness table <code>trunc(k * 0.7 sin(0.9q&sup2; + 2.24q))</code> (q = phase/256, may be negative: bytes wrap) turns texels into increments, which gives the flickering shimmer.</p>
+<p>It is a texture mapper on a coarse grid: 8x8 cells, 41 x 31 corners whose texture coordinates are computed in floating point and converted to 16.16 by the <em>magic number</em> trick (adding 1.5 x 2^36 and reading the low dword of the double), then bilinearly interpolated in fixed point. The 64 KB texture sits in a 64K aligned block, so <code>bl</code>/<code>bh</code> are the texture coordinates and wrap by themselves; the fractions live in <code>esi</code>/<code>ebp</code> and <code>adc</code> carries into them. Quirk: <code>ecx</code>/<code>edx</code> still contain the destination pixel and the integer steps in their low bytes, and those are added to the fractions too.</p>
+<h4>Grid corner (0x1171fc)</h4>
+<pre class="asm">117263  fsub dword ptr [ebx+0x14]       ; j - centre
+117268  fmul dword ptr [ebx+0x24]       ; * 320/width  (x, kept in an x87 register, never rounded)
+11726d  fmul dword ptr [esp+0x14]       ; x cos
+117273  fmul dword ptr [esp+0x20]       ; x sin
+117279  fsub dword ptr [esp+0x18]       ; x cos - (y sin)   (y sin, y cos were stored as float32)
+11727f  fadd dword ptr [esp+0x1c]       ; x sin + (y cos)
+117285  fmul st(2)                      ; * layer scale
+117299  fadd qword ptr [0x1ae47f]       ; + 160.0           (+100.0 for v)
+1172a9  faddp st(2)                     ; + 1.5*2^36 : low dword of the stored double = 16.16 texture coordinate
+1172ad  fstp qword ptr [edx-0x10]</pre>
+<h4>One pixel of a cell (0x153054)</h4>
+<pre class="asm">153054  mov al, byte ptr [ebx]          ; texel (bh:bl)
+153056  mov dl, byte ptr [0x1bdd72]     ; integer part of du per pixel
+15305c  add esi, ecx                   ; u fraction += du fraction (+ junk in cl)
+15305e  mov dh, byte ptr [0x1bdd76]
+153064  adc bl, dl                      ; carry into the integer part
+153066  mov al, byte ptr [eax+0x204280] ; layer brightness table
+15306c  mov cl, byte ptr [edi]          ; destination pixel
+15306e  add ebp, edx                   ; v fraction
+153070  adc bh, dh
+153072  add al, cl                      ; saturating add: add / sbb / or
+153074  sbb cl, cl
+153077  or cl, al
+15307d  mov byte ptr [edi], cl</pre>
+<pre class="js">let s = esi + ecxHi + cl; esi = s &gt;&gt;&gt; 0; const c1 = s &gt; 0xffffffff ? 1 : 0;   // add esi,ecx
+bl = (bl + dl + c1) &amp; 255;                                                   // adc bl,dl
+s = ebp + edx; ebp = s &gt;&gt;&gt; 0; const c2 = s &gt; 0xffffffff ? 1 : 0;             // add ebp,edx
+bh = (bh + dh + c2) &amp; 255;                                                   // adc bh,dh
+cl = Math.min(255, tbl[texel] + D[p]); texel = tex[(bh &lt;&lt; 8) | bl]; D[p] = cl;</pre>
+<dl class="facts">
+<dt>script</dt><dd><code>addEvent reebok reeb {} {TEMP8} {picture.png}</code>, after <code>fillbuffer</code>, followed by <code>palette palreeb {TEMP8} {LORES} {picture.pal}</code> and <code>doubleimage</code> (order 17-18)</dd>
+<dt>original</dt><dd>init 0x1170c8, run 0x1172cc, grid 0x1171fc, cell filler 0x152f94 (same code family as the sister demo's reebok)</dd>
+<dt>subtle</dt><dd>the angle uses the unrounded x87 value of 0.6 x elapsed while the phases use its float32 copy</dd>
+<dt>verified</dt><dd>80 consecutive frames on random start content: 0 of 76800 bytes differ in every frame</dd>
+</dl>
+</section>

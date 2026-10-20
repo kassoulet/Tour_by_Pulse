@@ -1,0 +1,34 @@
+<section class="fx" id="fx-archive-dlz">
+<h3>TOUR.98: the archive and the dlz decoder</h3>
+<p>All demo data lives in one file, <code>TOUR.98</code>: a chain of 116 records <code>[u32 usize][u32 csize][u32 namelen][u32 dataofs][u32 nameofs][u32 dataend][u8 type][name\0][data]</code>. The loader (around 0x10774d, strings "No archive file!!!" / "File not found") reads every header once, then <code>fread</code>s the payload of the requested name and dispatches on the type byte at 0x107b94: <code>0</code> stored, <code>1</code> byte RLE, <code>2</code>/<code>t</code> dlz, <code>3</code> adaptive-Huffman LZ, <code>4</code> order-N PPM + arithmetic coding (code present, no record uses it), <code>b</code> block-sorting coder, <code>j</code>/<code>p</code> raw JPEG/PNG. A type 2 record whose packed size is not smaller than the unpacked size is simply copied.</p>
+<p>The workhorse is "dlz" (0x129ed8, 55 + 3 records): a PKLITE-style LZ. Flag bits come from a 16-bit word consumed LSB first. The trick is that <code>dec dl</code> does not touch the carry flag, so the bit that <code>shr bp,1</code> shifted out is still in CF when the counter test is done; the offset high byte is even assembled with <code>rcl bh,1</code>, pushing stream bits straight into a register. Offsets are negative 16-bit values (high byte starts at 0xff), lengths use a small unary prefix code, and a 0xff offset byte with a zero flag ends the stream.</p>
+<pre class="asm">129fd7  shr bp,1            ; next flag bit -&gt; CF (bp = 16-bit bit word)
+129fda  dec dl              ; DEC leaves CF alone: bit counter 16..0
+129fdc  jne 0x129fe5
+129fde  lodsw               ; counter hit 0: refill 16 bits
+129fe0  mov bp,ax
+129fe3  mov dl,0x10
+129fe5  jae 0x129fea        ; CF=0 -&gt; match, CF=1 -&gt; literal
+129fe7  movsb               ; literal: copy one byte
+129fe8  jmp 0x129fd7
+129fea  ...                 ; (next bit, then) lodsb: low byte of the offset
+129ff8  lodsb
+129ff9  mov bh,0xff         ; offset is negative: high byte starts at 0xff
+129ffb  mov bl,al
+129ffd  jb 0x129ef3        ; ... short matches
+129f01  rcl bh,1            ; shift the next stream bit INTO the offset high byte
+129f03  shr bp,1            ; (bit read: shr / dec / reload / rcl)
+...
+12a116  rep movsb          ; (dlz copy loop, ecx = length)</pre><pre class="js">def gb():                      # shr bp,1 ; dec dl ; reload 16 bits at 0
+    b = w &amp; 1; w &gt;&gt;= 1; n -= 1
+    if n == 0: n = 16; w = u16(src, p); p += 2
+    return b
+# literal   : bit=1 -&gt; copy src byte
+# otherwise : bl = next byte, bh = 0xff then offset bits are rcl&#x27;ed in from the stream
+#             copy(bh,bl,len): out.append(out[len(out) + (((bh&lt;&lt;8)|bl) - 0x10000)])
+# length    : unary 3,4,5,6; then 7/8, byte+0x11 or 3 bits+9 ; 0xff offset escape = end of data</pre>
+<dl class="facts"><dt>Decoder</dt><dd>TOUR.EXE 0x129ed8 (eax = src, edx = dst, ebx = csize), 17-byte header skipped</dd>
+<dt>Code</dt><dd>docs/js/archive.js <code>decodeDlz</code>, tools/extract.py <code>decode_dlz</code>; checked byte-identical against the original in the Unicorn harness</dd>
+<dt>Type t</dt><dd>FEARS/DISP2/VISUAL.TGA: dlz-packed TGA, converted to PNG (RGB) by tools/extract.py</dd>
+<dt>Type 1</dt><dd>0x129ea8 byte RLE: <code>b&lt;0</code> copy -b literals, else repeat next byte b+3 times (only M_30_210.BIN)</dd></dl>
+</section>

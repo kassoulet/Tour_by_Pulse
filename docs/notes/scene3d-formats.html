@@ -1,0 +1,38 @@
+<section class="fx" id="fx-scene3d-formats">
+<h3>The 3D scene system: files, loaders and conventions</h3>
+<p>The <code>scene</code> effect of TOUR is the demo's whole 3D engine (source name <code>Bscene1.c</code>, with <code>loaduexp.c</code>, <code>loadlws.c</code>, <code>matmgr.c</code>, <code>hsort.c</code>).
+A script line such as <code>addEvent scene ipl {SCREEN} {SCREEN} {tentacle.exp 50.0 80.0} {0 0}</code> parses <code>"%s %f %f %c"</code> (file, speed, offset, flag), loads the scene and does nothing else until
+<code>play ipl</code> installs the render callback <code>0x105e0c</code> in the scene record. From then on the effect draws on top of whatever the earlier events left in the buffer: the scene time is
+<code>(Frame - playStart) * speed * 0.01 + offset</code> scene frames and the animation restarts when it passes <code>duration - 0.5</code>.</p>
+<p>Two file families exist, both small binaries made by the group's own converters (same lineage as 73 Million Seconds, but the build differs: TOUR renders into 32 bit 640x480 and the
+.exp loader keeps <em>five</em> texture slots per material). <code>.exp</code> (<code>UEXP</code>) is an export of a 3D Studio MAX scene: world-space vertices, per-corner uv, a node matrix, position tracks, a target
+camera with fov track and omni lights; the loader derives object-space vertices as <code>(p - T) * M^-1</code>. <code>.lwe</code> (<code>UNLW</code>) is a LightWave scene reduced to motion keys (44 byte
+Kochanek-Bartels keys) referring to a <code>.lwv</code> object; the loader flips the z axis, so the object matrix is <code>S R(h,p,-b) S</code>. A chunk of type 0x0b attaches an object modifier (see the effects note).</p>
+<pre class="asm">
+; 0x11c24a  chunk dispatch of the .lwe loader: ah = chunk id, jump table in the code segment at 0x11c070
+11c22a  mov  ah, byte ptr [ebp - 1]
+11c22d  cmp  ah, 0xff                       ; end of file
+11c236  mov  al, ah
+11c238  dec  al
+11c23a  cmp  al, 0xa
+11c23c  ja   0x11cb89                       ; unknown id: skip
+11c246  jmp  dword ptr cs:[edx*4 + 0x11c070]   ; 1 object, 2 camera, 3 light, 4 null, 0xb modifier
+; material: the draw routine is chosen from the mode byte [mat+0xa6] (0x11f181), e.g. mode 4 with slot 4 -> 0x84
+11f181  mov  dl, byte ptr [eax + 0xa6]
+11f187  cmp  dl, 0x23
+...
+11f2be  mov  dword ptr [eax + 0x50], 0x124624   ; mode 0x84 : 32 bit polygon routine
+</pre>
+<pre class="js">
+// scene3d-scene.js: object space of an .exp object and its world matrix
+so.P0[i] = (file[i] - tm.translation) * inverse(tm3);         // loader
+world    = (so.P - pivot) * tm3 + positionKey(t);              // evaluate()
+// vertex normals: sum of the unit normals of the triangles sharing the vertex, normalised
+</pre>
+<dl class="facts">
+<dt>Files used</dt><dd>unrdisp.lwe + y-soap1.lwv (env1.jpg), tentacle.exp (crater.png, pink.png), box3.exp (cityligh.png), hires.exp (redio.png, pink.png), camel8.exp (scape.png)</dd>
+<dt>Zoom</dt><dd>.exp: <code>W/2 / tan(fov/2)</code> (718.73 at fov 0.8378); .lwe: 718.74 x 862.488 (320x200 pixel aspect scaled)</dd>
+<dt>Script</dt><dd>scene / play / displace247 / bomb, see the effects note</dd>
+<dt>Code</dt><dd><code>docs/js/fx/scene3d-scene.js</code>, <code>scene3d-formats.js</code>, <code>re/scene3d.md</code></dd>
+</dl>
+</section>

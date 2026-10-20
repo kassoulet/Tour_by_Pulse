@@ -1,0 +1,30 @@
+<section class="fx" id="fx-echo5">
+<h3>echo5 - an additive 3D cage that smears itself into glow trails</h3>
+<p>The "echo" of echo5 is not a feedback of the picture into itself by warping: it is a tiny software 3D engine drawing into the 8 bit buffer <code>TEMP8</code>. A cage of 33 square sheets (11 along each axis, at -100..+100 in steps of 20; 132 vertices, 66 triangles) is rotated by an angle that integrates the <em>change</em> of the script expression (<code>0.5*Frame</code> only matters through its per-frame difference), pulsed by three sine waves and pushed 1200 units away. Every triangle is drawn <em>additively</em> (dest += texel, wrapping) with a perspective-correct texture mapper; the texture is 2500 random soft blobs generated at start from the C <code>rand()</code>. The buffer is never cleared: after drawing, each pixel gets 0.65 x the already smeared pixel on its left, then 0.65 x the one above - the glow trails and the overexposed look. The result is turned into colours later by <code>palette</code> + <code>doubleimage</code>.</p>
+<p>Because adding commutes, the polygon order does not matter (the original still files polygons into 4096 depth buckets by <code>0.2 x (z0+z1+z2)</code>, farthest first, and drops those beyond bucket 4095). The same triangle library was found in the sister demo (echo4 / echo6); here the projection scales are -0.625 / -0.390625 (pushed by the init, 0x1534c0).</p>
+<h4>Wobble of the vertices (0x1554dc)</h4>
+<pre class="asm">15558d  fsin                         ; sin(x_model/51.398 + t)
+155593  fmul st(5)                   ; * 0.3
+1555a4  fadd st(3)                   ; + 2/3
+1555b6  fsin                         ; sin(y_model/51.398 + 0.8 t)
+1555c8  fsin                         ; sin(z_model/51.398 + 1.3 t)
+1555d3  fld dword ptr [edx+eax]      ; transformed vertex x
+1555da  fmul st(1)                   ; * (0.3 (sin+sin+sin) + 2)
+1555f4  fadd dword ptr [0x1b0990]    ; z += 1200.0</pre>
+<h4>Glow smear (0x183d34: rows, 0x183d8a: columns)</h4>
+<pre class="asm">183d6d  mov al, byte ptr [edi]           ; pixel
+183d6f  mov cl, byte ptr [ebx+0x1c9f1c]  ; table[previous result]   (table[k] = round(k * 0.65), built by repeated fadd)
+183d75  add al, cl
+183d78  sbb cl, cl                       ; saturate
+183d7a  or al, cl
+183d7d  mov bl, al                       ; result becomes the next pixel's index
+183d7f  mov byte ptr [edi-1], al</pre>
+<pre class="js">for (let y = 0; y &lt; 200; y++) { let p = 0; for (let i = y*320; i &lt; y*320 + 320; i++) { const v = buf[i] + T[p]; p = v &gt; 255 ? 255 : v; buf[i] = p; } }
+for (let x = 0; x &lt; 320; x++) { let p = 0; for (let i = x; i &lt; 64000; i += 320) { const v = buf[i] + T[p]; p = v &gt; 255 ? 255 : v; buf[i] = p; } }</pre>
+<dl class="facts">
+<dt>script</dt><dd><code>addEvent echo5 eko5 {TEMP8} {TEMP8} {0.5*Frame}</code> after <code>fillbuffer</code> (order 8-17), followed by <code>palette pa {TEMP8} {LORES} {medusa.pal}</code> and <code>doubleimage</code>, blended over the picture</dd>
+<dt>original</dt><dd>init 0x11807c, run 0x1180dc, kernel 0x155628, mesh 0x154ee8, bins 0x1535a8, polygon loop 0x153a8c, triangles 0x18337a (4 clip stages, rasteriser 0x18253d)</dd>
+<dt>quirk</dt><dd>the texture generator consumes the global rand() sequence, so it depends on what ran before it (cellrd's preinit): the port shares <code>ctx.randSeed</code></dd>
+<dt>verified</dt><dd>300 consecutive frames byte-identical to the original (feedback included); the triangle pipeline separately on 900 random triangles (incl. clipping); per-frame x87 products of the angle and phases are emulated in extended precision (x87.js)</dd>
+</dl>
+</section>
