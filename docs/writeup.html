@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tour - the best asm tricks</title>
+<meta name="description" content="Fifteen clever low-level optimisations found in the 1998 DOS demo Tour by Pulse, with real disassembly, Pentium pipeline reasoning and JavaScript equivalents verified against the original.">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.trick{border-top:1px solid var(--line);padding-top:6px;margin-top:10px}
+.trick h3{color:var(--gold);font:700 21px var(--mono);margin-top:.8em}
+.where{font:12px var(--mono);color:var(--green);margin:0 0 .6em}
+.chapters.small a{padding:10px 12px 10px 44px}
+.note-box{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 14px;font-size:15px}
+pre.asm .ad,pre.asm .c{white-space:pre}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<p class="kicker">PULSE - 1998 - PMODE/W - 640x480 VESA - PENTIUM MMX</p>
+<h1>The best asm tricks of Tour</h1>
+<p class="lead">Fifteen pieces of the original executable worth reading slowly: FPU tricks, MMX, SWAR on plain Pentiums, self-modifying inner loops, hand-scheduled pairing, table-driven maths and three generations of bit readers.
+Every excerpt is real disassembly (addresses are linear, the image is loaded at 0x100000), and every claim that is not just reading the code was checked by running the original function in an emulator and comparing it with the JavaScript shown.</p>
+<p><a href="index.html">back to the player</a></p>
+</div></header>
+<main>
+<section class="wrap" id="intro">
+<h2>The machine behind the code</h2>
+<p><em>Tour</em> (Pulse with PygmyProjects / VirtualDreams, third at Assembly 1998) is the elder sibling of <em>73 million seconds</em>. It is a Watcom C/C++ 32-bit program running flat under a DOS extender (PMODE/W 1.33), drawing 640x480 in 8, 16 and 32 bits per pixel into a VESA linear
+framebuffer, with sound from the IMS library playing FastTracker modules. The target was a <strong>Pentium MMX</strong> (1997, P55C: two in-order pipes, U and V, with a 3-cycle FPU and a 1 MMX multiplier) and in 1998 a <strong>Pentium II</strong> (an out-of-order P6 core, where
+the old pairing games matter less and partial registers hurt). The compiler output is ordinary - <code>sar/shl/sbb</code> division idioms, stack frames, <code>fnstsw/sahf</code> compares - and
+the demo's own inner loops are hand-written assembly sitting in the middle of it, in the effect library (0x14xxxx-0x17xxxx), in "object 2" (0x1b000, NASM-style kernels) and in the bzip-style decoder.</p>
+<p>Rules of the Pentium game used below, in one paragraph: simple integer instructions (<code>mov, add, sub, and, cmp, lea, inc/dec</code>) can issue two per clock, one in each pipe (<em>pairing</em>), unless the second depends on the first; shifts and <code>adc/sbb</code> pair only in the U pipe;
+a register used as an address in the cycle after it was written costs a clock (AGI stall); a taken branch pairs in V; <code>fxch</code> is free next to an FP op; the FPU has a 3-cycle latency but starts a new operation every cycle, and <code>fdiv</code> runs alongside integer code; MMX multiplies have one unit with latency 3; the data cache does not allocate on a write miss.
+Cycle remarks in the text are estimates from these rules, not measurements.</p>
+</section>
+
+<section class="wrap" id="toc"><h2>The tricks</h2>
+<ol class="chapters small"><li><a href="#prefetch"><b>Clearing memory with a hand-made prefetch</b><span>0x103ad0 / 0x103b07 - Watcom runtime memset</span></a></li><li><a href="#trunc"><b>Truncating floats with the FPU control word</b><span>0x103d1a - helper used by fade, xfade, table builders</span></a></li><li><a href="#magic"><b>Float to 16.16 in three instructions, and an FDIV hidden behind integer code</b><span>0x16b4e5 and 0x16b972 - the scanline setup of the polygon fillers</span></a></li><li><a href="#fpupipe"><b>Four floats at a time: a hand-scheduled FPU pipeline</b><span>0x1521bd - volume vector library (mulvolume, addvolume, fadevolume ...)</span></a></li><li><a href="#mmxsat"><b>MMX saturating arithmetic and the negative-index loop</b><span>0x1e7a8..0x1e829 - object 2 blend kernels</span></a></li><li><a href="#lowpass"><b>A two-pass IIR blur on four columns at once</b><span>0x1f83c - &quot;lowpass&quot; effect, 8-bit 320x200 buffers</span></a></li><li><a href="#swar32"><b>Saturating add of four bytes without MMX</b><span>0x152e5a - additive filler for 32-bit buffers</span></a></li><li><a href="#swar565"><b>RGB565 saturation with an XOR carry detector and a 4-entry table</b><span>0x14b580 - additive filler for 16-bit buffers</span></a></li><li><a href="#smc"><b>Self-modifying scanline filler: immediates as registers</b><span>0x16b494-0x16b51b patches, 0x16baa0-0x16baee inner loop</span></a></li><li><a href="#cell"><b>A reaction-diffusion step as one table lookup, with stochastic rounding</b><span>0x20400 patcher and 0x2073e kernel - cellrd (Gray-Scott)</span></a></li><li><a href="#pitch"><b>2^(x/3072) from four 16-entry tables and three multiplies</b><span>0x148f90 - XM player (IMS), note to frequency</span></a></li><li><a href="#radix"><b>A painter&#x27;s sort in two radix passes with a float-bit key</b><span>0x125b61 (pass 2) - scene3d</span></a></li><li><a href="#div8"><b>Signed division by 8 using the carry flag</b><span>0x10fa40 - Watcom code generator idiom (blend, buffer sizes)</span></a></li><li><a href="#dlz"><b>The dlz bit reader: DEC does not touch the carry</b><span>0x129fd7 in the archive decoder; the same code is stage 1 of the EXE packer</span></a></li><li><a href="#bzip"><b>A bzip-style decoder: branch-free Huffman walk and self-patched tables</b><span>0x173b25..0x173bd8 - TOUR3.XM (2.9 MB -&gt; 2.1 MB)</span></a></li></ol></section>
+
+<section class="trick wrap" id="prefetch"><h3>1. Clearing memory with a hand-made prefetch</h3><p class="where">0x103ad0 / 0x103b07 - Watcom runtime memset</p><p>The C library's fill routine is the first thing every effect calls (it clears 640x480x32 buffers, 1.2 MB, many times a second). It is not
+the naive <code>rep stosd</code>: it aligns the destination, then writes 32 bytes per turn with eight plain <code>mov [eax+n],edx</code> and, <em>before</em> the stores of each line, issues
+a dummy <em>read</em> of the next 32-byte line, <code>cmp byte ptr [eax+0x20],dl</code>.</p>
+<p>Why: the Pentium and Pentium MMX data cache does <strong>not</strong> allocate a line on a write miss (the P6 family, i.e. Pentium II, does). A long run of stores into cold memory therefore
+produces a stream of individual bus writes. A read of one byte of the next line makes the cache fetch the whole line while the CPU is busy storing the current one; when the next turn arrives its stores hit the cache and
+are written back as a burst. The <code>cmp</code> pairs for free (U/V), it modifies only flags, and there is no software-prefetch instruction before the Pentium III's <code>prefetcht0</code>.</p>
+<h4>Entry 0x103ad0 (byte count) calls the dword filler 0x103b07</h4>
+<pre class="asm">103ad0  or ecx, ecx                       ; ecx = byte count, eax = destination, edx = byte replicated in all 4 bytes
+103ad2  je 0x103b00                       
+103ad4  cmp byte ptr [eax], dl            ; touch the first line (read) so the head stores hit
+103ad6  test al, 3                        ; misaligned? store single bytes until eax is dword aligned
+103ad8  je 0x103ae3                       
+103ada  mov byte ptr [eax], dl            
+103adc  inc eax                           
+103add  ror edx, 8                        ; rotate the pattern (irrelevant for a uniform byte)
+103ae0  dec ecx                           
+103ae1  jne 0x103ad6                      
+103ae3  push ecx                          
+103ae4  shr ecx, 2                        ; ecx/4 dwords go to the dword filler; the 0-3 byte tail is done at 0x103aed
+103ae7  call 0x103b07                     </pre><h4>0x103b07: dword filler (eax, ecx = dwords, edx)</h4><pre class="asm">103b0b  test al, 0x1f                     ; dword stores until eax is 32-byte (cache line) aligned
+103b0d  je 0x103b17                       
+103b0f  mov dword ptr [eax], edx          
+103b11  lea eax, [eax + 4]                
+103b14  dec ecx                           
+103b15  jne 0x103b0b                      
+        ...
+103b17  push ecx                          
+103b18  shr ecx, 2                        ; ecx = number of 16-byte groups
+103b1b  je 0x103b57                       
+103b1d  dec ecx                           ; only one 16-byte group? go straight to the single-group tail at 103b49
+103b1e  je 0x103b49                       
+103b20  mov dword ptr [eax], edx          ; first 16 bytes of the line
+103b22  mov dword ptr [eax + 4], edx      
+103b25  dec ecx                           ; dec ecx here sets ZF for the je below (no extra test)
+103b26  mov dword ptr [eax + 8], edx      
+103b29  mov dword ptr [eax + 0xc], edx    
+103b2c  je 0x103b46                       ; no second half-line to come? finish at 103b46 without touching (nothing to prefetch)
+103b2e  cmp byte ptr [eax + 0x20], dl     ; THE TRICK: read a byte of the line 32 bytes ahead -&gt; the cache fetches it now
+103b31  mov dword ptr [eax + 0x10], edx   ; second 16 bytes: these stores hit the line fetched one turn ago
+103b34  mov dword ptr [eax + 0x14], edx   
+103b37  dec ecx                           
+103b38  mov dword ptr [eax + 0x18], edx   
+103b3b  mov dword ptr [eax + 0x1c], edx   
+103b3e  lea eax, [eax + 0x20]             ; lea instead of add: no flag clobber, pairs in either pipe
+103b41  jne 0x103b20                      ; ZF still comes from the dec at 103b37
+103b43  lea eax, [eax - 0x10]             
+103b46  lea eax, [eax + 0x10]             
+103b49  mov dword ptr [eax], edx          
+103b4b  mov dword ptr [eax + 4], edx      
+103b4e  mov dword ptr [eax + 8], edx      
+103b51  mov dword ptr [eax + 0xc], edx    
+103b54  lea eax, [eax + 0x10]             </pre><p>Verified in the Unicorn harness: 2336 calls (32 alignments x 73 lengths, uniform byte) write exactly the requested range and nothing else. A funny side effect of the prefetch: it reads up to 32 bytes
+<em>past</em> the end of the buffer. In the emulator, whose memory ends at 0x10000000, a buffer ending at the very last page made the <code>cmp</code> fault - harmless in a flat DOS extender address space.
+The same filler is called directly (<code>call 0x103b07</code>, edx=0) to clear the 1024 depth buckets of the polygon sorter (see the radix section).</p><pre class="js">// JavaScript: the machine-specific part simply disappears
+function memset(u8, p, c, n) { u8.fill(c, p, p + n); }   // the engine&#x27;s buffers are typed arrays; fill() is native</pre></section>
+<section class="trick wrap" id="trunc"><h3>2. Truncating floats with the FPU control word</h3><p class="where">0x103d1a - helper used by fade, xfade, table builders</p><p>C semantics for <code>(int)x</code> is truncation toward zero, but the x87 rounds to nearest by default (<code>fistp</code> turns 2.7 into 3 and 2.5 into 2). Watcom's usual answer is a slow <code>__CHP</code> helper.
+Pulse wrote a 10-instruction helper that switches the <em>rounding control</em> field of the FPU control word to "chop", runs <code>frndint</code>, and restores the old word. The caller then does an ordinary
+<code>fistp</code>, which is now exact because the value is already an integer.</p>
+<p>The constant is subtle: the code reads the current control word with <code>fnstcw</code>, stores a copy 4 bytes up the stack, and overwrites <em>byte 1</em> of the working copy with 0x1f. With the default 0x037f that gives 0x1f7f:
+bits 10-11 (RC) = 11b = truncate, bits 8-9 (PC) = 11b = 64-bit mantissa (unchanged), bit 12 set (infinity control, irrelevant). Writing a whole byte instead of masking bits saves two instructions and a register.</p><pre class="asm">103d1a  push eax                          ; st(0) = x on entry; push eax just to reserve 4 bytes
+103d1b  wait                              
+103d1c  fnstcw word ptr [esp]             ; current control word -&gt; [esp]
+103d1f  wait                              
+103d20  push dword ptr [esp]              ; second copy (the one to restore) ends up at [esp+4]
+103d23  mov byte ptr [esp + 1], 0x1f      ; byte 1 of the working copy := 0x1f  -&gt; 0x1f7f = round toward zero
+103d28  fldcw word ptr [esp]              ; load the chop word
+103d2b  frndint                           ; now truncates
+103d2d  fldcw word ptr [esp + 4]          ; restore the original word
+103d31  wait                              
+103d32  lea esp, [esp + 8]                ; lea (not add) frees the two words without touching flags
+103d36  ret                               </pre><h4>A use: building a 512-entry byte table (lowpass init, 0x1117d9)</h4><pre class="asm">1117d9  fld qword ptr [0x1ad396]          
+1117df  fild dword ptr [esp + 0x14]       
+1117e3  fadd st(1)                        
+1117e5  mov ebx, dword ptr [esp + 0x14]   
+1117e9  fmul st(2)                        
+1117eb  lea ecx, [ebx + 1]                
+1117ee  call 0x103d1a                     ; trunc(st0)
+1117f3  fistp dword ptr [esp + 4]         ; fistp is exact now
+1117f7  mov al, byte ptr [esp + 4]        ; low byte of the result
+1117fb  mov dword ptr [esp + 0x14], ecx   
+1117ff  mov byte ptr [ebx + 0x1ffbc8], al </pre><p>Cost: <code>fldcw</code> is a slow, partly serialising instruction (several to ten-plus cycles each on a Pentium, worse on the P6), so the helper is for per-frame values and table setup, never for per-pixel work; the per-pixel
+conversions use the "magic number" trick in the next section. Checked on the original: trunc(2.7)=2, trunc(-2.7)=-2, trunc(-0.9)=0, while the same sequence without the helper gives 3, -3 and 2.5->2, 3.5->4 (banker's rounding).</p><pre class="js">const trunc = (x) =&gt; Math.trunc(x);     // or x | 0 when |x| &lt; 2**31</pre></section>
+<section class="trick wrap" id="magic"><h3>3. Float to 16.16 in three instructions, and an FDIV hidden behind integer code</h3><p class="where">0x16b4e5 and 0x16b972 - the scanline setup of the polygon fillers</p><p>The triangle fillers need edge positions and texture coordinates as 16.16 integers. A <code>fistp</code> would give a plain integer, and scaling by 65536 first costs a multiply. The classic
+"magic number" does it with one add: the float stored at <code>0x1c2488</code> is <code>0x51c00000</code> = 1.5 x 2<sup>36</sup>. Adding it to x forces the result into the binade [2<sup>36</sup>, 2<sup>37</sup>) where one unit in
+the last place of a <em>double</em> is 2<sup>-16</sup>; the 52-bit mantissa then holds <code>round(x*65536)</code> in its low bits. Store the sum as a qword and read the <em>low dword</em>: that is x in 16.16 (signed, ties to even).
+No <code>fistp</code>, no control-word games, and the add pairs with the surrounding FPU work.</p><pre class="asm">16b972  fld st(3)                         ; copy of the value to convert (an edge x, or u / v)
+16b974  fadd dword ptr [0x1c2488]         ; fadd the magic constant (float32 1.5*2^36)
+16b97a  mov eax, dword ptr [0x1c2498]     ; integer work proceeds while the FPU adds
+16b97f  mov ebx, dword ptr [0x1c245c]     
+16b985  cmp eax, dword ptr [0x1c24a8]     
+16b98b  jae 0x16ba98                      
+16b991  fstp qword ptr [0x1c2454]         ; store as a DOUBLE ...
+16b997  mov edx, dword ptr [0x1c2454]     ; ... and read its low dword: that is x*65536, rounded
+16b99d  add ebx, 0xfff0                   ; ebx = left edge in 16.16 (stored the same way earlier)
+16b9a3  shr ebx, 0x10                     ; (x + 0xfff0) &gt;&gt; 16: ceil with a 1/4096 pixel of slack = the fill rule
+16b9a6  add edx, 0xffe0                   ; right edge uses 0xffe0
+16b9ac  shr edx, 0x10                     </pre><p>Checked against the original (harness): 304 random floats in +-30000, including tiny ones, give exactly <code>round-to-nearest-even(fround(x)*65536)</code> every time (max error 0).</p>
+<h4>The FDIV that costs nothing</h4>
+<p>On the Pentium an <code>fdiv</code> takes 39 cycles at the default 64-bit precision but, unlike other FPU instructions, <em>only the FPU is busy</em>: integer instructions keep issuing. The setup code
+starts the slope division and then spends 25 instructions on integer work (splitting two 16.16 deltas into a fractional high half and an integer low half, and writing them into the inner loop's immediates) before the result is
+first used by <code>fmul st(1),st(0)</code> at 0x16b572. The divide is completely hidden.</p><pre class="asm">16b4e5  fdiv dword ptr [0x1c2448]         ; fdiv: starts now, finishes ~39 cycles later, FPU busy but the integer pipes are free
+16b4eb  mov eax, dword ptr [0x1c2454]     ; low dword of the magic-number double stored earlier = du in 16.16
+16b4f0  mov ebx, dword ptr [0x1c245c]     
+16b4f6  mov ecx, dword ptr [0x1c2454]     
+16b4fc  shl eax, 0x10                     ; shl 16: the FRACTIONAL part as a 32-bit addend (for add esi,imm)
+16b4ff  mov edx, ebx                      
+16b501  shr ecx, 0x10                     ; shr 16: the INTEGER part (for adc cl,imm)
+16b504  mov dword ptr [0x16bab5], eax     ; patch: inner loop immediate (see the self-modifying section)
+16b509  shl ebx, 0x10                     
+16b50c  mov byte ptr [0x16bae0], cl       ; patch: another immediate
+16b512  shr edx, 0x10                     
+16b515  mov dword ptr [0x16bae3], ebx     
+16b51b  mov byte ptr [0x16bae9], dl       </pre><pre class="js">const MAGIC = 1.5 * 2 ** 36;                         // the float32 0x51c00000 stored at 0x1c2488
+const f64 = new Float64Array(1), lo32 = new Int32Array(f64.buffer);
+function toFixed16(x) {                              // float -&gt; 16.16, round to nearest even
+  f64[0] = Math.fround(x) + MAGIC;                   // fld / fadd dword [0x1c2488] / fstp qword
+  return lo32[0];                                    // mov edx,[low dword]   (little endian)
+}</pre></section>
+<section class="trick wrap" id="fpupipe"><h3>4. Four floats at a time: a hand-scheduled FPU pipeline</h3><p class="where">0x1521bd - volume vector library (mulvolume, addvolume, fadevolume ...)</p><p>The voxel effects work on 16x16x16 fields of float32 (4096 values, 16 KB). Add, subtract, multiply and scale are one tiny hand-written routine each, and all of them are software-pipelined for the Pentium's x87:
+<code>fmul</code> has a 3-cycle latency but can start every cycle, <code>fld</code> and <code>fxch</code> are nearly free, and <code>fxch</code> may pair with the preceding FP instruction in the V pipe at no cost.
+So instead of "load, multiply, store" per element, the loop keeps four multiplies in flight: loads and multiplies of elements 0..3 interleave, <code>fxch st(2)</code> brings a finished product to the top just in time for <code>fstp</code>, and
+the stores are issued in the order that matches the stack (4, 0, 12, 8) rather than memory order. The loop control (<code>dec ecx / jne</code>) and the three pointer increments run in the shadow of the last stores.</p><pre class="asm">1521bd  shr ecx, 2                        ; ecx = float count; shr 2 = groups of 4 (16 bytes)
+1521c0  fld dword ptr [edx]               ; a0 on the stack
+1521c2  fmul dword ptr [ebx]              ; a0*b0 starts (memory operand: no separate load)
+1521c4  fld dword ptr [edx + 4]           ; a1 loads while a0*b0 is still in the multiplier
+1521c7  fmul dword ptr [ebx + 4]          
+1521ca  fld dword ptr [edx + 8]           
+1521cd  fmul dword ptr [ebx + 8]          
+1521d0  fxch st(2)                        ; fxch pairs with the previous FP op: free reordering of the stack
+1521d2  fld dword ptr [edx + 0xc]         
+1521d5  fmul dword ptr [ebx + 0xc]        
+1521d8  fxch st(2)                        
+1521da  fstp dword ptr [eax + 4]          ; results leave in stack order: elements 1, 0, 3, 2
+1521dd  fstp dword ptr [eax]              
+1521df  fstp dword ptr [eax + 0xc]        
+1521e2  fstp dword ptr [eax + 8]          
+1521e5  add eax, 0x10                     ; integer bookkeeping overlaps the fstp latency
+1521e8  add edx, 0x10                     
+1521eb  add ebx, 0x10                     
+1521ee  dec ecx                           
+1521ef  jne 0x1521c0                      ; dec/jne: the branch pairs with the dec
+1521f1  ret                               </pre><p>Verified in the harness: 4096 random float pairs through 0x1521bd (multiply) and 0x1521f2 (add) are bit-identical to the float32 operations. Every FPU result is rounded to float32 by <code>fstp dword</code>; an exact extended product of two float32 values
+rounds the same way as a float32 multiply, so JavaScript's <code>Float32Array</code> reproduces it exactly.</p><pre class="js">// 4 floats per iteration like the asm; every store rounds to float32, as fstp dword does.
+function mulVec(dst, a, b, n) {              // dst, a, b: Float32Array, n multiple of 4
+  for (let i = 0; i &lt; n; i += 4) {
+    dst[i]     = a[i]     * b[i];     dst[i + 1] = a[i + 1] * b[i + 1];
+    dst[i + 2] = a[i + 2] * b[i + 2]; dst[i + 3] = a[i + 3] * b[i + 3];
+  }
+}</pre></section>
+<section class="trick wrap" id="mmxsat"><h3>5. MMX saturating arithmetic and the negative-index loop</h3><p class="where">0x1e7a8..0x1e829 - object 2 blend kernels</p><p>Object 2, a block of NASM-style code the program carries separately, holds the blend loops for 8-bit-per-channel buffers: add, add-and-double, subtract. One <code>paddusb</code> clamps eight bytes at once, replacing
+what on a plain Pentium takes a compare, a branch or a lookup table per byte (the next two sections show how the same saturation was done without MMX).</p>
+<p>The loop shape is the one to steal: it counts <em>up to zero</em> with a negative index. The prologue negates the length and biases all three pointers by it (<code>sub esi,ecx</code> subtracts a negative number: esi moves to the end). The loop body
+then addresses <code>[esi+ecx]</code> and increments ecx by 8; when it reaches 0 the flags from <code>add ecx,8</code> are already right for <code>jne</code>. No separate counter, no <code>cmp</code>: four instructions of overhead become two, and they pair (add in U, jne in V).</p><pre class="asm">1e7a8  neg ecx                           ; ecx = -length
+1e7aa  sub esi, ecx                      ; esi, ebx, edi all += length: they now point at the END of their arrays
+1e7ac  sub ebx, ecx                      
+1e7ae  sub edi, ecx                      
+1e7b0  movq mm0, qword ptr [esi + ecx]   ; movq: 8 bytes of source A
+1e7b4  paddusb mm0, qword ptr [ebx + ecx]; paddusb with memory operand: 8 saturating byte adds (the load and the add do not pair: dependent)
+1e7b8  movq qword ptr [edi + ecx], mm0   ; 8 bytes out
+1e7bc  add ecx, 8                        ; ecx += 8 sets ZF when it reaches 0
+1e7c2  jne 0x1e7b0                       ; so no cmp: jne uses the flags of the add
+1e7c4  emms                              ; emms: hand the FPU back (MMX aliases the x87 registers)
+1e7c6  ret                               </pre><p>Harness check: 4096 random bytes through each entry equal numpy's clamped results for add (0x1e7a8), add then double (0x1e7c7) and subtract (0x1e7e9). The fourth entry, 0x1e808, is a bug that shipped: it does
+<code>psubusb mm0,[ebx+ecx]</code> and then <code>psubusb mm0,mm0</code>, i.e. x-x = 0, so that blend mode writes zeros (mode 33 in the "blend" effect) - confirmed by the harness.</p><pre class="js">const addus8 = (dst, a, b, n) =&gt; { for (let i = 0; i &lt; n; i++) dst[i] = a[i] + b[i]; };
+// dst is a Uint8ClampedArray: the store itself saturates, exactly paddusb.  psubusb = same with a[i]-b[i].</pre></section>
+<section class="trick wrap" id="lowpass"><h3>6. A two-pass IIR blur on four columns at once</h3><p class="where">0x1f83c - &quot;lowpass&quot; effect, 8-bit 320x200 buffers</p><p>The lowpass effect smooths an 8-bit image vertically with an exponential filter y += (x-y)*t/128, first top-to-bottom into a scratch column, then bottom-to-top back into the image (which cancels the phase lag).
+An IIR filter is a serial dependency chain, so it cannot be vectorised along the filter direction. The trick is to vectorise <em>across</em> it: one <code>movd</code> loads four horizontally adjacent pixels, <code>punpcklbw</code> against a zero register widens them to four 16-bit lanes, and the four filters run in parallel
+with <code>psubw / pmullw / psraw 7 / paddw</code>. Each iteration is a 12-instruction loop for 4 pixels.</p>
+<p>Two more details. The weight t is replicated into the four lanes once (<code>mov ah,al / shl / or</code> then <code>punpcklbw</code>). And the loop counter is folded into the address register: ebp starts at 0xffff0600 and grows by the row stride
+0x140 until it wraps to exactly zero after 200 rows, so <code>add ebp,0x140 ... jne</code> needs no <code>cmp</code>. MMX instructions leave the flags alone, so the <code>jne</code> may sit two MMX instructions after the <code>add</code> that feeds it.
+The pmullw (3-cycle latency, one multiplier) makes the recurrence the critical path; the loads, the pack and the pointer updates are all scheduled in its shadow.</p><pre class="asm">1f83c  pushal                            ; (pushal) al = t (0..128) on entry
+1f83d  mov ah, al                        ; replicate t into all 4 bytes ...
+1f83f  mov ebx, eax                      
+1f841  shl ebx, 0x10                     
+1f844  or eax, ebx                       
+1f846  mov dword ptr [0x1e934], eax      
+1f84b  mov ebp, 0xffff0600               
+1f850  push esi                          
+1f851  push edi                          
+1f852  pxor mm7, mm7                     ; mm7 = 0, mm6 = t in four 16-bit lanes
+1f855  movd mm6, dword ptr [0x1e934]     
+1f85c  punpcklbw mm6, mm7                
+1f85f  sub esi, ebp                      ; esi -= ebp (= -0xfa00): esi = column start + 64000, ebp counts rows from -200*320
+1f861  mov edi, 0x1ee3c                  ; edi = scratch column buffer (200 dwords)
+1f866  sub edi, 4                        
+1f86c  movd mm1, dword ptr [esi + ebp]   
+1f870  movd mm0, dword ptr [esi + ebp]   ; mm0 = the next 4 source pixels (mm1 still holds the previous output)
+1f874  punpcklbw mm1, mm7                
+1f877  punpcklbw mm0, mm7                
+1f87a  psubw mm0, mm1                    ; mm0 = x - y  (signed 16-bit lanes)
+1f87d  pmullw mm0, mm6                   ; * t
+1f880  psraw mm0, 7                      ; &gt;&gt; 7 (arithmetic)
+1f884  paddw mm1, mm0                    ; y += ...
+1f887  add edi, 4                        
+1f88d  add ebp, 0x140                    ; ebp += 320: next row AND loop counter
+1f893  packuswb mm1, mm7                 ; pack back to bytes (saturating)
+1f896  movd dword ptr [edi], mm1         ; store 4 filtered pixels in the scratch column
+1f899  jne 0x1f870                       ; ZF from the add ebp,0x140 two instructions up: wraps to 0 after 200 rows</pre><p>Harness check: for t = 0,1,17,64,100,128, a random 320x200 image and a 4-column strip, the output of the original equals the JavaScript below byte for byte, and the other columns are untouched.</p><pre class="js">// Forward then backward recursive filter down 4 adjacent columns of a 320x200 8-bit image.
+function lowpass4(src, dst, col, t) {                // 0 &lt;= t &lt;= 128 (weight in 1/128)
+  const acc = [0, 0, 0, 0], tmp = new Uint8Array(200 * 4);
+  for (let c = 0; c &lt; 4; c++) acc[c] = src[col + c];          // first pixel primes mm1
+  for (let y = 0; y &lt; 200; y++) for (let c = 0; c &lt; 4; c++) {
+    acc[c] += ((src[y * 320 + col + c] - acc[c]) * t) &gt;&gt; 7;   // psubw, pmullw, psraw 7, paddw
+    tmp[y * 4 + c] = acc[c];                                  // packuswb + movd [edi]
+  }
+  for (let y = 199; y &gt;= 0; y--) for (let c = 0; c &lt; 4; c++) {
+    acc[c] += ((tmp[y * 4 + c] - acc[c]) * t) &gt;&gt; 7;           // second pass, bottom to top
+    dst[y * 320 + col + c] = acc[c];
+  }
+}</pre></section>
+<section class="trick wrap" id="swar32"><h3>7. Saturating add of four bytes without MMX</h3><p class="where">0x152e5a - additive filler for 32-bit buffers</p><p>The fillers also exist in a flavour that runs on a plain Pentium. To add a 32-bit texel to a 32-bit pixel with per-channel saturation it uses a SWAR sequence (SIMD within a register) of seven ALU
+instructions. Both operands have <strong>bit 0 of every byte cleared</strong> (the destination is masked on the fly with <code>and ebx,0xfefefefe</code>, the texels are stored that way). Adding them can then never carry out of bit 0, so bit 0 of the sum's byte k+1 is
+<em>exactly</em> "byte k overflowed". <code>and edx,0x01010100</code> collects those three flags; <code>edx - (edx>>8)</code> turns each flag 0x100 into 0xff in the byte below; <code>or</code> forces those bytes to 255.
+The price is one bit of precision (7-bit effective channels) and an unsaturated top byte, which the 32-bit buffers do not use.</p><pre class="asm">152e5a  mov ebx, dword ptr [edi]          ; ebx = destination pixel
+152e5c  mov al, byte ptr [ecx + 0x1869f]  ; al = texture index byte at [ecx + base] (ecx = packed v:u, base patched)
+152e62  and ebx, 0xfefefefe               ; clear bit 0 of every destination byte
+152e68  nop                               
+152e69  mov eax, dword ptr [eax*4 + 0x1869f]; eax = 32-bit palette entry [eax*4 + base] (pre-masked the same way)
+152e70  add esi, 0xbc614e                 ; add esi,imm: low half of the u/v step (self-modified, see below)
+152e76  adc cl, 0xc                       ; adc cl,imm: integer step + carry
+152e79  add eax, ebx                      ; the packed add: no carry can cross a byte because bit 0 was free ...
+152e7b  mov edx, eax                      
+152e7d  add edi, 4                        
+152e80  and edx, 0x1010100                ; ... except into bit 0 of the next byte: these 3 bits are the overflow flags
+152e86  mov ebx, edx                      ; flags 0x100 / 0x10000 / 0x1000000
+152e88  shr edx, 8                        ; &gt;&gt; 8
+152e8b  sub ebx, edx                      ; 0x100-0x001 = 0xff in the byte that overflowed
+152e8d  or ebx, eax                       ; force saturated bytes to 255 (and leave flag bits as junk in bit 0)
+152e8f  dec ebp                           ; dec ebp: the loop counter, sets ZF
+152e90  mov eax, 0                        ; mov eax,0 (not xor: mov leaves the flags alone) zeroes eax for the next mov al
+152e95  mov dword ptr [edi - 4], ebx      
+152e98  jne 0x152e5a                      ; jne on the ZF of the dec ebp at 152e8f</pre><p>Harness: 20000 random (pixel, texel) pairs: the original equals the model below exactly, and the low three bytes equal an ideal saturating add whenever bit 0 is ignored (100.00%).</p><pre class="js">function addSat4(d, t) {                  // t: every byte even.  Top byte is not saturated.
+  d &amp;= 0xfefefefe;                        // keep bit 0 of each byte free for the carry
+  const s = (d + t) | 0;
+  const e = s &amp; 0x01010100;               // bit 0 of bytes 1..3 = &quot;byte below overflowed&quot;
+  return (s | (e - (e &gt;&gt;&gt; 8))) &gt;&gt;&gt; 0;     // 0x100 - 0x001 = 0x0ff in the byte below
+}</pre></section>
+<section class="trick wrap" id="swar565"><h3>8. RGB565 saturation with an XOR carry detector and a 4-entry table</h3><p class="where">0x14b580 - additive filler for 16-bit buffers</p><p>RGB565 has fields of 5, 6 and 5 bits with no spare bits, so the 32-bit trick does not apply. The 16-bit filler recovers the carries instead: after <code>add bx,ax</code> the expression <code>dest ^ texel ^ sum</code> has bit k set exactly when a carry <em>entered</em> bit k.
+Masking with 0x820 (bit 5 = first green bit, bit 11 = first red bit) tells whether blue and green overflowed; the carry out of bit 15 is still in CF, and <code>sbb eax,eax</code> turns it into a full mask for red. The two flag bits, shifted down by 5, form an index into a four-entry table of
+16-bit masks placed at <code>0x1ba99c</code>: [0]=0, [1]=0x001f, [0x40]=0x07e0, [0x41]=0x07ff, sparse because the index is built from bits 0 and 6. A <code>mov</code> from <code>[edx*2+table]</code> replaces what would be two compare-and-branch pairs.</p>
+<p>It is not a perfect saturating add: the overflowing carry has already incremented the next field by 1 before it is forced to its maximum. Measured against an exact per-channel min(sum, max) it differs in
+47% of uniformly random pairs (red and green are +1 too large in about 24% each, blue never), and never by more than one step - invisible in a 5/6-bit image, and the port reproduces it.</p><pre class="asm">14b580  mov bx, word ptr [edi]            ; bx = destination RGB565 pixel
+14b583  mov al, byte ptr [ecx + 0x1869f]  ; al = map byte (index) from [ecx + base]: base patched at run time
+14b589  mov ax, word ptr [eax*2 + 0x1869f]; ax = palette/texture colour [eax*2 + base]
+14b591  mov edx, ebx                      ; edx = dest ^ texel (part 1 of the carry detector)
+14b593  xor edx, eax                      
+14b595  nop                               
+14b596  add bx, ax                        ; sum; CF = carry out of red
+14b599  nop                               ; (nops: padding for pairing / alignment; a compiler never emits them)
+14b59a  sbb eax, eax                      ; eax = -CF
+14b59c  xor edx, ebx                      ; edx = dest ^ texel ^ sum : bit k = carry INTO bit k
+14b59e  and edx, 0x820                    ; keep carries into bit 5 and bit 11
+14b5a4  and eax, 0xf800                   ; red mask = CF ? 0xf800 : 0
+14b5a9  shr edx, 5                        ; index 0, 1, 0x40 or 0x41
+14b5ac  add esi, 0xbc614e                 ; add esi,imm / adc cl,imm: the texture-coordinate DDA (patched immediates)
+14b5b2  adc cl, 0xc                       
+14b5b5  or ebx, eax                       ; saturate red
+14b5b7  or bx, word ptr [edx*2 + 0x1ba99c]; saturate blue/green from the 4-entry table
+14b5bf  xor eax, eax                      
+14b5c1  mov word ptr [edi], bx            
+14b5c4  add edi, 2                        
+14b5c7  dec ebp                           
+14b5c8  jne 0x14b580                      ; dec ebp / jne</pre><p>Harness: 20000 random pixel pairs, 0 mismatches against the model below.</p><pre class="js">const MASK = new Uint16Array(0x42);       // the 4 used words of the table at 0x1ba99c
+MASK[0x01] = 0x001f; MASK[0x40] = 0x07e0; MASK[0x41] = 0x07ff;
+function addSat565(d, t) {
+  const sum = d + t, s16 = sum &amp; 0xffff;
+  const carries = d ^ t ^ s16;            // bit k set  &lt;=&gt;  a carry entered bit k
+  let r = s16 | MASK[(carries &amp; 0x820) &gt;&gt; 5];   // blue-&gt;green carry (bit 5), green-&gt;red (bit 11)
+  if (sum &gt; 0xffff) r |= 0xf800;          // sbb eax,eax / and eax,0xf800
+  return r;                               // note: the carry already bumped the next field by 1
+}</pre></section>
+<section class="trick wrap" id="smc"><h3>9. Self-modifying scanline filler: immediates as registers</h3><p class="where">0x16b494-0x16b51b patches, 0x16baa0-0x16baee inner loop</p><p>The textured triangle filler is a template in the program's own code segment; before every triangle the setup code writes the triangle's constants <em>into the instruction stream</em> (the extender maps all objects read-write-execute, so this needs
+no tricks). The inner loop then has no loads for its constants and, more importantly, it needs no registers for them: a 32-bit-x86 inner loop with two texture bases, two fractional steps and two integer steps would not fit in 7 registers. The placeholders are visible in the shipped
+binary: <code>0xbc614e</code> (an arbitrary marker) in <code>add esi,imm32</code> and <code>0x0c</code> in <code>adc cl,imm8</code>; there are 84 such sites over the ~20 filler variants. The setup stores to 0x16baaf (alpha-map base), 0x16babd (texture base), 0x16bab5 / 0x16bae3
+(fractional steps, <code>delta &lt;&lt; 16</code>) and 0x16bae0 / 0x16bae9 (integer steps, <code>delta &gt;&gt; 16</code>), as in the FDIV excerpt above.</p>
+<p>The texture coordinates are a fixed-point DDA with <strong>the carry flag as the fixed-point carry</strong>: u lives as 8 integer bits in <code>cl</code> and 16 fractional bits in the top half of esi; v is the same in <code>ch</code> and ebx. <code>add esi,fracstep</code> produces the carry, <code>adc cl,intstep</code> consumes it.
+Because ecx's low 16 bits are <code>v:u</code>, they are directly the index into a 256x256 texture: no shifts or masks per pixel. The <code>add esi</code> is issued early in the loop and the matching <code>adc cl</code> eight instructions later, with
+MMX instructions in between that do not touch the flags (the MMX unit is a separate pipeline from the flag logic), so the carry survives.</p>
+<p>Per pixel the loop does a premultiplied alpha blend, <code>dst = dst*(63-a)/64 + texel</code>, in MMX: <code>punpcklbw</code> widens the four channels, <code>pmullw</code> multiplies by (63-a), <code>psraw 6</code> divides, <code>packuswb</code> narrows and <code>paddb</code> adds the texel.
+The multiplier (63-a) in <em>all four</em> 16-bit lanes comes from a 64-entry table of 8-byte rows at 0x1c2224 indexed with <code>[eax*8+table]</code> - the MMX instruction set has no broadcast instruction, so a lookup beats <code>movd + 2x punpck</code>. The destination is addressed with a negative count in edx
+(<code>[edi+edx*4]</code>, edx runs up to 0), the same trick as before. Written for the Pentium MMX: on a Pentium Pro/II the <code>mov al,[..]</code> followed by a read of <code>eax</code> would be a partial-register stall (the preceding <code>xor eax,eax</code> sits outside the loop).</p><pre class="asm">16baa0  pop edi                           ; span record pushed by the setup: edi = line end, edx = -count, ebx/esi = frac v/u, ecx = v:u
+16baa1  nop                               
+16baa2  test edi, edi                     
+16baa4  je 0x16baf0                       
+16baa6  pop edx                           
+16baa7  pop ebx                           
+16baa8  pop esi                           
+16baa9  pop ecx                           
+16baaa  xor eax, eax                      ; eax = 0 so that al can be used as an index
+16baac  nop                               
+16baad  mov al, byte ptr [ecx + 0xbc614e] ; al = alpha (0..63) of texel v:u; displacement 0xbc614e... patched with the map address
+16bab3  add esi, 0xbc614e                 ; esi += du_frac  (patched imm32) : sets CF
+16bab9  movd mm0, dword ptr [ecx*4]       ; mm0 = texel (4 bytes, [ecx*4 + patched texture base])
+16bac1  movd mm1, dword ptr [edi + edx*4] ; mm1 = dest pixel, negative-index addressing
+16bac5  punpcklbw mm1, mm7                ; widen to 16-bit lanes (mm7 = 0)
+16bac8  pmullw mm1, qword ptr [eax*8 + 0x1c2224]; * (63-alpha) from the 8-byte-row table
+16bad0  psraw mm1, 6                      ; / 64
+16bad4  packuswb mm1, mm7                 ; narrow with saturation
+16bad7  paddb mm1, mm0                    ; + texel (paddb: wraps by design, premultiplied can not overflow)
+16bada  movd dword ptr [edi + edx*4], mm1 ; store
+16bade  adc cl, 0xc                       ; adc cl,du_int : the carry from 16bab3 arrives 8 instructions later
+16bae1  add ebx, 0xbc614e                 ; ebx += dv_frac
+16bae7  adc ch, 0xc                       ; adc ch,dv_int
+16baea  nop                               
+16baeb  inc edx                           ; edx++ : counts to 0
+16baec  jne 0x16baad                      ; ZF from the inc: loop
+16baee  jmp 0x16baa0                      </pre><p>Harness: patching those six immediates exactly as the setup does and running the loop on random textures, alpha maps, destinations and steps gives the same bytes as the JavaScript below (5 random runs of 300 pixels, and a 200 pixel vector replayed in node). Note for emulators: self-modifying code needs the translation cache flushed after each patch.</p><pre class="js">// One scanline of the textured, alpha-weighted filler. dst/tex: Uint8Array BGRA, alpha: 0..63 per texel.
+function scan(dst, di, n, tex, alpha, u, v, du, dv) {         // u,v,du,dv: 8.16 fixed (24 bit)
+  for (let i = 0; i &lt; n; i++, di += 4) {
+    const idx = (((v &gt;&gt;&gt; 16) &amp; 255) &lt;&lt; 8) | ((u &gt;&gt;&gt; 16) &amp; 255); // cl = u int, ch = v int
+    const k = 63 - alpha[idx];                                  // [eax*8 + 0x1c2224]
+    for (let c = 0; c &lt; 4; c++)
+      dst[di + c] = ((dst[di + c] * k) &gt;&gt; 6) + tex[idx * 4 + c];// pmullw, psraw 6, paddb (wraps)
+    u = (u + du) &amp; 0xffffff; v = (v + dv) &amp; 0xffffff;           // add esi,imm / adc cl,imm ...
+  }
+}</pre></section>
+<section class="trick wrap" id="cell"><h3>10. A reaction-diffusion step as one table lookup, with stochastic rounding</h3><p class="where">0x20400 patcher and 0x2073e kernel - cellrd (Gray-Scott)</p><p>The Gray-Scott chemistry of the "cellrd" effect would be a few floating point multiplies per cell. The original precomputes the whole update as two tables: the new value of a cell is a function of its own state and the sum of its neighbours, packed by the caller into one index (sum&lt;&lt;10 | B&lt;&lt;5 | A, tables of 776K and 280K 16-bit entries). The kernel is then <em>one lookup per cell</em>
+that yields an 8.8 fixed-point value. Truncating 8.8 to the 5-bit state would freeze slow reactions, so the high byte of <code>table + noise</code> is taken, where the noise byte is a running sum of a 32 KB random table, walked with a stride that shrinks from 0x41 to 1: stochastic rounding (dithering) with a long-period, cheap noise source.</p>
+<p>The three tables (T1, T2, noise) are not kept in registers: an entry routine at 0x20400 copies their addresses into the 12 displacement fields of the kernel (<code>mov [0x20762],ecx ...</code>, one store per site, run once per effect instance), and the kernel is unrolled 4x so that each
+<code>mov ax,[eax+eax+imm32]</code> already has its table address. <code>[eax+eax+T]</code> is the way to say "<code>T + 2*eax</code>" with a 16-bit table: the x86 has the scale factors 1/2/4/8 but only on the index register, and two base registers can be added instead (the encoding is a SIB byte with eax as base and index). The loop counter doubles as the noise stride:
+<code>add ebp,[esp]</code> / <code>dec dword [esp]</code>.</p><pre class="asm">20400  pushal                            
+20401  mov eax, dword ptr [0x214280]     ; eax,ebx,ecx = the three table addresses (globals set by init)
+20406  mov ebx, dword ptr [0x214284]     
+2040c  mov ecx, dword ptr [0x214288]     
+20412  mov dword ptr [0x20762], ecx      ; patch the noise-table displacement of step 1 ...
+20418  mov dword ptr [0x2076a], eax      ; ... the T1 displacement ...
+2041d  mov dword ptr [0x20778], ebx      ; ... the T2 displacement ...
+20423  mov dword ptr [0x20794], eax      
+20428  mov dword ptr [0x2079a], ecx      ; ... and so on for all 4 unrolled steps: 12 stores in total</pre><pre class="asm">2075e  mov eax, dword ptr [edx]          ; eax = packed index (neighbourhood sum, B, A) of cell j, built by the caller
+20760  add bl, byte ptr [ebp - 0x44444445]; add bl,[ebp+noise]: the noise byte accumulates in bl only
+20766  mov ax, word ptr [eax + eax - 0x44444445]; ax = T1[sum]: 16-bit entry (8.8), upper half of eax is 0
+2076e  mov ecx, dword ptr [edx + 0x410]  ; the same for the other field (the array at +0x410 bytes) with table T2
+20774  mov cx, word ptr [ecx + ecx - 0x44444445]
+2077c  add ebp, dword ptr [esp]          ; ebp += loop counter (shrinking stride)
+2077f  add eax, ebx                      ; + dither
+20781  and ebp, 0x7fff                   ; ring buffer of 0x8000 bytes
+20787  mov byte ptr [esi], ah            ; store ah = bits 8..15 = (T + noise) &gt;&gt; 8
+20789  add ecx, ebx                      
+2078b  mov byte ptr [edi], ch            ; second output</pre><p>Harness: tables and noise filled with random data, patcher run, 260 cells x 2 rows evaluated: the original and the JavaScript below agree on every output byte and on the written-back dither state (ebx, ebp).</p><pre class="js">// Reaction kernel of cellrd: one table lookup per cell, 8.8 result, stochastic rounding by a noise walk.
+function cellRow(out1, out2, s1, s2, T1, T2, N, st) {          // 260 cells, two output fields
+  let step = 0x41;
+  for (let it = 0, j = 0; it &lt; 0x41; it++, step--) {
+    for (let k = 0; k &lt; 4; k++, j++) {
+      st.ebx = (st.ebx &amp; ~255) | ((st.ebx + N[st.ebp]) &amp; 255);  // add bl,[ebp+N]
+      out1[j] = ((T1[s1[j]] + st.ebx) &gt;&gt; 8) &amp; 255;              // mov ax,[eax+eax+T1]; add eax,ebx; ah
+      out2[j] = ((T2[s2[j]] + st.ebx) &gt;&gt; 8) &amp; 255;
+      st.ebp = (st.ebp + step) &amp; 0x7fff;                        // add ebp,[esp] ; and ebp,0x7fff
+    }
+  }
+}</pre></section>
+<section class="trick wrap" id="pitch"><h3>11. 2^(x/3072) from four 16-entry tables and three multiplies</h3><p class="where">0x148f90 - XM player (IMS), note to frequency</p><p>The music player converts a note, in 1/256 semitone units, to a sample rate: <code>8363 * 2^(x/3072)</code> (8363 Hz is the Amiga/S3M "C-4 speed"; 3072 = 12 semitones x 256). Calling <code>pow()</code> per voice per tick on a 486/Pentium mixer is out of the question, so
+the exponent is split into hexadecimal digits: 2^(x/3072) is the product of one table lookup per nibble of x, and each lookup table has 16 entries. Three 16-entry word tables (2<sup>-n/3072</sup>, 2<sup>-16n/3072</sup> and 2<sup>-256n/3072</sup> in 1.15 fixed point, 0x8000 = 1.0) and one dword table (the top digit, already scaled by 8363) cover the whole 16-bit range.
+The combination is three <code>mul</code>+<code>shrd eax,edx,16</code>: <code>shrd</code> takes the middle 32 bits of the 64-bit product in edx:eax, a 16.16 fixed-point multiply in two instructions with no loss of the upper word. The word tables are doubled with <code>add reg,reg</code> (1.15 to 1.16): on the Pentium <code>add</code> pairs in either pipe while <code>shl</code> by 1 only in U.</p>
+<p>Notice the rounding in the top digit: <code>add eax,0x8000</code> before <code>sar eax,12</code> rounds to the nearest nibble instead of truncating, so the fine nibbles only need to correct a signed error of half a step.</p><pre class="asm">148f90  push ebx                          
+148f91  push ecx                          
+148f92  push edx                          
+148f93  neg eax                           ; x = -x (the tables hold 2^(-n))
+148f95  mov ebx, eax                      
+148f97  and ebx, 0xf                      ; digit 0 (units): word table at 0x1ba700
+148f9a  mov bx, word ptr [ebx*2 + 0x1ba700]
+148fa2  mov edx, eax                      
+148fa4  sar edx, 4                        ; digit 1 (x16): table 0x1ba6e0
+148fa7  and edx, 0xf                      
+148faa  xor ecx, ecx                      
+148fac  mov cx, word ptr [edx*2 + 0x1ba6e0]
+148fb4  mov edx, eax                      
+148fb6  sar edx, 8                        ; digit 2 (x256 = one semitone): table 0x1ba6c0
+148fb9  and ebx, 0xffff                   
+148fbf  and edx, 0xf                      
+148fc2  add ebx, ebx                      ; 1.15 -&gt; 1.16
+148fc4  add ecx, ecx                      
+148fc6  mov dx, word ptr [edx*2 + 0x1ba6c0]
+148fce  add eax, 0x8000                   ; round the top digit
+148fd3  sar eax, 0xc                      ; digit 3 (x4096 = 16 semitones), rounded
+148fd6  and edx, 0xffff                   
+148fdc  and eax, 0xf                      
+148fdf  add edx, edx                      
+148fe1  mov eax, dword ptr [eax*4 + 0x1ba680]; dword table 0x1ba680: 8363*2^(...) integer
+148fe8  mul edx                           ; edx:eax = a*b
+148fea  shrd eax, edx, 0x10               ; shrd: the 16.16 product
+148fee  mov edx, ecx                      
+148ff0  mul edx                           
+148ff2  shrd eax, edx, 0x10               
+148ff6  mov edx, ebx                      
+148ff8  mul edx                           ; third multiply: result is the sample rate in Hz
+148ffa  shrd eax, edx, 0x10               
+148ffe  pop edx                           
+148fff  pop ecx                           
+149000  pop ebx                           
+149001  ret                               </pre><p>Harness: 98 inputs from -0x7000 to 0x7000 are reproduced exactly by the JavaScript below using the original tables (dumped from memory); against the ideal 8363*2^(x/3072) the original is within 0.22% (under 4 cents) for results above 1 kHz and exact at f(0)=8363 (f(3072)=16725 vs 16726.0); the table quantisation and the integer result dominate.
+</p><pre class="js">// 8363 * 2**(x/3072)  (x = 1/256 semitone): four small tables, three 16.16 multiplies.
+function pitchHz(x, W0, W1, W2, D3) {
+  const n = -x;
+  const a = W0[n &amp; 15] * 2, b = W1[(n &gt;&gt; 4) &amp; 15] * 2, c = W2[(n &gt;&gt; 8) &amp; 15] * 2;
+  let r = D3[((n + 0x8000) &gt;&gt; 12) &amp; 15];
+  r = Math.floor(r * c / 65536);          // mul edx ; shrd eax,edx,16
+  r = Math.floor(r * b / 65536);
+  return Math.floor(r * a / 65536);
+}</pre></section>
+<section class="trick wrap" id="radix"><h3>12. A painter's sort in two radix passes with a float-bit key</h3><p class="where">0x125b61 (pass 2) - scene3d</p><p>The 3D scenes use no z-buffer: triangles are sorted back to front. The sort key is the float depth sum of the three vertices multiplied by 2000, and its <em>bits</em> are used as an integer: for non-negative floats the IEEE-754 bit pattern is already monotonic;
+for negative ones, <code>~bits</code> restores the order. A 20-bit key (<code>&gt;&gt; 12</code>) is sorted by an LSD radix sort in two passes of 10 bits: pass 1 (0x107ebc) distributes into the lists at 0x1f73c0, pass 2, shown here, walks those lists and
+pushes every triangle on the front of a 1024-entry bucket table. A bucket "push" is just <code>node.next = bucket[key]; bucket[key] = node</code>;
+The whole sort is O(n) and branch-light: the two compares are range assertions ("RSorting range exceeded"), not data-dependent branches. The 4 KB bucket table is cleared by the dword memset above (<code>call 0x103b07</code>, 0x400 dwords).</p><pre class="asm">125b42  mov ecx, 0x400                    ; 1024 buckets, 4 bytes each, cleared with the dword filler
+125b47  mov eax, 0x2045a0                 
+125b4c  xor edx, edx                      
+125b4e  call 0x103b07                     
+        ...
+125b61  mov edx, dword ptr [ebx + 0x1f73c0]; edx = head of list #(ebx/4) from pass 1 (ebx steps through 0x1f73c0)
+125b67  test edx, edx                     
+125b69  je 0x125ba5                       
+125b6b  cmp esi, dword ptr [edx + 4]      ; key &gt;= 0 ? (assert; esi = 0)
+125b6e  jle 0x125b77                      
+125b70  mov eax, edi                      
+125b72  call 0x108b54                     
+125b77  cmp dword ptr [edx + 4], 0x400    ; key &lt; 0x400 ? (assert)
+125b7e  jl 0x125b87                       
+125b80  mov eax, ecx                      
+125b82  call 0x108b54                     
+125b87  mov eax, dword ptr [edx + 4]      ; eax = key
+125b8a  mov eax, dword ptr [eax*4 + 0x2045a0]; eax = old head of that bucket
+125b91  mov dword ptr [edx + 0xc], eax    ; node.next2 = old head
+125b94  mov eax, dword ptr [edx + 4]      
+125b97  mov dword ptr [eax*4 + 0x2045a0], edx; bucket[key] = node: push front
+125b9e  mov edx, dword ptr [edx + 8]      ; next node of the pass-1 list
+125ba1  test edx, edx                     
+125ba3  jne 0x125b6b                      </pre><pre class="js">const f32 = new Float32Array(1), u32 = new Uint32Array(f32.buffer);
+function floatKey(z) {                       // 20-bit depth key, monotonic in z
+  f32[0] = z * 2000; let b = u32[0];
+  b = (b &gt;&gt;&gt; 31) ? ~b &gt;&gt;&gt; 0 : (b | 0x80000000) &gt;&gt;&gt; 0;
+  return b &gt;&gt;&gt; 12;
+}
+function radixPass2(lists, bucket) {            // lists: arrays of nodes in pass-1 order
+  for (const list of lists) for (const n of list) { n.next2 = bucket[n.key2]; bucket[n.key2] = n; }
+}</pre></section>
+<section class="trick wrap" id="div8"><h3>13. Signed division by 8 using the carry flag</h3><p class="where">0x10fa40 - Watcom code generator idiom (blend, buffer sizes)</p><p>Not Pulse's own cleverness but worth knowing, because it recurs all over the binary (0x10fa40, 0x12eab3, ...): Watcom compiles <code>x / 8</code> for a signed int without a branch and without the
+<code>cdq / and / add</code> sequence the other compilers use. <code>sar edx,31</code> gives 0 or -1; <code>shl edx,3</code> turns -1 into -8 and, as a side effect, leaves CF=1 (the last bit shifted out is a 1) only for negative numbers;
+<code>sbb eax,edx</code> then computes eax - edx - CF = eax + 8 - 1 = eax + 7 for negative x and eax for positive x; <code>sar eax,3</code> finishes. That is "add 7 if negative, then shift", i.e. round toward zero, in four instructions. (Checked on 3142 values, including the extremes, in the harness.)</p><pre class="asm">10fa40  imul edx, eax                     ; edx = a*b (a buffer size)
+10fa43  mov eax, edx                      ; eax = edx
+10fa45  sar edx, 0x1f                     ; edx = (x &lt; 0) ? -1 : 0
+10fa48  shl edx, 3                        ; edx = -8 or 0, CF = 1 for negative
+10fa4b  sbb eax, edx                      ; eax = x - edx - CF = x + 7 (negative) or x
+10fa4d  sar eax, 3                        ; &gt;&gt; 3: truncating divide by 8</pre><pre class="js">const div8 = (x) =&gt; (x + ((x &gt;&gt; 31) &amp; 7)) &gt;&gt; 3;   // sar edx,31 ; shl edx,3 ; sbb eax,edx ; sar eax,3</pre></section>
+<section class="trick wrap" id="dlz"><h3>14. The dlz bit reader: DEC does not touch the carry</h3><p class="where">0x129fd7 in the archive decoder; the same code is stage 1 of the EXE packer</p><p>58 of the 116 records in TOUR.98 (scripts, palettes, models, three TGAs) are packed with "dlz", an LZEXE-style LZ77. Its bit reader is the classic 16-bit-window loop: <code>shr bp,1</code> shifts the next control bit into CF, <code>dec dl</code> counts the bits left (16..0) and, crucially,
+<strong><code>dec</code> leaves CF unchanged</strong>, so the bit survives the counter update; if the counter hits zero, <code>lodsw / mov bp,ax / mov dl,16</code> reload the window - none of those three touch CF either - and the following <code>jae</code>/<code>jb</code> or <code>rcl</code> consumes the bit.
+Per bit: three instructions and one well-predicted branch. Matches copy from <code>[ebx+edi]</code> with ebx a sign-extended negative offset (<code>movsx ebx,bx</code>), so the byte-by-byte copy loop handles overlapping matches (RLE) for free, and a literal is one <code>movsb</code>.</p>
+<p>The same code, in 16-bit form, is the first-stage decompressor of TOUR.EXE itself (offset 0x82 of the packed stub: a <em>subroutine</em> "get bit" that returns the bit in CF, called with <code>call 0x82</code> and tested with <code>jae/jb/adc/rcl</code>). The layout (relocation table of 0x1a entries, <code>retf</code> into the unpacked code) matches LZEXE 0.91, the 1990 packer: the program is a Russian doll
+of the same trick (an LZEXE-style packed PMODE/W stub, then the PMW1 pages, then the archive).</p><pre class="asm">129fcd  movsx ebx, bx                     ; ebx = signed 16-bit negative offset
+129fd0  mov al, byte ptr [ebx + edi]      ; overlapping copy, byte by byte
+129fd3  stosb byte ptr es:[edi], al       
+129fd4  dec ecx                           ; dec ecx
+129fd5  jne 0x129fd0                      ; copy loop; then falls into the bit reader at 129fd7
+129fd7  shr bp, 1                         ; next control bit -&gt; CF
+129fda  dec dl                            ; dec dl: bit counter; CF unchanged
+129fdc  jne 0x129fe5                      ; counter not 0: skip the reload
+129fde  lodsw ax, word ptr [esi]          ; reload: lodsw / mov / mov : CF untouched
+129fe0  mov bp, ax                        
+129fe3  mov dl, 0x10                      
+129fe5  jae 0x129fea                      ; CF=0: match; CF=1: literal
+129fe7  movsb byte ptr es:[edi], byte ptr [esi]; literal: one byte straight through
+129fe8  jmp 0x129fd7                      
+        ...
+129ff8  lodsb al, byte ptr [esi]          ; offset low byte
+129ff9  mov bh, 0xff                      ; offset high byte starts as 0xff (negative)
+129ffb  mov bl, al                        
+129ffd  jb 0x129ef3                       ; CF = the control bit read at 129fea (lodsb/mov leave it alone): branch on it</pre><pre class="asm">; stage 1 stub (16-bit, offset in the stub image; the same bit reader as a subroutine)
+0082  shr bp,1            ; bit -&gt; CF
+0084  dec dl              ; CF survives
+0086  jne 0x8d
+0088  lodsw
+0089  mov bp,ax
+008b  mov dl,0x10
+008d  ret                 ; the caller then tests CF with jae / jb / adc / rcl</pre><p>Harness: the original at 0x129ed8 decompresses SCRIPT.UNR (1498 -> 4221 bytes) identically to the file extracted by the port; the JavaScript below is the port's own <code>decodeDlz</code> (docs/js/archive.js).</p><pre class="js">function decodeDlz(src) {
+  let p = 0x11, w = src[p] | src[p + 1] &lt;&lt; 8, n = 16; p += 2;
+  let out = new Uint8Array(1 &lt;&lt; 16), o = 0;
+  const put = (v) =&gt; { if (o === out.length) { const t = new Uint8Array(o * 2); t.set(out); out = t; } out[o++] = v; };
+  const gb = () =&gt; { const b = w &amp; 1; w &gt;&gt;= 1; if (--n === 0) { n = 16; w = src[p] | src[p + 1] &lt;&lt; 8; p += 2; } return b; };
+  const copy = (bh, bl, len) =&gt; { const off = ((bh &lt;&lt; 8) | bl) - 0x10000; for (let i = 0; i &lt; len; i++) put(out[o + off]); };
+  for (;;) {
+    if (gb()) { put(src[p++]); continue; }
+    const b2 = gb(), bl = src[p++]; let bh = 0xff;
+    if (!b2) {
+      if (gb()) { for (let i = 0; i &lt; 3; i++) bh = ((bh &lt;&lt; 1) | gb()) &amp; 255; bh = (bh - 1) &amp; 255; copy(bh, bl, 2); continue; }
+      if (bl !== 0xff) { copy(bh, bl, 2); continue; }
+      if (gb()) continue;
+      return out.slice(0, o);
+    }
+    bh = ((bh &lt;&lt; 1) | gb()) &amp; 255;
+    if (!gb()) {
+      let dh = 2;
+      for (let i = 0; i &lt; 3; i++) { if (gb()) break; bh = ((bh &lt;&lt; 1) | gb()) &amp; 255; dh = (dh &lt;&lt; 1) &amp; 255; }
+      bh = (bh - dh) &amp; 255;
+    }
+    let cl = 3;
+    for (; cl &lt;= 6; cl++) if (gb()) break;
+    if (cl &gt; 6) {
+      if (gb()) cl = gb() ? 8 : 7;
+      else if (gb()) cl = src[p++] + 0x11;
+      else { let c = 0; for (let i = 0; i &lt; 3; i++) c = (c &lt;&lt; 1) | gb(); cl = c + 9; }
+    }
+    copy(bh, bl, cl);
+  }
+}</pre></section>
+<section class="trick wrap" id="bzip"><h3>15. A bzip-style decoder: branch-free Huffman walk and self-patched tables</h3><p class="where">0x173b25..0x173bd8 - TOUR3.XM (2.9 MB -&gt; 2.1 MB)</p><p>The soundtrack module is the one file packed with the block-sorting coder ("BlockSort" in the error strings): Huffman, move-to-front, run-length codes and an inverse Burrows-Wheeler transform. The decoder is hand-written assembly (interleaved with deliberate <code>nop</code>s: the
+mark of someone scheduling for the U and V pipes), and it has three good ideas.</p>
+<p><strong>Bit buffer.</strong> The bits are kept left-aligned in edx. When fewer than 8 remain, one unaligned <code>mov edi,[esi]</code> reads four bytes, <code>bswap</code> makes them big-endian, <code>and edi,0xffffff00</code> keeps three, <code>shr edi,cl</code>
+slides them under the bits already present and <code>or</code> merges them: 24 fresh bits for 8 instructions, no per-bit loop. <strong>Fast Huffman.</strong> The top 8 bits of edx index a 256-entry table of node pointers; a node holds symbol and code length, so most symbols cost one lookup.
+For longer codes the symbol field is -1 and the walk continues bit by bit <em>without a branch</em>: <code>add edx,edx</code> shifts the next bit into CF, <code>sbb ebp,ebp</code> turns it into 0 or -1 and <code>mov edi,[edi+ebp*4+4]</code> selects child 0 or child 1.</p>
+<p><strong>Self-patching.</strong> The count table and the inverse-BWT vector are addressed through <code>0x3e7</code> placeholders (<code>[ecx*4+0x3e7]</code>, <code>[edi*4+0x3e7]</code>): the entry routine 0x173aa7 patches the real addresses into seven sites (0x173bac, 0x173bb3, 0x173bbb, 0x173c07, 0x173c0f, 0x173c1d, 0x173c7e), which frees registers for the bit buffer.
+The move-to-front step shifts the list with a short byte loop (<code>mov ch,[eax+list-1] / mov [eax+list],ch / sub eax,1 / jns</code>).</p><pre class="asm">173ab9  shl edi, 2                        ; edi = block size * 4
+173abc  sub ebp, edi                      
+173abe  mov dword ptr [0x173bb3], ebp     ; patch the displacement of the vector store [edi*4+disp] at 0x173bb3 ...
+173ac4  mov dword ptr [0x173c0f], ebp     ; ... and the same value into 0x173c0f</pre><pre class="asm">173b42  mov eax, edx                      ; top 8 bits of the buffer = index
+173b44  shr eax, 0x18                     
+173b47  mov edi, dword ptr [eax*4 + 0x1c2ce9]; node pointer from the 256-entry fast table
+173b4e  mov ecx, dword ptr [edi + 0xc]    ; node.len
+173b51  mov eax, dword ptr [edi + 8]      ; node.symbol (-1 = continue in the tree)
+173b54  cmp eax, -1                       
+173b57  je 0x173b5f                       
+173b59  shl edx, cl                       ; consume len bits
+173b5b  sub ebx, ecx                      
+173b5d  jmp 0x173b95                      
+        ...
+173b72  add edx, edx                      ; add edx,edx: next bit -&gt; CF
+173b74  nop                               
+173b75  sbb ebp, ebp                      ; ebp = CF ? -1 : 0
+173b77  nop                               
+173b78  dec bl                            ; dec bl: bit count; refill at 0 (bswap)
+173b7a  jne 0x173b86                      
+173b7c  mov edx, dword ptr [esi]          
+173b7e  mov bl, 0x20                      
+173b80  bswap edx                         
+173b82  add esi, 4                        
+173b85  nop                               
+173b86  mov edi, dword ptr [edi + ebp*4 + 4]; child[bit]: edi + ebp*4 + 4 -&gt; node
+173b8a  mov ecx, dword ptr [edi + 0xc]    
+173b8d  mov eax, dword ptr [edi + 8]      
+173b90  cmp eax, -1                       
+173b93  je 0x173b72                       ; while the node is internal</pre><pre class="asm">173b9f  mov cl, byte ptr [eax + 0x1c2bcd] ; symbol &lt; 256: it is an MTF index; cl = list[index]
+173ba5  nop                               
+173ba6  mov byte ptr [edi], cl            ; output byte
+173ba8  nop                               
+173ba9  mov ebp, dword ptr [ecx*4 + 0x3e7]; ebp = count[cl]; vector[i] = ebp; count[cl] = ebp+1 : the inverse-BWT vector is built here (both bases patched, 0x3e7 placeholder)
+173bb0  mov dword ptr [edi*4 + 0x3e7], ebp
+173bb7  inc ebp                           
+173bb8  mov dword ptr [ecx*4 + 0x3e7], ebp
+173bbf  mov byte ptr [0x1c2bcc], cl       ; front of the MTF list := cl
+173bc5  test eax, eax                     
+173bc7  je 0x173bda                       
+173bc9  mov ch, byte ptr [eax + 0x1c2bcc] ; shift the list entries up by one down to the found index
+173bcf  mov byte ptr [eax + 0x1c2bcd], ch 
+173bd5  sub eax, 1                        ; sub eax,1 / jns: loop while the index stays &gt;= 0
+173bd8  jns 0x173bc9                      </pre><p>Harness: calling the original block decoder at 0x130136 on the 2 146 697 byte record produces the 2 894 937-byte file starting with <code>Extended Module: tribal cloud no. 9</code>; its XM header is consistent (32 patterns, 31 instruments).
+That output is saved as re/assets_raw/TOUR3.XM. The Huffman walk and the MTF step in JavaScript (illustrative; the port's decoder is docs/js/archive.js):</p><pre class="js">// canonical-Huffman symbol read: 8-bit fast table, then a branch-free tree walk
+function readSym(br, fast) {             // br.peek(n) / br.skip(n): MSB-first bit reader
+  let node = fast[br.peek(8)];
+  if (node.sym &gt;= 0) { br.skip(node.len); return node.sym; }
+  br.skip(8);
+  do { const bit = br.peek(1); br.skip(1); node = node.child[bit]; } while (node.sym &lt; 0);
+  return node.sym;                       // asm: child index = -CF via sbb, so no branch on the data bit
+}
+function mtf(list, i) { const b = list[i]; list.copyWithin(1, 0, i); list[0] = b; return b; }</pre></section>
+
+<section class="wrap" id="loader">
+<h2>How the loader and the packers work</h2>
+<p><strong>TOUR.EXE is two packers deep.</strong> The 16-bit MZ stub (file offset 0x40, entry 0x5e) is an LZEXE-style decompressor (the get-bit subroutine of section 14): it unpacks the PMODE/W 1.33 extender in place, relocates it and jumps to it. PMODE/W then reads the overlay appended to
+the EXE (signature <code>PMW1</code> at file offset 0x2d00), decompresses the program's objects with its own LZ, applies the relocations, switches the CPU to 32-bit protected mode with its own DPMI-like host and jumps to the Watcom start-up code. The result is an LE-like image: object 1 (code, data and bss, loaded at linear 0x100000, about 1.6 MB with bss)
+and object 2, 40 KB at 0x1b000 holding the MMX kernels and the cell-automaton kernel. All objects are read/write/execute, which is why the filler templates and the kernels can patch themselves.</p>
+<p>To extract the program we did not reimplement either decompressor: <code>re/unpack_pmodew.py</code> runs the original stub in Unicorn in real mode, emulates the DOS calls it makes (open/read/seek of TOUR.EXE itself, memory queries), follows the switch to protected mode, and lets PMODE/W unpack everything; the loaded memory is then
+cut into <code>re/image.bin</code> and <code>re/obj2.bin</code>. After that, every later check in this page uses the harness: a snapshot of the booted program (<code>re/state.bin</code>) from which single functions are called with the Watcom register convention (args in EAX, EDX, EBX, ECX), their output compared with the port.
+The data archive TOUR.98 has its own coders: 58 records of "dlz" (section 14), one byte-RLE, one adaptive-Huffman LZ (type 3, for RYMDLEGO.XM) and the BWT coder of section 15 for the 2.9 MB module; JPEG and PNG are stored as they are. The 640x480x32 screen is the VESA linear framebuffer itself: the demo writes straight into the card's memory.</p>
+</section>
+
+<section class="wrap" id="more">
+<h2>Honourable mentions</h2>
+<ul>
+<li>A record index times 85 without <code>imul</code>: <code>mov edx,ecx / shl ecx,2 / add ecx,edx</code> (x5), then <code>mov edx,ecx / shl ecx,4</code> and <code>[ecx+edx]</code> (x16 + x1 = x17) - Watcom's strength reduction in the IMS code at 0x13bd68.</li>
+<li>Every <code>mov eax,eax</code> / <code>lea eax,[eax]</code> / <code>nop</code> filler between functions and inside the asm loops is alignment: the original aligns loop heads, which on the Pentium avoids a fetch-block penalty.</li>
+<li>The marching-cubes code is x87 with a table-driven 1/sqrt (a table plus a Newton step), the plasma volume computes one octant and mirrors it with four stores per sine - see the volume notes in the site.</li>
+<li>Palette fades use two self-patched 64 KB tables; see the "basic 2D" notes.</li>
+</ul>
+</section>
+</main>
+<p class="foot">Pulse - Tour - Assembly 1998 - disassembly excerpts from TOUR.EXE for study and preservation</p>
+<script type="module">
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function hiAsm(pre){
+  const raw=pre.textContent;
+  pre.innerHTML=raw.split('\n').map((l)=>{
+    const m=/^(\s*[0-9a-fA-F]{3,8}[:\s])(.*)$/.exec(l); let a='',rest=l;
+    if(m){a='<span class="ad">'+esc(m[1])+'</span>';rest=m[2];}
+    const i=rest.indexOf(';');
+    return a+(i<0?esc(rest):esc(rest.slice(0,i))+'<span class="c">'+esc(rest.slice(i))+'</span>');
+  }).join('\n');
+}
+document.querySelectorAll('pre.asm').forEach(hiAsm);
+</script>
+</body>
+</html>

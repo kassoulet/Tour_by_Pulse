@@ -76,6 +76,7 @@ export function makeCtx(assets) {
       };
       if (!impl) warnOnce('fx' + ev.type, 'missing effect', ev.type);
       else if (impl.init) { try { ev.state = impl.init(g[2], ev, this); } catch (err) { ev.failed = true; console.error('effect init', ev.type, name, 'failed:', err.message); } } // tolerant: a failing effect is skipped, the demo goes on
+      if (this.ff) ev.t0 = this.frame; // seek fast-forward: the event has been running since its creation (Frame origin = creation time)
       this.events.push(ev); return ev;
     },
     _named(name) { const n = name.toLowerCase(); return this.events.filter((e) => e.name.toLowerCase() === n); },
@@ -196,7 +197,7 @@ export class Engine {
   seek(t, warm = 1.5, fps = 30) {
     this.reset();
     const from = Math.max(0, t - warm);
-    this.ff = true; this._exec(from - 1e-6 > 0 ? from - 1e-6 : 0); this.ff = false;
+    this.ff = this.ctx.ff = true; this._exec(from - 1e-6 > 0 ? from - 1e-6 : 0); this.ff = this.ctx.ff = false;
     for (let tt = from; tt < t; tt += 1 / fps) this.update(tt);
     return this.update(t);
   }
