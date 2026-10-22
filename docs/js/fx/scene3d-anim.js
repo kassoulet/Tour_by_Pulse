@@ -4,7 +4,7 @@
 // out[i] = value of channel i at frame t. keys: [{frame, v:Array(n), tension, continuity, bias, linear}] sorted by frame.
 // The first key must have frame 0 and the last key frame == lastFrame for the end tangents to match the original
 // (first key: outgoing tangent = 0.5*(cp+cn)*(B-A); last key: incoming tangent = 0.5*(cp+cn)*(B-A)).
-export function evalKeys(keys, t, out, lastFrame) {
+export function evalKeys(keys, t, out, lastFrame, zeroLast) {
   const n = keys.length, nc = out.length;
   if (n === 1) { for (let i = 0; i < nc; i++) out[i] = keys[0].v[i]; return out; }
   if (lastFrame === undefined) lastFrame = keys[n - 1].frame;
@@ -32,7 +32,7 @@ export function evalKeys(keys, t, out, lastFrame) {
   for (let i = 0; i < nc; i++) {
     const d = B.v[i] - A.v[i];
     const tsA = prev ? 0.5 * (aP * (A.v[i] - prev.v[i]) + aN * d) * 2 * sA : 0.5 * (aP + aN) * d;
-    const tdB = next ? 0.5 * (bP * d + bN * (next.v[i] - B.v[i])) * 2 * sB : 0.5 * (bP + bN) * d;
+    const tdB = next ? 0.5 * (bP * d + bN * (next.v[i] - B.v[i])) * 2 * sB : (zeroLast ? 0 : 0.5 * (bP + bN) * d); /* .exp scenes of TOUR: the last key has a zero incoming tangent (fitted on the original, 2e-3); .lwe keys use the plain formula */
     out[i] = h1 * A.v[i] + h2 * B.v[i] + h3 * tsA + h4 * tdB;
   }
   return out;

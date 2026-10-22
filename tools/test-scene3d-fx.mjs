@@ -5,7 +5,7 @@ import { FX, Buf, compileExpr } from '../docs/js/core.js';
 import '../docs/js/fx/scene3d.js'; import '../docs/js/fx/scene3d-fx.js';
 const [jf, sparams, fparams, fxname] = process.argv.slice(2); const gt = JSON.parse(fs.readFileSync(jf));
 const assets = await nodeAssets(), scr = new Buf('SCREEN', 640, 480, 32);
-const evs = []; const ctx = { assets, frame: 0, render: false, expr: compileExpr, engine: { events: evs } };
+const evs = []; const ctx = { bombSeed: 0x565bb039, assets, frame: 0, render: false, expr: compileExpr, engine: { events: evs } };
 const sev = { name: fparams.split(' ')[0], inputs: [scr], outputs: [scr], local: 0 }; sev.state = FX.get('scene').init(sparams, sev, ctx); evs.push(sev);
 FX.get('scene').play(sev.state, sev, ctx);
 const fev = { name: 'sdfdfg', local: 0 }; fev.state = FX.get(fxname).init(fparams, fev, ctx); evs.push(fev);

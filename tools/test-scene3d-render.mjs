@@ -13,7 +13,7 @@ for (const nm of names) {
   const [params] = cases[nm]; const scr = new Buf('SCREEN', 640, 480, 32);
   const ctx = { assets, frame: 0, render: true, engine: { events: [] } }, ev = { inputs: [scr], outputs: [scr], local: 0, name: 'x' }, impl = FX.get('scene');
   const st = impl.init(params, ev, ctx); ctx.frame = 0; impl.play(st, ev, ctx);
-  for (const T of [100, 200, 300]) {
+  for (const T of (process.env.TS ? process.env.TS.split(",").map(Number) : [100, 200, 300])) {
     const f = new URL(`${nm}/f${String(T).padStart(5, '0')}.raw`, R); if (!fs.existsSync(f)) continue;
     const ref = new Uint32Array(fs.readFileSync(f).buffer.slice(0)); scr.data.fill(0); ctx.frame = T; const t0 = performance.now(); impl.run(st, ev, ctx); const ms = performance.now() - t0;
     let same = 0, sum = [0, 0, 0], mx = 0, cov = 0;

@@ -3,7 +3,7 @@
 import fs from 'fs'; import path from 'path'; import { fileURLToPath } from 'url';
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const { Engine, syntheticTimeline } = await import(root + '/docs/js/engine.js');
-const { xmTimeline } = await import(root + '/docs/js/xmtime.js');
+const { xmTimeline, timelineFromTable } = await import(root + '/docs/js/xmtime.js');
 const { makeAssets } = await import(root + '/docs/js/assets.js');
 const { decodeIndexedPng } = await import(root + '/docs/js/png.js');
 await import(root + '/docs/js/fx/index.js');
@@ -26,6 +26,7 @@ export async function nodeAssets() {
 export function loadTimeline() {
   const p = A + 'tour3.xm';
   if (!fs.existsSync(p)) { console.warn('tour3.xm missing: synthetic timeline'); return syntheticTimeline(); }
+  if (fs.existsSync(A + 'xm_times.json')) return timelineFromTable(JSON.parse(fs.readFileSync(A + 'xm_times.json')));
   const xm = fs.readFileSync(p); return xmTimeline(xm.buffer.slice(xm.byteOffset, xm.byteOffset + xm.length));
 }
 export function writePPM(scr, out) {

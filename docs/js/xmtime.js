@@ -54,3 +54,8 @@ export function timeOf(tl, order, row) {
   const r = tl.times[o];
   return r ? (r[Math.min(row, r.length - 1)] ?? tl.duration) : tl.duration;
 }
+
+/** Timeline from a precomputed table (docs/assets/xm_times.json, made by tools/openmpt_times.py with libopenmpt): the browser plays the module with libopenmpt, so the script must follow ITS clock. */
+export function timelineFromTable(j) {
+  return { times: j.times, duration: j.duration, songLen: j.times.length, orders: [] };
+}

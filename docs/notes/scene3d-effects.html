@@ -44,7 +44,7 @@ const m = (1 + spd[t] * d) * dist[t];                               // bomb: new
 </pre>
 <dl class="facts">
 <dt>Script</dt><dd><code>addEvent displace247 sdfdfg {} {} {wscene1 Box02 0.3 -0.04 0.17+0.04*sin(Frame*0.002)} {0 0}</code>; <code>addEvent bomb ast {} {} {ipl tentacle sqr(Frame*0.03)}</code></dd>
-<dt>Verified</dt><dd>displace247 vertices vs original: 5e-5 after 90 frames; bomb: 1e-4 after 60 frames, frame 99.4 % identical; unrdisp displacement: 2e-7 at t=30</dd>
+<dt>Verified</dt><dd>displace247 vertices vs original: 5e-5 after 90 frames; bomb: 1e-4 after 60 frames, per-face state bit-identical in the continuous run; unrdisp displacement: 2e-7 at t=30 (the Null rotation is used too)</dd>
 <dt>Code</dt><dd><code>docs/js/fx/scene3d-fx.js</code>, <code>scene3d-disp.js</code></dd>
 </dl>
 </section>

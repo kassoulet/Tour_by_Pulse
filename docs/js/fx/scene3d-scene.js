@@ -63,7 +63,7 @@ export class Scene {
     if (this.kind === 'exp') {
       for (const o of this.objects) {
         if (!o.keys) continue;
-        evalKeys(o.keys, t, d.subarray(0, 3), o.keys[o.keys.length - 1].frame);
+        evalKeys(o.keys, t, d.subarray(0, 3), o.keys[o.keys.length - 1].frame, true);
         const M = o.M, p = o.pivot, W3 = o.W;
         // world = (p_obj - pivot) * M + key(t)   (rotation / scale keys are single identity keys in every shipped file)
         for (let r = 0; r < 3; r++) for (let k = 0; k < 3; k++) W3[r * 3 + k] = M[r * 3 + k];
@@ -73,9 +73,9 @@ export class Scene {
         }
         for (let k = 0; k < 3; k++) W3[9 + k] = d[k] - (p[0] * W3[k] + p[1] * W3[3 + k] + p[2] * W3[6 + k]);
       }
-      for (const l of this.lights) { evalKeys(l.keys, t, d.subarray(0, 3), l.keys[l.keys.length - 1].frame); l.pos = [d[0], d[1], d[2]]; }
+      for (const l of this.lights) { evalKeys(l.keys, t, d.subarray(0, 3), l.keys[l.keys.length - 1].frame, true); l.pos = [d[0], d[1], d[2]]; }
       const cs = this.camsrc, e = new Float64Array(3), g = new Float64Array(3);
-      evalKeys(cs.pos, t, e, cs.pos[cs.pos.length - 1].frame); evalKeys(cs.target, t, g, cs.target[cs.target.length - 1].frame);
+      evalKeys(cs.pos, t, e, cs.pos[cs.pos.length - 1].frame, true); evalKeys(cs.target, t, g, cs.target[cs.target.length - 1].frame, true);
       c.pos.set(e);
       let fx = g[0] - e[0], fy = g[1] - e[1], fz = g[2] - e[2]; const fl = Math.hypot(fx, fy, fz) || 1; fx /= fl; fy /= fl; fz /= fl;
       let rx = fy, ry = -fx, rz = 0; const rl = Math.hypot(rx, ry, rz) || 1; rx /= rl; ry /= rl; rz /= rl;   // right = forward x up(0,0,1)

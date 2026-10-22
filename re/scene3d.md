@@ -82,3 +82,9 @@ attribute gradients from the three vertices (plane equation), left edge correcte
 ## API for other effects (`ctx.engine.events.find(name).state`)
 `getObjectNames()`, `getObjectBBox(name)` -> `[xmin,ymin,zmin,xmax,ymax,zmax]` (object space, the original's `obj+0xbc..0xd0`), `setObjectMesh(name, {pos,idx,nrm?,faceNormals?,smooth?})` replaces the object's mesh
 (positions in object space; used by marchingcubes every frame, `box01` of `test`), `getScene()`.
+
+## Whole-demo corrections (continuous reference re/golden/full)
+* `.exp` TCB tracks: the **last key has a zero incoming tangent** (camera tentacle.exp t=620: error 1.7 -> 0.003 with it); `.lwe` keys keep the plain end tangent.
+* The unrdisp modifier uses the Null's rotation too: `q = S R(h,p,-b) S * (P0 - NullPos)` (matrix 0x150 = inverse of the Null's world matrix); the bubble now matches at scene times 210-499 (the Null turns 90 deg at frame 299, banks 40 deg at 400).
+* bomb: the rand() state at creation in the continuous original run is 0xfc0b2df1 (re/dt_scene3d/seed_at.py; cellrd's steps consumed rand() since 0x565bb039). The per-face state of the port (offsets, dir, dist, speed) is bit-identical to the original's (re/dt_scene3d/bomb_at.py).
+* mean error per 10 s bin against re/golden/full (before -> after): 50-60 2.20 -> 1.14, 60-70 16.33 -> 1.73, 70-80 3.32 -> 2.05, 80-90 4.07 -> 1.32, overall 3.74 -> 2.33.

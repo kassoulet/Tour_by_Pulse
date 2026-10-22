@@ -1,6 +1,6 @@
 // main.js - browser player for the JS port of "Tour" (640x480 SCREEN buffer, 32 bit 0x00RRGGBB).
 import { Engine, syntheticTimeline } from './engine.js';
-import { xmTimeline, timeOf } from './xmtime.js';
+import { xmTimeline, timelineFromTable, timeOf } from './xmtime.js';
 import { loadAssets } from './assets.js';
 import { ChiptuneJsPlayer } from '../vendor/chiptune3/chiptune3.js';
 import './fx/index.js';
@@ -39,6 +39,7 @@ async function boot() {
   try {
     const r = await fetch('assets/tour3.xm'); if (!r.ok) throw new Error('tour3.xm ' + r.status);
     xmData = await r.arrayBuffer(); tl = xmTimeline(xmData);
+    try { const j = await fetch('assets/xm_times.json'); if (j.ok) tl = timelineFromTable(await j.json()); } catch (e) { /* keep the effect-walker timeline */ } // libopenmpt's exact clock (the audio is played by libopenmpt)
   } catch (e) { console.warn('module not available, silent mode with a synthetic timeline:', e.message); xmData = null; tl = syntheticTimeline(); }
   eng = new Engine(assets, assets.text('script.unr'), tl);
   chapters = CHAPTERS.map(([o, r, n]) => ({ t: timeOf(tl, o, r), name: n }));

@@ -1,0 +1,4 @@
+echo5 init t=45.967 seed 0x565bb039
+bomb init t=74.300 seed 0xfc0b2df1
+cellrd init t=108.133 seed 0x23ad31f2
+cellrd first run t=108.133 seed 0x23ad31f2

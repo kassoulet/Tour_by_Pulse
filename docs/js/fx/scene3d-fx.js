@@ -52,11 +52,14 @@ FX.register('displacenorm', {
 
 // Watcom rand(): seed = seed*0x41c64e6d + 0x3039, result (seed>>16)&0x7fff.  The seed (0x1ba928) holds 0x565bb039 when the script starts (rand is called during start-up).
 function makeRand(seed) { return () => { seed = (Math.imul(seed, 0x41c64e6d) + 0x3039) >>> 0; return (seed >>> 16) & 0x7fff; }; }
-const RAND_SEED_AT_SCRIPT_START = 0x565bb039;
+// rand() on the SHARED state ctx.randSeed (echo5's texture, bomb's per-face speeds and cellrd's dither noise all draw from the one C seed 0x1ba928)
+function sharedRand(ctx, fallback) { if (ctx.bombSeed !== undefined) ctx.randSeed = ctx.bombSeed; else if (ctx.randSeed === undefined) ctx.randSeed = fallback; return () => { ctx.randSeed = (Math.imul(ctx.randSeed, 0x41c64e6d) + 0x3039) >>> 0; return (ctx.randSeed >>> 16) & 0x7fff; }; }
+// rand() state when `bomb` is created in the continuous 30 fps reference run (re/dt_scene3d/seed_at.py: cellrd's steps consumed rand() since 0x565bb039); the real value depends on how many frames cellrd ran
+const RAND_SEED_AT_BOMB = 0xfc0b2df1;
 
 FX.register('bomb', {
   init(params, ev, ctx) {
-    const p = words(params), o = target(ctx, p, 'Bomb'), rnd = makeRand(ctx.randSeed ?? RAND_SEED_AT_SCRIPT_START);
+    const p = words(params), o = target(ctx, p, 'Bomb'), rnd = (ctx.dbgSeed && ctx.dbgSeed('bomb init'), sharedRand(ctx, RAND_SEED_AT_BOMB));
     // unshare the mesh: every triangle gets its own three vertices (0x112730); normals / uv follow
     const idx = o.idx, nt = idx.length / 3, P0 = o.P, N0 = o.N, P = new Float32Array(nt * 9), N = new Float32Array(nt * 9);
     for (let k = 0; k < nt * 3; k++) { const v = idx[k]; for (let c = 0; c < 3; c++) { P[k * 3 + c] = P0[v * 3 + c]; N[k * 3 + c] = N0[v * 3 + c]; } }

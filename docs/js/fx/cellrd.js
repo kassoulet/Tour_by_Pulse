@@ -166,7 +166,7 @@ FX.register('cellrd', {
   init(params, ev, ctx) {
     const m = /^\s*(preinit\s+)?grayscott\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)/.exec(params);
     if (m) { setup(parseFloat(m[2]), parseFloat(m[3]), parseFloat(m[4])); if (ctx) ctx.randSeed = G.seed; return { pre: !!m[1] }; }   // ctx.randSeed: the C rand() state is shared by all effects (echo5's init draws from it too)
-    if (/^\s*run\b/.test(params)) { if (!G.ready) setup(0.012, 0.045, 3.2); return { pre: false }; }
+    if (/^\s*run\b/.test(params)) { if (ctx && ctx.dbgSeed) ctx.dbgSeed('cellrd run init'); if (!G.ready) setup(0.012, 0.045, 3.2); return { pre: false }; }
     console.error('cellrd: illegal args'); return { pre: true };
   },
   run(st, ev, ctx) {
