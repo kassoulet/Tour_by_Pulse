@@ -85,6 +85,15 @@ addEvent blend blendpa {SCREEN EFXLAYER} {SCREEN} {1}
   </ol>
 </section>
 
+<section class="wrap" id="check">
+  <h2>How faithful is the port?</h2>
+  <p>Each effect was compared with the original function running in the emulator on the same input: 2D effects, volumes, <em>cellrd</em>, <em>reebok</em> and <em>echo5</em> are bit-identical; the 3D pipeline matches to float precision and
+  the rasteriser to within one texel on the silhouettes. Then the whole demo was compared: the original engine was run headlessly from the first frame to the last (4,560 frames at 30&nbsp;fps) and one frame in fifteen was compared
+  with the port. <strong>Mean error: 1.2 levels out of 255 per channel; 94&nbsp;% of the pixels are within 8 levels</strong>; no ten-second stretch averages above 1.9. What is left is mostly the JPEG decoder (the original upsamples chroma without interpolation),
+  fitted colour tables in two 3D scenes, and the explosion of the tentacle in the first half-second. Two details were needed to get there: the C library's <code>rand()</code> state is shared by the texture generator of <em>echo5</em>,
+  the explosion of <em>bomb</em> and the dither noise of <em>cellrd</em> (so each must consume it exactly as the original), and the music clock has to be the player's, not a naive walk of the pattern effects (several channels set the speed on the same row).</p>
+</section>
+
 <section class="wrap" id="loops">
   <h2>Interesting inner loops</h2>
   <p>The effects below were ported from the disassembly. Each note shows the real x86 code of the hot loop (addresses are linear addresses of the unpacked image, which loads at 0x100000) next to the JavaScript equivalent.
