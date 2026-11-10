@@ -131,7 +131,42 @@ canvas.addEventListener('click', () => (started ? toggle() : play()));
 canvas.addEventListener('dblclick', fullscreen);
 $('seek').addEventListener('change', (e) => seekTo(+e.target.value / 10));
 $('vol').addEventListener('input', (e) => { if (player) player.setVol(+e.target.value); });
-$('scan').addEventListener('change', (e) => stage.classList.toggle('scan', e.target.checked));
+// CRT overlay: scanline period = k whole device pixels per source row (k = floor(available device px / 480)), so no moire. Display only.
+const scanEl = stage.querySelector('.scanlines'), scanChk = $('scan');
+let crtWanted = false; try { crtWanted = localStorage.getItem('tour.crt') === '1'; } catch (e) { /* ignore */ }
+function crtLayout() {
+  const dpr = window.devicePixelRatio || 1;
+  const availH = Math.min(stage.clientHeight, stage.clientWidth * 3 / 4) * dpr;
+  const k = Math.floor(availH / H + 1e-6), ok = k >= 2;
+  scanChk.disabled = !ok; scanChk.parentElement.classList.toggle('off', !ok);
+  scanChk.parentElement.title = ok ? 'CRT scanlines (C)' : 'CRT scanlines unavailable: the window is too small (needs at least 2 device pixels per source row)';
+  scanChk.checked = ok && crtWanted;
+  const on = ok && crtWanted; stage.classList.toggle('scan', on);
+  for (const el of [canvas, scanEl]) {
+    if (on) { Object.assign(el.style, { objectFit: 'fill', position: 'absolute', inset: '0', margin: 'auto', width: (k * W / dpr) + 'px', height: (k * H / dpr) + 'px' }); }
+    else for (const p of ['objectFit', 'position', 'inset', 'margin', 'width', 'height']) el.style[p] = '';
+  }
+  if (on && scanEl.height !== H * k) drawScan(k);
+}
+// bitmap overlay (not a CSS gradient: CSS tile sizes are quantised to 1/64 css px, which drifts at fractional dpr). 1 bitmap row = 1 device row.
+function drawScan(k) {
+  const w = 160, h = H * k; scanEl.width = w; scanEl.height = h;
+  const c = scanEl.getContext('2d'), im = c.createImageData(w, h), d = im.data;
+  for (let y = 0; y < h; y++) {
+    const f = ((y % k) + 0.5) / k, band = f < 0.4 ? 0 : 0.35 * (f - 0.4) / 0.6; // 40% clear, then ramp to 35% black
+    for (let x = 0; x < w; x++) {
+      const r = Math.hypot((x + 0.5) / w * 2 - 1, (y + 0.5) / h * 2 - 1) / Math.SQRT2, v = r < 0.65 ? 0 : 0.15 * ((r - 0.65) / 0.35) ** 2;
+      d[(y * w + x) * 4 + 3] = Math.round(255 * (1 - (1 - band) * (1 - v)));
+    }
+  }
+  c.putImageData(im, 0, 0);
+}
+function setCrt(v) { crtWanted = v; try { localStorage.setItem('tour.crt', v ? '1' : '0'); } catch (e) { /* ignore */ } crtLayout(); }
+scanChk.addEventListener('change', (e) => setCrt(e.target.checked));
+new ResizeObserver(crtLayout).observe(stage);
+addEventListener('resize', crtLayout); document.addEventListener('fullscreenchange', crtLayout);
+(function watchDpr() { const m = matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`); m.addEventListener('change', () => { crtLayout(); watchDpr(); }, { once: true }); })();
+crtLayout();
 $('hudb').addEventListener('change', (e) => { showHud = e.target.checked; $('hud').hidden = !showHud; });
 addEventListener('keydown', (e) => {
   if (e.target.tagName === 'INPUT' && e.target.type !== 'range' && e.target.type !== 'checkbox') return;
@@ -140,6 +175,7 @@ addEventListener('keydown', (e) => {
   else if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
   else if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
   else if (e.key === 'f' || e.key === 'F') fullscreen();
+  else if ((e.key === 'c' || e.key === 'C') && !scanChk.disabled) setCrt(!crtWanted);
   else if (e.key === 'l') seekTo(curT() + 5);
   else if (e.key === 'j') seekTo(curT() - 5);
 });

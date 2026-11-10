@@ -4,6 +4,8 @@ A study port of **"Tour"** (Pulse / Pygmy Projects / Virtual Dreams, Assembly '9
 re-implemented in plain JavaScript for the browser and Node 22, with the reverse-engineering notes, tools and write-up.
 It is the predecessor of the engine of *73 million seconds* (see the sister project `73-Million-Seconds-by-Pulse`).
 
+**CRT option** (player checkbox / key `C`, off by default, remembered): display-only scanline overlay whose period is a whole number of device pixels per source row (480 rows), so no moire; unavailable when the window gives < 2 device pixels per row.
+
 **Site (GitHub Pages):** `docs/` — player (`demo.html`), engine notes (`index.html`), the best asm tricks (`writeup.html`).
 
 ## What is here

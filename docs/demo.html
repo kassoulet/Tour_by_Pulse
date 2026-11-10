@@ -18,7 +18,7 @@
 <section id="player" class="wrap">
   <div id="stage" class="stage">
     <canvas id="screen" width="640" height="480" aria-label="Demo output (640 by 480 pixels)"></canvas>
-    <div class="scanlines"></div>
+    <canvas class="scanlines" aria-hidden="true"></canvas>
     <div id="loading" class="overlay"><p>loading assets…</p><div class="progress"><div id="bar"></div></div></div>
     <button id="start" class="overlay bigplay" hidden aria-label="Start the demo">▶ <span>start (sound on)</span></button>
     <div id="busy" class="overlay small" hidden>seeking…</div>
@@ -34,13 +34,13 @@
         <span id="chap" class="chap"></span>
         <span class="sp"></span>
         <label class="chk" title="Show active events"><input id="hudb" type="checkbox"> events</label>
-        <label class="chk" title="CRT scanlines"><input id="scan" type="checkbox"> CRT</label>
+        <label class="chk" title="CRT scanlines (C)"><input id="scan" type="checkbox"> CRT</label>
         <input id="vol" type="range" min="0" max="1" step="0.05" value="1" aria-label="Volume" title="Volume">
         <button id="fs" title="Fullscreen (F)" aria-label="Fullscreen">⛶</button>
       </div>
     </div>
   </div>
-  <p class="status">status: <span id="status">starting</span> · keys: <kbd>space</kbd> play/pause · <kbd>←</kbd> <kbd>→</kbd> previous/next scene · <kbd>J</kbd> <kbd>L</kbd> ∓5 s · <kbd>F</kbd> fullscreen</p>
+  <p class="status">status: <span id="status">starting</span> · keys: <kbd>space</kbd> play/pause · <kbd>←</kbd> <kbd>→</kbd> previous/next scene · <kbd>J</kbd> <kbd>L</kbd> ∓5 s · <kbd>F</kbd> fullscreen · <kbd>C</kbd> CRT</p>
 </section>
 </main>
 <script type="module" src="js/main.js"></script>
