@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>TOUR (Pulse / Pygmy Projects / Virtual Dreams, 1998) - effects,
+engine and scenes</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+  :root{--bg:#fff;--fg:#1d1d22;--mut:#666;--ac:#c4155a;--code:#f3f3f6;--bd:#d8d8e0}
+  @media (prefers-color-scheme:dark){:root{--bg:#0b0b10;--fg:#d8d8e0;--mut:#9a9aa8;--ac:#ff6a9a;--code:#17171f;--bd:#33333f}}
+  *{box-sizing:border-box}
+  body{margin:0 auto;max-width:62rem;padding:0 16px;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,sans-serif}
+  #wunav{display:flex;gap:16px;flex-wrap:wrap;padding-top:12px;padding-bottom:8px;border-bottom:1px solid var(--bd);font-size:14px}
+  a{color:var(--ac)}
+  h1,h2,h3,h4{line-height:1.25;margin-top:1.8em}
+  img{max-width:100%;height:auto;image-rendering:auto}
+  pre{background:var(--code);border:1px solid var(--bd);border-radius:4px;padding:10px 12px;overflow-x:auto;font-size:13px;line-height:1.4}
+  code{background:var(--code);padding:1px 4px;border-radius:3px;font-size:.92em;overflow-wrap:anywhere}
+  pre code{background:none;padding:0;overflow-wrap:normal}
+  table{border-collapse:collapse;display:block;overflow-x:auto;max-width:100%}
+  td,th{border:1px solid var(--bd);padding:4px 8px}
+  blockquote{border-left:3px solid var(--bd);margin-left:0;padding-left:14px;color:var(--mut)}
+  #TOC{font-size:14px}#TOC ul{padding-left:1.2em}
+  #TOC>ul{padding-left:0;list-style:none}
+  details#toc-box{margin:12px 0}
+  </style>
+</head>
+<body>
+<nav id="wunav"><a href="../index.html">&larr; the demo</a> <a href="WRITEUP-asm.html">asm</a> <a href="WRITEUP-effects.html">effects</a> <a href="https://github.com/kassoulet/Tour_by_Pulse">README on GitHub</a></nav>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a
+href="#tour-pulse--pygmy-projects--virtual-dreams-1998---effects-engine-and-scenes"
+id="toc-tour-pulse--pygmy-projects--virtual-dreams-1998---effects-engine-and-scenes">TOUR
+(Pulse / Pygmy Projects / Virtual Dreams, 1998) - effects, engine and
+scenes</a>
+<ul>
+<li><a href="#0-what-is-exact-and-what-is-not"
+id="toc-0-what-is-exact-and-what-is-not">0. What is exact and what is
+not</a></li>
+<li><a href="#1-display-and-timing" id="toc-1-display-and-timing">1.
+Display and timing</a></li>
+<li><a href="#2-timeline-times-from-rexm_timesjson-orderrow---seconds"
+id="toc-2-timeline-times-from-rexm_timesjson-orderrow---seconds">2.
+Timeline (times from <code>re/xm_times.json</code>, order:row -&gt;
+seconds)</a></li>
+<li><a href="#3-the-2d-building-blocks-docsjsfxbasic2djs"
+id="toc-3-the-2d-building-blocks-docsjsfxbasic2djs">3. The 2D building
+blocks (<code>docs/js/fx/basic2d.js</code>)</a>
+<ul>
+<li><a href="#31-palette--doubleimage-the-low-res-path"
+id="toc-31-palette--doubleimage-the-low-res-path">3.1 palette +
+doubleimage: the "low-res" path</a></li>
+<li><a href="#32-blend-fade" id="toc-32-blend-fade">3.2 blend,
+fade</a></li>
+<li><a href="#33-mapimage-the-city-lights-band"
+id="toc-33-mapimage-the-city-lights-band">3.3 mapimage: the city lights
+band</a></li>
+<li><a href="#34-blit-and-formats" id="toc-34-blit-and-formats">3.4 Blit
+and formats</a></li>
+</ul></li>
+<li><a href="#4-title-slideshow-and-the-two-feedback-looks"
+id="toc-4-title-slideshow-and-the-two-feedback-looks">4. Title slideshow
+and the two "feedback" looks</a>
+<ul>
+<li><a
+href="#41-echo5-46---52-s-an-additive-3d-cage-with-a-recursive-glow"
+id="toc-41-echo5-46---52-s-an-additive-3d-cage-with-a-recursive-glow">4.1
+echo5 (46 - 52 s): an additive 3D cage with a recursive glow</a></li>
+<li><a href="#42-reebok-137---147-six-additive-rotozoom-layers"
+id="toc-42-reebok-137---147-six-additive-rotozoom-layers">4.2 reebok
+(1:37 - 1:47): six additive rotozoom layers</a></li>
+</ul></li>
+<li><a
+href="#5-cellrd-from-147-behind-the-hires-scene-gray-scott-by-lookup-table"
+id="toc-5-cellrd-from-147-behind-the-hires-scene-gray-scott-by-lookup-table">5.
+cellrd (from 1:47, behind the hires scene): Gray-Scott by lookup
+table</a></li>
+<li><a href="#6-the-3d-renderer-scene-docsjsfxscene3djs"
+id="toc-6-the-3d-renderer-scene-docsjsfxscene3djs">6. The 3D renderer
+(<code>scene</code>, <code>docs/js/fx/scene3d*.js</code>)</a>
+<ul>
+<li><a href="#61-pipeline" id="toc-61-pipeline">6.1 Pipeline</a></li>
+<li><a href="#62-fillers-approximated"
+id="toc-62-fillers-approximated">6.2 Fillers (approximated)</a></li>
+<li><a href="#63-mesh-modifying-effects"
+id="toc-63-mesh-modifying-effects">6.3 Mesh-modifying effects</a></li>
+</ul></li>
+<li><a
+href="#7-the-volume-sequence-116---137-metaballs-plasma-marching-cubes"
+id="toc-7-the-volume-sequence-116---137-metaballs-plasma-marching-cubes">7.
+The volume sequence (1:16 - 1:37): metaballs, plasma, marching
+cubes</a></li>
+<li><a href="#8-scene-notes" id="toc-8-scene-notes">8. Scene
+notes</a></li>
+<li><a href="#9-how-it-was-checked" id="toc-9-how-it-was-checked">9. How
+it was checked</a></li>
+<li><a href="#10-art-and-data-where-it-lives-how-it-was-decoded"
+id="toc-10-art-and-data-where-it-lives-how-it-was-decoded">10. Art and
+data: where it lives, how it was decoded</a>
+<ul>
+<li><a href="#101-full-screen-pictures-jpeg-640x480-true-colour"
+id="toc-101-full-screen-pictures-jpeg-640x480-true-colour">10.1
+Full-screen pictures (JPEG, 640x480 true colour)</a></li>
+<li><a href="#102-textures-and-maps" id="toc-102-textures-and-maps">10.2
+Textures and maps</a></li>
+<li><a href="#103-3d-models-and-scenes"
+id="toc-103-3d-models-and-scenes">10.3 3D models and scenes</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1
+id="tour-pulse--pygmy-projects--virtual-dreams-1998---effects-engine-and-scenes">TOUR
+(Pulse / Pygmy Projects / Virtual Dreams, 1998) - effects, engine and
+scenes</h1>
+<p><em>Tour</em> is the 3rd-place demo of Assembly '98 (752 points).
+Credits (<code>TOUR.NFO</code>): programming camel, silver eagle,
+unreal; 3D fndr; gfx/3D/design visualize; music falcon. Files:
+<code>TOUR.EXE</code> (PMODE/W, Watcom C++ 32-bit, ~494 KB),
+<code>TOUR.98</code> (4.7 MB archive of 116 records), music
+<code>tour3.xm</code> ("tribal cloud no. 9", XM, 20 channels), which is
+stored inside the archive with a BWT+MTF+Huffman coder. It is the
+predecessor of the engine of <em>73 million seconds</em>
+(<code>../pls73ms</code>), and the port is a study of it.</p>
+<p>All addresses below are linear addresses of the unpacked image (base
+0x100000; object 2, the self-modifying rasteriser/MMX code, at 0x1b000).
+Everything quoted as "verified" is taken from <code>re/*.md</code> and
+<code>docs/notes/*.html</code>, which record differential tests of the
+JS against the original running under Unicorn.</p>
+<h2 id="0-what-is-exact-and-what-is-not">0. What is exact and what is
+not</h2>
+<table>
+<thead>
+<tr>
+<th>part</th>
+<th>status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>script interpreter, event scheduler, expression evaluator (float32
+rules)</td>
+<td>exact behaviour, checked on 40-60 random Frame values per
+function</td>
+</tr>
+<tr>
+<td><code>palette</code>, <code>doubleimage</code>, <code>blend</code>,
+<code>fade</code>, <code>mapimage</code>, <code>blit</code>
+(16-&gt;32)</td>
+<td>100 % identical pixels against the original</td>
+</tr>
+<tr>
+<td><code>echo5</code>, <code>reebok</code></td>
+<td>300 resp. 80 consecutive frames: 0 differing bytes</td>
+</tr>
+<tr>
+<td><code>cellrd</code></td>
+<td>tables, palette, noise, A, B and screen identical for 400 frames
+(800 steps)</td>
+</tr>
+<tr>
+<td>volume effects, metaballs, marching cubes</td>
+<td>float-for-float identical (4096/4096), 5 volumes of marching cubes
+bit-identical</td>
+</tr>
+<tr>
+<td>3D pipeline (transform, shading, sort, clip)</td>
+<td>camera/vertex/normal/env-uv agree to ~1e-6; <strong>not
+bit-exact</strong></td>
+</tr>
+<tr>
+<td>3D fillers</td>
+<td><strong>approximated</strong>: same sampling positions, but
+floating-point plane gradients instead of the original's 16.16 patched
+immediates; silhouettes 99.7 % identical, interior mean error 0.3 - 1
+per channel</td>
+</tr>
+<tr>
+<td>tentacle / hires colour tables</td>
+<td><strong>fitted</strong> (tentacle LUT max error 3/255, hires alpha
+tables fitted); camel8 ramp is a measured table</td>
+</tr>
+<tr>
+<td>whole demo vs. the original run headless</td>
+<td>mean error <strong>1.2 / 255</strong> per channel, 93.6 % of pixels
+within 8 levels over 152 s (README). The JPEG decoder of the browser
+differs from the original's: ~1 level floor</td>
+</tr>
+</tbody>
+</table>
+<p>Not ported (unused by <code>script.unr</code>): 16-bit target
+renderers, flat-lit/flare/particle paths, zoom, colormap, matrix,
+dither, edges, wave, lowpass, other <code>echo*</code> variants,
+<code>volumesprites</code>, other displacement-modifier projections.</p>
+<h2 id="1-display-and-timing">1. Display and timing</h2>
+<ul>
+<li>VESA <strong>640x480x32</strong>, square pixels, 4:3. Several
+effects work in a <strong>320x240 8-bit</strong> buffer
+(<code>TEMP8</code>) and are palettised then doubled (section 3.1). The
+LightWave scenes (<code>.lwe</code>) use a vertical zoom
+<code>y = 1.2 * x</code> (862.488 vs 718.74): the aspect of 320x200
+data, fixed in the loader.</li>
+<li><strong>All time is the music clock.</strong> <code>Frame</code>
+(float at 0x1b28f8) is the song time in centiseconds, taken from IMS
+(<code>(int)time16.16 * 100 * 2^-16</code>). The script lines starting
+with <code>order row</code> fire when the XM position reaches them; at
+most one timed group fires per frame in the original (the port runs all
+due groups). Each event keeps its own <code>Frame</code> origin, set on
+its first <code>run</code>. That is why the port can pause/seek: it sets
+the module position and re-renders. The exceptions are effects that
+accumulate state per rendered frame (echo5, reebok, cellrd, bomb): they
+depend on the frames actually executed.</li>
+<li><strong>The script is data</strong>: <code>script.unr</code> (116
+lines) creates 16 buffers and ~45 events. Events run <strong>strictly in
+creation order</strong> every frame; the picture is composed by that
+order (for example
+<code>fillbuffer -&gt; echo5 -&gt; palette -&gt; doubleimage -&gt; blend</code>).
+The optional 4th group <code>{order row}</code> is a start gate. There
+are no layers in this build.</li>
+</ul>
+<pre><code>; frame function 0x101364: at most one timed group per frame, then the event loop 0x105d08
+for e in events (creation order): if (e.startOrder &lt; curOrder || (== &amp;&amp; e.startRow &lt;= curRow)) &amp;&amp; !suppressed: e.run()</code></pre>
+<h2 id="2-timeline-times-from-rexm_timesjson-orderrow---seconds">2.
+Timeline (times from <code>re/xm_times.json</code>, order:row -&gt;
+seconds)</h2>
+<table>
+<thead>
+<tr>
+<th>time</th>
+<th>order</th>
+<th>what happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0:00 - 0:46</td>
+<td>0-7</td>
+<td><code>cellrd</code> preinit (silent, builds tables), then a
+slideshow of 7 title JPEGs (the first is shown from the start)
+(<code>blit TEMPIMAGES TITLE</code>, next image loaded one row
+later)</td>
+</tr>
+<tr>
+<td>0:46 - 0:52</td>
+<td>8</td>
+<td>echo5 cage, palette <code>medusa.pal</code>, added over
+<code>efxlayer.jpg</code></td>
+</tr>
+<tr>
+<td>0:52 - 1:04</td>
+<td>9-10</td>
+<td>Isabella picture + LightWave scene <code>unrdisp.lwe</code> (soap
+bubble with displacement modifier)</td>
+</tr>
+<tr>
+<td>1:04 - 1:16</td>
+<td>11-12</td>
+<td><code>newhires.jpg</code> + <code>tentacle.exp</code> (from 12:35 /
+1:13.5 the <code>bomb</code> effect blows its faces apart)</td>
+</tr>
+<tr>
+<td>1:16 - 1:37</td>
+<td>13-16:29</td>
+<td><code>box3.exp</code> glass cube whose box01 mesh is a
+<strong>marching-cubes</strong> polygonisation of a morphing
+metaball/plasma volume</td>
+</tr>
+<tr>
+<td>1:37 - 1:47</td>
+<td>16:30-17</td>
+<td><code>reebok</code> six-layer rotozoom, with a <code>fade</code> of
+<code>fears.tga</code> added</td>
+</tr>
+<tr>
+<td>1:47 - 2:11</td>
+<td>18-21</td>
+<td><code>hires.exp</code> with <code>displace247</code>, over a live
+Gray-Scott <code>cellrd</code> simulation</td>
+</tr>
+<tr>
+<td>2:11 - 2:29</td>
+<td>22-24</td>
+<td><code>camel8.exp</code> city with scrolling light band
+(<code>mapimage</code>) + <code>ppro</code> overlay</td>
+</tr>
+<tr>
+<td>2:29 - end</td>
+<td>25</td>
+<td><code>sleep.jpg</code>, <code>TheEnd</code> at 25:63</td>
+</tr>
+</tbody>
+</table>
+<p>(The note in <code>re/archive.md</code>: xmtime.js totals 154.56 s,
+libopenmpt reports 152.34 s; a 2.2 s mismatch is unexplained there, so
+the times in this table are as accurate as
+<code>xm_times.json</code>.)</p>
+<h2 id="3-the-2d-building-blocks-docsjsfxbasic2djs">3. The 2D building
+blocks (<code>docs/js/fx/basic2d.js</code>)</h2>
+<h3 id="31-palette--doubleimage-the-low-res-path">3.1 palette +
+doubleimage: the "low-res" path</h3>
+<p>8-bit work buffers hold indices. <code>palette</code> turns them into
+32-bit colour through a 256-entry table made from a 768-byte VGA palette
+(6-bit components). The conversion is done on the packed dword: the
+components are at most 63, so one <code>shl 2</code> multiplies all
+three at once.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>t32[i] <span class="op">=</span> (((r <span class="op">&lt;&lt;</span> <span class="dv">16</span>) <span class="op">|</span> (g <span class="op">&lt;&lt;</span> <span class="dv">8</span>) <span class="op">|</span> b) <span class="op">&lt;&lt;</span> <span class="dv">2</span>) <span class="op">&gt;&gt;&gt;</span> <span class="dv">0</span><span class="op">;</span>     <span class="co">// 0x108e3d..0x108e4d</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> n<span class="op">;</span> i<span class="op">++</span>) dst[i] <span class="op">=</span> t32[src[i]]<span class="op">;</span>     <span class="co">// 0x108e61: one table read per pixel</span></span></code></pre></div>
+<p><code>doubleimage</code> writes every pixel as a 2x2 block (pitch
+640*4 hard-coded in the original routine at 0x1e896). If the heights
+differ it centres vertically by
+<code>(x - (x&gt;&gt;31)) &gt;&gt; 1</code> rows. Verified 100 %
+identical pixels (3 palettes, random data).</p>
+<h3 id="32-blend-fade">3.2 blend, fade</h3>
+<p><code>blend {A B} {OUT} {1}</code> is a saturating add per byte
+(<code>paddusb</code>, MMX at 0x1e7a8); modes 2, 3, 11, 22, 33 exist.
+The script uses only mode 1. The original has two bugs that the port
+copies: mode 22 falls back into the key-0 loop after the first non-key
+pixel, and mode 33 does <code>psubusb mm0,mm0</code> (writes zeros). The
+JS emulates the packed byte add with SWAR:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> r <span class="op">=</span> ((x <span class="op">&amp;</span> <span class="bn">0x7f7f7f7f</span>) <span class="op">+</span> (y <span class="op">&amp;</span> <span class="bn">0x7f7f7f7f</span>)) <span class="op">^</span> ((x <span class="op">^</span> y) <span class="op">&amp;</span> <span class="bn">0x80808080</span>)<span class="op">;</span>   <span class="co">// per-byte sum without carry-out</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> c <span class="op">=</span> ((x <span class="op">&amp;</span> y) <span class="op">|</span> ((x <span class="op">|</span> y) <span class="op">&amp;</span> <span class="op">~</span>r)) <span class="op">&amp;</span> <span class="bn">0x80808080</span><span class="op">;</span>                         <span class="co">// bytes that overflowed</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>o[i] <span class="op">=</span> r <span class="op">|</span> ((c <span class="op">&gt;&gt;&gt;</span> <span class="dv">7</span>) <span class="op">*</span> <span class="dv">255</span>)<span class="op">;</span></span></code></pre></div>
+<p><code>fade {r g b expr}</code> fades <strong>towards a
+colour</strong>: <code>f = (int)(expr * 255)</code> (truncating, see asm
+doc), <code>out = ((256-f)*src &gt;&gt; 8) + (f*col &gt;&gt; 8)</code>
+per channel through two 256-entry tables (<code>A[f][v]</code>,
+<code>B[f][v]</code> at 0x1d1b40/0x1d1b48 in the original). In the
+script,
+<code>fade xf {FEARS} {TEMP} {0 0 0 (1.0-sqr(sqr(fabs(sin(Frame*0.0071)))))}</code>
+pulses a picture out of black, and
+<code>blend addop {SCREEN TEMP}</code> adds it over the reebok layer.
+Verified identical.</p>
+<h3 id="33-mapimage-the-city-lights-band">3.3 mapimage: the city lights
+band</h3>
+<p>A 256x256 JPEG is loaded <strong>linearly</strong> into a 640x480
+buffer, so the effect reads the buffer as rows of 256 pixels. Rows
+48..207 become destination rows 160..319, each repeated 2.5 times and
+scrolled by <code>(int)Frame</code> pixels (the <em>global</em> Frame,
+100 px/s) with the wrap done by <code>and 0xff</code> on the index:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">let</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> k <span class="op">&lt;</span> <span class="dv">160</span><span class="op">;</span> k<span class="op">++</span>) <span class="cf">for</span> (<span class="kw">let</span> x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> x <span class="op">&lt;</span> <span class="dv">640</span><span class="op">;</span> x<span class="op">++</span>) d[(<span class="dv">160</span><span class="op">+</span>k)<span class="op">*</span><span class="dv">640</span> <span class="op">+</span> x] <span class="op">=</span> s[(<span class="dv">48</span><span class="op">+</span>k)<span class="op">*</span><span class="dv">256</span> <span class="op">+</span> ((x <span class="op">+</span> shift) <span class="op">&amp;</span> <span class="dv">255</span>)]<span class="op">;</span></span></code></pre></div>
+<p>Verified 100 % at 5 frame values.</p>
+<h3 id="34-blit-and-formats">3.4 Blit and formats</h3>
+<p>32 bpp is 0x00RRGGBB, 16 bpp RGB565. The original's 16-&gt;32 blit
+(every title picture) is <strong>not</strong> bit replication: R and B
+use <code>floor(v*255/31)</code>, G uses
+<code>v*4139 &gt;&gt; 10</code>, so 63 becomes <strong>254</strong> (not
+255) in green. Verified over all 65536 inputs. The port reproduces these
+tables.</p>
+<h2 id="4-title-slideshow-and-the-two-feedback-looks">4. Title slideshow
+and the two "feedback" looks</h2>
+<h3
+id="41-echo5-46---52-s-an-additive-3d-cage-with-a-recursive-glow">4.1
+echo5 (46 - 52 s): an additive 3D cage with a recursive glow</h3>
+<p>It is not a picture feedback by warping. echo5 is a tiny software 3D
+engine drawing into the 320x240 8-bit buffer:</p>
+<ul>
+<li>a cage of <strong>33 square sheets</strong> (11 along each axis at
+-100..+100 step 20, 132 vertices, 66 triangles), rotated by an angle
+that integrates the <em>change</em> of the script expression
+<code>0.5*Frame</code> (<code>angle += delta*0.00425</code>; rotY uses
+1.1x, rotZ 0.8x), scaled (2, 2.6, 2), and wobbled by three sines:
+<code>G = 0.3(sin(X/51.4 + t) + sin(Y/51.4 + 0.8t) + sin(Z/51.4 + 1.3t)) + 2</code>,
+where X, Y, Z are the <em>integer-truncated</em> model coordinates; then
+<code>v = M p * G</code>, <code>z += 1200</code>;</li>
+<li>every triangle is drawn <strong>additively</strong>
+(<code>dest += texel</code>, wrapping) with a perspective-correct mapper
+into a texture of <strong>2500 random soft blobs</strong> generated at
+start from <code>rand()</code> (so it depends on the rand state left by
+cellrd's preinit; the port shares <code>ctx.randSeed</code>);</li>
+<li>polygons are filed into 4096 depth buckets by
+<code>0.2*(z0+z1+z2)</code>; since addition commutes the order does not
+matter visually;</li>
+<li>after drawing, a <strong>recursive smear</strong> runs over the
+320x200 buffer, first along rows then along columns:
+<code>p_new = p + T[p_prev]</code> with saturation,
+<code>T[k] = round(0.65 k)</code>. That is an IIR filter with gain 0.65
+and gives the glowing trails.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">let</span> y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> y <span class="op">&lt;</span> <span class="dv">200</span><span class="op">;</span> y<span class="op">++</span>) { <span class="kw">let</span> p <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> <span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> y<span class="op">*</span><span class="dv">320</span><span class="op">;</span> i <span class="op">&lt;</span> y<span class="op">*</span><span class="dv">320</span> <span class="op">+</span> <span class="dv">320</span><span class="op">;</span> i<span class="op">++</span>) { <span class="kw">const</span> v <span class="op">=</span> buf[i] <span class="op">+</span> T[p]<span class="op">;</span> p <span class="op">=</span> v <span class="op">&gt;</span> <span class="dv">255</span> <span class="op">?</span> <span class="dv">255</span> <span class="op">:</span> v<span class="op">;</span> buf[i] <span class="op">=</span> p<span class="op">;</span> } }</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">let</span> x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> x <span class="op">&lt;</span> <span class="dv">320</span><span class="op">;</span> x<span class="op">++</span>) { <span class="kw">let</span> p <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> <span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> x<span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">64000</span><span class="op">;</span> i <span class="op">+=</span> <span class="dv">320</span>) { <span class="kw">const</span> v <span class="op">=</span> buf[i] <span class="op">+</span> T[p]<span class="op">;</span> p <span class="op">=</span> v <span class="op">&gt;</span> <span class="dv">255</span> <span class="op">?</span> <span class="dv">255</span> <span class="op">:</span> v<span class="op">;</span> buf[i] <span class="op">=</span> p<span class="op">;</span> } }</span></code></pre></div>
+<p>Verified 300 consecutive frames byte-identical (feedback included);
+the triangle library (4 clip stages, rasteriser 0x18253d) separately on
+900 random triangles. The per-frame products of angle and phases are
+emulated in x87 extended precision (<code>x87.js</code>) because the
+original keeps them unrounded.</p>
+<h3 id="42-reebok-137---147-six-additive-rotozoom-layers">4.2 reebok
+(1:37 - 1:47): six additive rotozoom layers</h3>
+<p>The 256x256 8-bit <code>picture.png</code> is drawn six times into
+the 320x240 index buffer, each layer rotated and zoomed differently,
+<strong>added with saturation</strong> into the buffer, then palettised
+(<code>picture.pal</code>) and doubled. Per frame:
+<code>x0 = (Frame - t0)*0.6</code>, angle
+<code>a = f32(x0 * 0.006)</code>; six phases (0, 42, 84, 126, 168, 210)
+all decrease with time, wrap at 256; the zoom of a layer is
+<code>(sin(a)*0.5 + 2) * phase/32</code>; a per-layer brightness table
+<code>trunc(k * f32(0.7 sin(0.9 q^2 + 2.24 q)))</code> (q = phase/256;
+may be negative, bytes wrap) turns texels into additive increments.</p>
+<p>The mapper works on a <strong>coarse grid</strong>: 8x8-pixel cells
+on a 41 x 31 grid of corners. The corner texture coordinates are
+computed in floating point and converted to 16.16 with the magic-number
+trick (asm doc, section 3); inside a cell the coordinates are
+interpolated incrementally in fixed point, with the carry of the
+fraction add feeding the integer byte (<code>adc</code>). The texture
+sits in a 64 KB-aligned block, so <code>bh:bl</code> is the address and
+wraps for free. One quirk is reproduced: <code>ecx</code> and
+<code>edx</code> still hold the destination pixel / integer steps in
+their low bytes and those are added to the fractions too.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> s <span class="op">=</span> esi <span class="op">+</span> ecxHi <span class="op">+</span> cl<span class="op">;</span> esi <span class="op">=</span> s <span class="op">&gt;&gt;&gt;</span> <span class="dv">0</span><span class="op">;</span> <span class="kw">const</span> c1 <span class="op">=</span> s <span class="op">&gt;</span> <span class="bn">0xffffffff</span> <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">// add esi,ecx</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>bl <span class="op">=</span> (bl <span class="op">+</span> dl <span class="op">+</span> c1) <span class="op">&amp;</span> <span class="dv">255</span><span class="op">;</span>                                                   <span class="co">// adc bl,dl</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> ebp <span class="op">+</span> edx<span class="op">;</span> ebp <span class="op">=</span> s <span class="op">&gt;&gt;&gt;</span> <span class="dv">0</span><span class="op">;</span> <span class="kw">const</span> c2 <span class="op">=</span> s <span class="op">&gt;</span> <span class="bn">0xffffffff</span> <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">0</span><span class="op">;</span>             <span class="co">// add ebp,edx</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>bh <span class="op">=</span> (bh <span class="op">+</span> dh <span class="op">+</span> c2) <span class="op">&amp;</span> <span class="dv">255</span><span class="op">;</span>                                                   <span class="co">// adc bh,dh</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>cl <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">min</span>(<span class="dv">255</span><span class="op">,</span> tbl[texel] <span class="op">+</span> D[p])<span class="op">;</span> texel <span class="op">=</span> tex[(bh <span class="op">&lt;&lt;</span> <span class="dv">8</span>) <span class="op">|</span> bl]<span class="op">;</span> D[p] <span class="op">=</span> cl<span class="op">;</span></span></code></pre></div>
+<p>Verified: 80 frames on random start content, 0 of 76800 bytes differ
+in every frame. A detail found by testing: the angle uses the unrounded
+x87 value of <code>0.6*elapsed</code>, the phases use its float32
+copy.</p>
+<h2
+id="5-cellrd-from-147-behind-the-hires-scene-gray-scott-by-lookup-table">5.
+cellrd (from 1:47, behind the hires scene): Gray-Scott by lookup
+table</h2>
+<p>Pink worms in the lower-left and upper-right of the
+<code>hires.exp</code> scene are a chemical simulation: two species A, B
+(5 bits each, 0..31) on a 260 x 140 torus (stored in 264 x 144 bytes,
+2-cell periodic border). A diffuses with a 5x5 box sum, B with a 3x3 box
+sum, and the reaction <code>dA = F(1-A) - A B^2</code>,
+<code>dB = A B^2 - (F+k) B</code> turns it into spots, stripes and
+worms. The script gives <code>0.012 0.045 3.2</code> = F, k, D. The
+preinit event (script start, at time 0) builds everything and is then
+deleted.</p>
+<p><strong>No floating point per cell.</strong> At preinit two 16-bit
+tables are filled by a float loop (0x14ed9c): T1 has 776 x 1024 entries
+(A: max 5x5 sum is 25*31), T2 has 280 x 1024 (B), index
+<code>(sum &lt;&lt; 10) | (B &lt;&lt; 5) | A</code>. The table already
+contains the whole reaction term plus the diffusion mean:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">// T1: floor(256 * clamp(31 * (D*(F(1-a) - a w^2) + 0.04*sumA/31), 0, 31)),  a = A/31, w = 0.7*B/31</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">// T2: floor(256 * clamp(31/0.7 * (D*(a w^2 - (F+k) w) + 0.7*sumB/31/9), 0, 31))</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>A2[i] <span class="op">=</span> (t1[(s5[i] <span class="op">&lt;&lt;</span> <span class="dv">10</span>) <span class="op">|</span> ab] <span class="op">+</span> bl) <span class="op">&gt;&gt;</span> <span class="dv">8</span><span class="op">;</span>         <span class="co">// ab = (B[i] &lt;&lt; 5) | A[i]</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>B2[i] <span class="op">=</span> (t2[(s3[i] <span class="op">&lt;&lt;</span> <span class="dv">10</span>) <span class="op">|</span> ab] <span class="op">+</span> bl) <span class="op">&gt;&gt;</span> <span class="dv">8</span><span class="op">;</span></span></code></pre></div>
+<p>The low byte of the 16-bit value is the fraction. A pseudo-random
+<strong>dither byte</strong> <code>bl</code> (running sum of a 32 KB
+noise table of <code>rand()</code> bytes) is added before the
+<code>&gt;&gt; 8</code>, i.e. <strong>stochastic rounding</strong>: slow
+reaction rates still progress. A quirk preserved by the port: the caller
+draws a random step, but the kernel adds its loop counter instead. Per
+frame: eight moving 3x3 blob seeds
+(<code>pos = trunc(117 sin(p2 t + p3) + 130, 63 sin(p4 t + p5) + 70)</code>),
+<strong>two</strong> steps, then the field is drawn twice into the
+640-wide 32-bit screen (at 0,195 and 378,156 - hence the two worm areas)
+through a 1024-entry colour table <code>pal[B*32 + A]</code>:
+<code>R = 255(1.5-2a)</code>, <code>G = 255(b + 4.3 a b^2 - 0.2)</code>,
+<code>B = 255(1 - 0.6 sin(5b) - 1.2 a)</code>.</p>
+<p>The original's table builder uses 80-bit x87 intermediates; a few
+entries fall exactly on a float32 rounding tie, where JS doubles round
+the other way. Those are recomputed with BigInt arithmetic that rounds
+to 64 bits after each operation (<code>x87.js</code>). Result: identical
+for 400 frames. ~2.5 ms/frame in node.</p>
+<h2 id="6-the-3d-renderer-scene-docsjsfxscene3djs">6. The 3D renderer
+(<code>scene</code>, <code>docs/js/fx/scene3d*.js</code>)</h2>
+<h3 id="61-pipeline">6.1 Pipeline</h3>
+<p><code>scene NAME {SCREEN} {SCREEN} {file speed offset} {0 0}</code>
+loads <code>.exp</code> or <code>.lwe</code> (chosen by
+<code>strstr</code>) and <code>play NAME</code> sets the animation clock
+<code>x = (Frame - start)*speed*0.01 + offset</code> (scene frames, 30/s
+nominal). Per frame: animate objects/lights/camera (TCB splines for
+keys), then <code>0x125990</code>:</p>
+<ul>
+<li>each vertex (a 0x60-byte record cached by frame number) is
+transformed to camera space, flagged against 5 frustum planes, projected
+<code>x*zoom/z + centre</code>; triangles outside one plane are dropped;
+<strong>no z buffer and no back-face culling</strong> (the dot product
+is dead code; the glass cube shows its inner faces);</li>
+<li><strong>painter's sort</strong>: key =
+<code>float32((z0+z1+z2)*2000)</code>, with the float bits made
+monotonic and <code>&gt;&gt;12</code> (20 bits), two 10-bit radix
+passes; far to near, ties in creation order;</li>
+<li>the polygon is clipped in <strong>camera space</strong> (near, left,
+right, top, bottom; Sutherland-Hodgman, all attributes interpolated
+linearly), fan-triangulated, and scan converted by the filler chosen
+from the material mode.</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">sortKey</span>(zsum) { f32[<span class="dv">0</span>] <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">fround</span>(zsum) <span class="op">*</span> <span class="dv">2000</span><span class="op">;</span> <span class="kw">const</span> b <span class="op">=</span> u32[<span class="dv">0</span>]<span class="op">;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> (((b <span class="op">&amp;</span> <span class="bn">0x80000000</span>) <span class="op">?</span> <span class="op">~</span>b <span class="op">:</span> (b <span class="op">|</span> <span class="bn">0x80000000</span>)) <span class="op">&gt;&gt;&gt;</span> <span class="dv">12</span>)<span class="op">;</span> }</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>polys<span class="op">.</span><span class="fu">sort</span>((p<span class="op">,</span> q) <span class="kw">=&gt;</span> q<span class="op">.</span><span class="at">k</span> <span class="op">-</span> p<span class="op">.</span><span class="at">k</span> <span class="op">||</span> p<span class="op">.</span><span class="at">s</span> <span class="op">-</span> q<span class="op">.</span><span class="at">s</span>)<span class="op">;</span>        <span class="co">// far first, creation order for ties</span></span></code></pre></div>
+<p>Shading is per vertex: environment mapping
+<code>u = 127 nx + 128, v = 127 ny + 128</code> from the camera-space
+unit normal; smooth lit mode
+<code>I = min((amb + sum max(0, n.d)/|d|) * 230.77, 254)</code> (ambient
+16/230.769). Vertex normals are the normalised sum of the unit normals
+of adjacent triangles. Checked against dumps of the original to ~1e-6.
+Geometry conventions found by testing: <code>.exp</code> objects are
+stored in world space; <code>.lwe</code> handedness is flipped on z; the
+<strong>last <code>.exp</code> TCB key has a zero incoming
+tangent</strong>. A real quirk of the original that the port reproduces:
+<code>tentacle.exp</code> has one rotation key and the original
+interpolates past the end of the key array (uninitialised heap), which
+makes the tentacle rotate about x by <code>1.58e-4 * t</code> rad.</p>
+<h3 id="62-fillers-approximated">6.2 Fillers (approximated)</h3>
+<p>There is no generic rasteriser. A template per (material mode, depth)
+is patched by its setup routine (see asm doc, section 1). The modes
+used:</p>
+<table>
+<thead>
+<tr>
+<th>mode</th>
+<th>scene</th>
+<th>pixel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td>unrdisp (bubble)</td>
+<td>`dst = tex32[v&lt;&lt;8</td>
+</tr>
+<tr>
+<td>4</td>
+<td>box3 (glass cube)</td>
+<td>`dst = pal32[tex8[v&lt;&lt;8</td>
+</tr>
+<tr>
+<td>2</td>
+<td>camel8 (city)</td>
+<td>`dst = lut[(L&lt;&lt;8)</td>
+</tr>
+<tr>
+<td>0x84</td>
+<td>tentacle</td>
+<td>two 8-bit textures (file uv and env uv): `dst =
+lut[(pink&lt;&lt;8)</td>
+</tr>
+<tr>
+<td>0x24</td>
+<td>hires (glass)</td>
+<td>two passes: <code>c32</code> premultiplied by alpha, then
+<code>dst = c32 + mul[a][dst]</code>,
+<code>mul[a][d] = floor(d(63-a)/63)</code>, packed add without
+saturation</td>
+</tr>
+</tbody>
+</table>
+<p>The JS keeps the original sampling positions (start
+<code>(x + 0xfff0) &gt;&gt; 16</code>, end
+<code>(x + 0xffe0) &gt;&gt; 16</code>, same for rows) but computes
+plane-equation attributes in floating point:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dst[ro <span class="op">+</span> x] <span class="op">=</span> tex[((((v0 <span class="op">+</span> dv<span class="op">*</span>x <span class="op">+</span> <span class="dv">65536</span>) <span class="op">|</span> <span class="dv">0</span>) <span class="op">&amp;</span> <span class="dv">255</span>) <span class="op">&lt;&lt;</span> <span class="dv">8</span>) <span class="op">|</span> (((u0 <span class="op">+</span> du<span class="op">*</span>x <span class="op">+</span> <span class="dv">65536</span>) <span class="op">|</span> <span class="dv">0</span>) <span class="op">&amp;</span> <span class="dv">255</span>)]<span class="op">;</span></span></code></pre></div>
+<p>This is the <strong>approximated</strong> part: silhouettes 99.7 %
+identical; interior differs by the original's 16.16 quantisation, 8-bit
+fraction packing and carry leaks, and the fitted colour tables. Speed
+1.6 - 4.5 ms/frame in node (tentacle: 2741 triangles). The 16-bit
+renderers and flare/particle paths exist in the binary but are
+unused.</p>
+<h3 id="63-mesh-modifying-effects">6.3 Mesh-modifying effects</h3>
+<ul>
+<li><strong>displace247</strong> (script:
+<code>{wscene1 Box02 0.3 -0.04 0.17+0.04*sin(Frame*0.002)}</code>)
+wobbles every vertex of one object radially:
+<code>v' = c + (v-c)*(1 + A sin(|v-c| F + Frame S))</code>. A, S, F are
+script expressions evaluated per frame. Verified: 5e-5 after 90
+frames.</li>
+<li><strong>bomb</strong> (<code>{ipl tentacle sqr(Frame*0.03)}</code>):
+unshares the mesh into three private vertices per triangle and flies
+every triangle away from the object centre,
+<code>centre' = g + dir*|c-g|*(1 + speed*d)</code>, speed =
+<code>(1.2 - |c-g|/max) * (rand()/32768 + 0.3)</code>.
+<code>rand()</code> is the Watcom LCG
+(<code>seed*0x41c64e6d + 0x3039</code>,
+<code>&gt;&gt;16 &amp; 0x7fff</code>), so the explosion is the same each
+run: the seed in the continuous original run is 0xfc0b2df1 at creation
+(cellrd consumed rand() since 0x565bb039). The per-face state is
+bit-identical to the original's.</li>
+<li><strong>unrdisp displacement modifier</strong> (an <code>.lwe</code>
+chunk): every vertex is projected spherically around a Null object,
+looked up in the 256x256 map <code>Disp2.tga</code> (tiled 3 x 4) and
+pushed out by up to 2 units:
+<code>u = frac(1 - lon/2pi)*3, v = frac(0.5 - lat/pi)*4, h = Disp2[(floor(v*255)&amp;255)&lt;&lt;8 | floor(u*255)&amp;255], P = P0 + q/|q| * h * 2/255</code>.
+Exact to 2e-7 at t = 30; at t = 75 ~5 % of the vertices differ by one
+map texel (float32 rounding of the u/v chain). The modifier also uses
+the Null's rotation. The other projection types (planar, cylindrical)
+are in the code and not ported (no shipped file uses them).</li>
+</ul>
+<h2
+id="7-the-volume-sequence-116---137-metaballs-plasma-marching-cubes">7.
+The volume sequence (1:16 - 1:37): metaballs, plasma, marching
+cubes</h2>
+<p>The script builds a small dataflow of named 16x16x16 float volumes
+(<code>volume3D</code>, <code>copyvolume</code>, <code>metaballs</code>,
+<code>morphvolume</code>, <code>plasma1volume</code>,
+<code>mulvolume</code>) and polygonises the result into the
+<code>box01</code> object of <code>box3.exp</code> every frame
+(<code>marchingcubes test box01 OurVolume 1</code>). Events run in
+creation order, which <em>is</em> the dataflow:</p>
+<pre><code>SrcVolume &lt;- vbox.dat ;  per frame: OurVolume = SrcVolume ; OurVolume += metaballs(test1.mbs)
+OurVolume = OurVolume*t + V8Volume*(1-t)   ; t = clip10(0.5 + 0.3 sin(0.01 F) + 0.7 cos(0.007 F))
+PlasmaVolume = 0.7 + 0.7 sin(r + 0.02 F)   ; OurVolume *= PlasmaVolume ; marching cubes at iso 0.65</code></pre>
+<ul>
+<li><strong>Volumes</strong> are 0x4000-byte float arrays, index
+<code>x + 16y + 256z</code>, registered by name in a 32-slot table
+(linear <code>strcmp</code>). Kernels are x87 unrolled by 4. Values are
+computed in 80-bit and rounded to float on store, which the JS
+reproduces with doubles + <code>Float32Array</code>, bit for bit. One
+detail found by testing: the script-expression factor is rounded to
+float before use.</li>
+<li><strong>plasma1volume</strong>:
+<code>v = a + b sin(dist + 0.02 Frame)</code>, <code>dist</code> a
+precomputed table sqrt((x-7.5)^2+...); only <strong>one octant</strong>
+(8x8x8 = 512 <code>fsin</code>) is evaluated, each result stored four
+times (x, y mirrored), and the finished planes z&lt;8 are copied onto
+15-z.</li>
+<li><strong>metaballs</strong> (<code>test1.mbs</code>: 8 lines
+<code>X Y Z R C</code>, each a script expression of Frame): every ball
+is added (never cleared by the effect) with the quartic
+<code>f(d2) = (A d2 + B) d2 + C</code>, <code>A = C/R^4</code>,
+<code>B = -2C/R^2</code>: value C at the centre, value and slope zero at
+radius R. The grid points sit at <code>(i-8)*0.25</code>. The renderer
+precomputes squared distance tables per axis and clips loops to the
+sphere's bounding box. Only <code>A = C/(R*R*R2)</code> needs real x87
+emulation (BigInt) to be bit-exact for every radius.</li>
+<li><strong>marching cubes</strong> (iso 0.65, constant): per sample,
+the 3 edges from the lower neighbours carry a vertex when exactly one
+end is above the threshold; vertices are interpolated
+<code>t = (v1-thr)/(v1-v0)</code>, their normals are the interpolated
+central-difference gradient, normalised with a table-driven reciprocal
+square root (asm doc, section 8). Triangles come from the classic
+256-case table (identical to the 73MS table); vertex slots are indexed
+by <em>edge</em> (array of 4096 x-edges, then y, then z) so triangles
+share vertices. The object's mesh is replaced with up to 4000 faces of
+0x3c bytes (a copy of face 0, so the material is kept) and a vertex
+count of 0x3000. Verified for 5 volumes (224 - 3360 triangles): count,
+slot indices, positions, normals, face normals all bit-identical.</li>
+</ul>
+<h2 id="8-scene-notes">8. Scene notes</h2>
+<ul>
+<li><strong>Soap bubble</strong> (<code>unrdisp.lwe</code>, 52 s -
+1:04): <code>.lwe</code> scene with env-map <code>env1.jpg</code> (mode
+3, file uv) over the <code>isabella.jpg</code> backdrop; the
+displacement modifier above wobbles it. Matches at scene times 210-499
+once the Null's turn (90 deg at frame 299, bank 40 deg at 400) is
+applied.</li>
+<li><strong>Tentacle</strong> (<code>tentacle.exp</code>, mode 0x84, two
+textures) with the <strong>bomb</strong> explosion from 1:13.5.</li>
+<li><strong>Glass cube</strong> (<code>box3.exp</code>, mode 4): the
+camera sees inner faces (no culling); the marching-cubes mesh lives
+inside it. A huge mostly-off-screen quad of the box is the reason
+clipping happens in camera space.</li>
+<li><strong>hires.exp</strong> (mode 0x24, alpha glass) with
+<code>displace247</code> over the live <code>cellrd</code> field;
+<strong>camel8.exp</strong> (mode 2 lit, <code>displace247</code> on
+<code>Box02</code> with other parameters
+<code>0.2 -0.02 0.10+0.05 sin(0.002 Frame)</code>) over
+<code>mapimage</code> light band + <code>ppro.jpg</code> added with
+<code>blend</code>.</li>
+</ul>
+<h2 id="9-how-it-was-checked">9. How it was checked</h2>
+<p><code>re/unpack_pmodew.py</code> unpacks the EXE under Unicorn;
+<code>re/boot.py</code> boots it to its main loop (snapshot
+<code>state.bin</code>); <code>re/harness.py</code> calls any original
+function with custom buffers; <code>re/golden.py</code> renders whole
+reference frames from the original (virtual music clock; deterministic:
+two runs 100 % identical); <code>tools/replay.mjs</code> +
+<code>tools/cmp-all.py</code> compare them with the port. Each effect
+has a differential test (<code>re/dt_*</code>,
+<code>tools/test-*.mjs</code>). Caveat recorded in
+<code>re/clock.md</code>: coarse fast-forward changes the state of
+stateful effects (cellrd, echo), so exact frames need a single run from
+t = 0.</p>
+<h2 id="10-art-and-data-where-it-lives-how-it-was-decoded">10. Art and
+data: where it lives, how it was decoded</h2>
+<p>Everything is in <strong><code>TOUR.98</code></strong> (4,752,364
+bytes, 116 records, no file is stored outside it). Record layout:
+<code>[u32 usize][u32 csize][u32 namelen][u32 dataofs][u32 nameofs][u32 dataend][u8 type][name\0][payload]</code>,
+offsets absolute; the loader is <code>0x107680</code> (directory) /
+<code>0x107907</code> (load by name). Types: <code>j</code> raw JPEG (37
+files), <code>p</code> raw PNG (18), <code>t</code> TGA (3; stored with
+the "dlz" LZ when smaller, <code>csize &lt; usize</code>),
+<code>2</code> dlz LZ (55: scripts, palettes, meshes, volumes),
+<code>b</code> BWT/MTF/Huffman (the XM), <code>3</code> adaptive-Huffman
+LZ (<code>RYMDLEGO.XM</code>), <code>1</code> byte RLE. Offsets below
+are file offsets of the payload (parsed from the archive directory,
+<code>tools/extract.py</code> does the same; the decoders were compared
+with the original's own routines in Unicorn: <code>TOUR3.XM</code>
+2,894,937 bytes equal, <code>RYMDLEGO.XM</code> 74,016 equal, 113 files
+identical + 3 TGA size-checked by <code>tools/test-archive.mjs</code>).
+Extracted copies: <code>re/assets_raw/</code> (as stored) and
+<code>docs/assets/</code> (what the browser reads; TGA converted to
+PNG).</p>
+<p>Previews (made from <code>re/assets_raw/</code> with Pillow,
+resized): <a
+href="https://github.com/kassoulet/Tour_by_Pulse/blob/main/figures/tour_pictures.png"><code>figures/tour_pictures.png</code></a>
+(16 cover/backdrop pictures, 160x120 thumbnails) and <a
+href="https://github.com/kassoulet/Tour_by_Pulse/blob/main/figures/tour_textures.png"><code>figures/tour_textures.png</code></a>
+(the 256x256 textures, <code>FONT0.PNG</code> and
+<code>FEARS.TGA</code>, 128x128 thumbnails; palettised PNGs shown with
+their own palette).</p>
+<h3 id="101-full-screen-pictures-jpeg-640x480-true-colour">10.1
+Full-screen pictures (JPEG, 640x480 true colour)</h3>
+<p>All 640x480 JPEGs, true colour (distinct-colour counts measured with
+Pillow: 39,179 - 67,895 for COUNTRYF/FENDERCL/SILVER/CAMELC, more than
+70,000 for the others except where listed).
+<code>createBuffer NAME 640 480 16 file</code> decodes into an
+<strong>RGB565</strong> surface (so the 16-&gt;32 blit tables of section
+3.4 apply), <code>... 32 file</code> into 0x00RRGGBB. The original uses
+its own JPEG decoder; the browser's differs slightly (README: ~1 level
+floor).</p>
+<table>
+<thead>
+<tr>
+<th>file</th>
+<th>offset</th>
+<th>bytes</th>
+<th>used as</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>COUNTRYF, FENDERCL, FALCON, SILVER, ECHO, CAMELC, UNREAL .JPG</td>
+<td>3,581,210 / 3,425,606 / 3,522,228 / 3,380,036 / 2,801,569 /
+3,471,155 / 3,310,594</td>
+<td>53,713 / 45,513 / 58,944 / 45,532 / 71,094 / 51,037 / 69,406</td>
+<td>the 7 title-slideshow pictures, loaded into <code>TEMPIMAGES</code>
+then blitted to <code>TITLE</code> (countryf first, from the script
+start)</td>
+</tr>
+<tr>
+<td>TITLE.JPG</td>
+<td>3,182,874</td>
+<td>60,592</td>
+<td>initial <code>TITLE</code> buffer content</td>
+</tr>
+<tr>
+<td>ISABELLA.JPG</td>
+<td>3,262,299</td>
+<td>48,259</td>
+<td>backdrop of the soap-bubble scene</td>
+</tr>
+<tr>
+<td>NEWHIRES.JPG / Q.JPG / HIRES.JPG</td>
+<td>3,752,990 / 3,112,540 / 3,058,967</td>
+<td>95,082 / 70,299 / 53,542</td>
+<td>backdrops of the tentacle / cube / hires scenes
+(<code>changeBuffers bbb {NEWHIRES}</code>, <code>{DREAMS}</code> =
+q.jpg, <code>{HIRES}</code>)</td>
+</tr>
+<tr>
+<td>PPRO.JPG</td>
+<td>3,243,500</td>
+<td>18,761</td>
+<td>overlay of the city scene; only <strong>256 distinct
+colours</strong> (counted), added with <code>blend</code> mode 1</td>
+</tr>
+<tr>
+<td>EFXLAYER.JPG</td>
+<td>2,401,338</td>
+<td>26,027</td>
+<td>layer added over the echo5 picture; 669 distinct colours</td>
+</tr>
+<tr>
+<td>SLEEP.JPG</td>
+<td>2,319,413</td>
+<td>81,887</td>
+<td>final "THEEND" picture</td>
+</tr>
+<tr>
+<td>SCROLL.JPG</td>
+<td>2,719,428</td>
+<td>14,255</td>
+<td><strong>256x256</strong>, 34,111 colours: source of the
+<code>mapimage</code> light band (section 3.3)</td>
+</tr>
+</tbody>
+</table>
+<p>About 25 more JPEGs in the archive (MEMORIES, BINOCHE, WHITE, SCR,
+TOURZ2, PULSEW, CLASSICA, VIRTUALD, WSPEDO, CUV, LENV, BUMPY, A, PYGMYW,
+KVET, RUUTI2, EYE2...) are <strong>not referenced by
+<code>script.unr</code></strong>; their role was not investigated.</p>
+<h3 id="102-textures-and-maps">10.2 Textures and maps</h3>
+<table>
+<thead>
+<tr>
+<th>file</th>
+<th>offset</th>
+<th>bytes</th>
+<th>format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PICTURE.PNG (+ PICTURE.PAL)</td>
+<td>2,688,155 / 2,149,953</td>
+<td>19,704 / 768 (386 packed)</td>
+<td>256x256 PNG, 8-bit paletted, <strong>74 colours</strong> used; the
+reebok picture, coloured at run time by <code>picture.pal</code> (VGA
+6-bit RGB)</td>
+</tr>
+<tr>
+<td>MEDUSA.PAL</td>
+<td>2,148,810</td>
+<td>768</td>
+<td>palette of the echo5 look (also GREEN.PAL, ORANGE.PAL exist, unused
+by the script)</td>
+</tr>
+<tr>
+<td>ENV1.JPG</td>
+<td>2,707,893</td>
+<td>11,499</td>
+<td>256x256 true colour (19,232 colours), environment map of the soap
+bubble</td>
+</tr>
+<tr>
+<td>CRATER.PNG, PINK.PNG</td>
+<td>2,909,023 / 4,438,262</td>
+<td>44,993 / 43,993</td>
+<td>256x256 PNG 8-bit, 256 / 248 colours; the two textures of the
+tentacle (file uv / env uv)</td>
+</tr>
+<tr>
+<td>CITYLIGH.PNG</td>
+<td>2,872,701</td>
+<td>36,286</td>
+<td>256x256 PNG 8-bit, 256 colours; env map of the glass cube</td>
+</tr>
+<tr>
+<td>REDIO.PNG</td>
+<td>2,733,718</td>
+<td>22,787</td>
+<td>256x256 PNG 8-bit, 256 colours; colour of the hires glass (alpha
+comes from the average of PINK's palette)</td>
+</tr>
+<tr>
+<td>SCAPE.PNG</td>
+<td>2,756,540</td>
+<td>44,995</td>
+<td>256x256 PNG 8-bit, 256 colours; camel8 city texture</td>
+</tr>
+<tr>
+<td>DISP2.JPG / DISP2.TGA</td>
+<td>3,972,262 / 3,979,099</td>
+<td>6,802 / 66,322 (8,398 packed)</td>
+<td>256x256 height map of the bubble modifier (TGA: header says 8-bit
+<strong>paletted</strong> type 1, 256x256; the loader uses the red
+channel; the JPEG version has 255 colours)</td>
+</tr>
+<tr>
+<td>FEARS.TGA</td>
+<td>2,427,400</td>
+<td>307,218 (260,718 packed)</td>
+<td>header: image type 3, <strong>8-bit greyscale 640x480</strong> (18 +
+307,200 bytes); loaded into a 32-bit buffer, faded in by
+<code>fade</code></td>
+</tr>
+<tr>
+<td>VISUAL.TGA</td>
+<td>4,620,053</td>
+<td>64,786 (13,646 packed)</td>
+<td>8-bit paletted type 1, 320x200 per header; not referenced by the
+script</td>
+</tr>
+<tr>
+<td>FONT0.PNG</td>
+<td>4,649,178</td>
+<td>3,506</td>
+<td>320x200 PNG, 8-bit palette with <strong>2 colours</strong> (a bitmap
+font sheet); not referenced by <code>script.unr</code> (the demo shows
+no text from it in this script)</td>
+</tr>
+<tr>
+<td>FLARE1.UNR</td>
+<td>4,743,713</td>
+<td>2,854</td>
+<td>a 128x128 PNG (122 colours) with an odd extension: a lens-flare
+sprite, unused by the script</td>
+</tr>
+</tbody>
+</table>
+<p>Note on formats: PNG textures are loaded as 8-bit
+<strong>indices</strong> (palette kept) for the 8-bit material paths and
+converted for the 32-bit ones; the JPEG-derived ones become 0x00RRGGBB.
+The mesh materials reference up to 5 texture slots (13-byte names) per
+material; the modes are listed in section 6.2.</p>
+<h3 id="103-3d-models-and-scenes">10.3 3D models and scenes</h3>
+<p>Two in-house formats made by the group's converters (see
+<code>docs/notes/scene3d-formats.html</code>):</p>
+<ul>
+<li><p><strong><code>.exp</code> (magic <code>UEXP</code>)</strong>:
+export of a 3D Studio MAX scene. Header = counts (objects, cameras,
+nulls, lights, particles, materials) + duration; materials (81-byte
+name+5 texture slots, 9 colour floats, shininess/opacity/mode/flags);
+per object: world-space vertices, per-corner UVs, triangles with
+material index, node matrix, pivot, rotation/position keys (TCB).
+Extracted counts (parsed with the port's <code>parseEXP</code>):</p>
+<table>
+<thead>
+<tr>
+<th>file</th>
+<th>offset</th>
+<th>bytes (packed)</th>
+<th>object</th>
+<th>vertices</th>
+<th>triangles</th>
+<th>duration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TENTACLE.EXP</td>
+<td>2,215,155</td>
+<td>105,605 (55,066)</td>
+<td><code>tentacle</code></td>
+<td>1,396</td>
+<td>2,741</td>
+<td>700 frames @30</td>
+</tr>
+<tr>
+<td>BOX3.EXP</td>
+<td>2,171,989</td>
+<td>1,073 (434)</td>
+<td><code>Box01</code> (cube; its mesh is replaced by marching
+cubes)</td>
+<td>8</td>
+<td>12</td>
+<td>500</td>
+</tr>
+<tr>
+<td>HIRES.EXP</td>
+<td>2,192,515</td>
+<td>44,345 (14,877)</td>
+<td><code>Box02</code></td>
+<td>602</td>
+<td>1,200</td>
+<td>100</td>
+</tr>
+<tr>
+<td>CAMEL8.EXP</td>
+<td>2,177,610</td>
+<td>44,345 (14,870)</td>
+<td><code>Box02</code></td>
+<td>602</td>
+<td>1,200</td>
+<td>100</td>
+</tr>
+</tbody>
+</table>
+<p>(hires and camel8 have the same size and mesh data; they differ by
+material/camera. Other <code>.exp</code> files in the archive - BOX2,
+CAMEL, CUBE, EXPORT, IPLTEST, MAP, SLAM, SLAM2, SLAM3, UNREAL - are not
+used by the script.)</p></li>
+<li><p><strong><code>.lwe</code> + <code>.lwv</code> (UNLW)</strong>: a
+LightWave scene reduced to 44-byte Kochanek-Bartels motion keys
+(<code>.lwe</code>, 814 bytes for <code>UNRDISP.LWE</code> at 2,170,978)
+referring to an object <code>.lwv</code>. <strong>Y-SOAP1.LWV</strong>
+(39,866 bytes, 19,511 packed, offset 2,151,430) is the soap bubble:
+1,106 vertices (3,318 floats), 2,208 triangles, 1 surface; the
+displacement modifier of the <code>.lwe</code> (chunk 0x0b) names
+<code>Disp2.tga</code>. Other <code>.lwv/.lwe</code> (ZZZ, TESTMAP,
+WIRE1, DEL3/4, BOKS, DABOX, UUU, ZSCENE, JEAS1, WOJSPERI, UNREAL) and
+<code>ZORRO.LWO</code> are not referenced by the script.</p></li>
+<li><p><strong>Volumes</strong>: <code>V1..V8.DAT</code>,
+<code>VBOX.DAT</code> are raw 16x16x16 float32 fields (16,384 bytes
+each, dlz-packed); the script loads <code>V8</code> and
+<code>VBOX</code>. <code>*.MBS</code> are the metaball scripts
+(<code>TEST1.MBS</code> used).</p></li>
+<li><p><strong>Music</strong>: <code>TOUR3.XM</code> (type
+<code>b</code>, 2,146,697 packed -&gt; 2,894,937 bytes, "tribal cloud
+no. 9", XM 1.04, 20 channels, 26 orders, 32 patterns, 31 instruments /
+21 samples, 2,842,748 sample bytes, standard delta-coded PCM) and
+<code>RYMDLEGO.XM</code> (74,016 bytes, 16 channels, 17 samples; not
+used by the script). The original mixes the music itself
+(<code>TOUR.NFO</code>: SB32 disabled because the music is over a
+megabyte).</p></li>
+<li><p><strong>Misc</strong>: <code>SCRIPT.UNR</code> (4,221 bytes,
+1,498 packed, dlz, at offset 36: the demo's whole timeline),
+<code>TUNNEL.MAT</code> (6,268 bytes, not referenced),
+<code>M_*.BIN</code> (256 bytes each, small tables, not
+analysed).</p></li>
+</ul>
+</body>
+</html>
